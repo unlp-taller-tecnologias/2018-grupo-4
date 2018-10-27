@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Agregar Oficina</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+
+
+        {%if is_granted('ROLE_USER') %}
+          Hola {{ app.user.username}}
+          <li><a href="{{path('fos_user_security_logout')}}">Logout</a></li>
+          {%if is_granted('ROLE_SUPERUSER')%}
+          <a>Agregar oficina</a>
+          {% endif %}
+        {% else %}
+            <li><a href="{{path('fos_user_security_login')}}">Login</a></li>
+        {% endif %}
+
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+      <!--  <form class="" action="index.html" method="post">
+          <label for="">Nombre</label>
+          <input type="text" name="name" placeholder="Nombre">
+          <label>Numero de carpeta:</label>
+          <input type="text" name="carpeta" placeholder="Numero de carpeta">
+          <label>Responsable:</label>
+          <input type="text" name="responsable" placeholder="Responsable">
+        </form> -->
+
+
+    </body>
+</html>
+
+
+
+
+<html>
