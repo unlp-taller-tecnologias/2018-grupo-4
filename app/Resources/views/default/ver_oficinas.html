@@ -1,0 +1,15 @@
+<table style="width:25%">
+  <tr>
+    <th>Nombre Oficina</th>
+    <th>Num Carpeta</th>
+    <th>Responsable</th>
+  </tr>
+  {% for item in oficina %}
+    <tr>
+      <td>{{item.nombre}}</td>
+      <td>{{item.numCarpeta}}</td>
+      <td>{{item.responsable}}</td>
+    </tr>
+  {% endfor %}
+</table>
+<a href="/">Volver</a>

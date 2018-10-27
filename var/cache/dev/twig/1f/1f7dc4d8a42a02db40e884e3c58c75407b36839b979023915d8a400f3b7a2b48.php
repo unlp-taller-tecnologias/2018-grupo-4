@@ -52,12 +52,12 @@ class __TwigTemplate_7f0347475b704e18e78440d071c398842b9c6ebef61325d9838c9c46f48
         $this->displayBlock('javascripts', $context, $blocks);
         // line 13
         echo "
-            <a href=\"#\">Oficinas</a>
+            <a href=\"/ver_oficinas\">Oficinas</a>
             <a href=\"#\">Artículos</a>
 
         ";
         // line 17
-        if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_HOLI")) {
+        if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_USUARIO")) {
             // line 18
             echo "          <h1>Hola ";
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["app"] ?? $this->getContext($context, "app")), "user", array()), "username", array()), "html", null, true);
@@ -219,10 +219,10 @@ class __TwigTemplate_7f0347475b704e18e78440d071c398842b9c6ebef61325d9838c9c46f48
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
 
-            <a href=\"#\">Oficinas</a>
+            <a href=\"/ver_oficinas\">Oficinas</a>
             <a href=\"#\">Artículos</a>
 
-        {%if is_granted('ROLE_HOLI') %}
+        {%if is_granted('ROLE_USUARIO') %}
           <h1>Hola {{ app.user.username}}</h1>
           <li><a href=\"{{path('fos_user_security_logout')}}\">Logout</a></li>
           {%if is_granted('ROLE_ADMINISTRADOR')%}
@@ -247,6 +247,6 @@ class __TwigTemplate_7f0347475b704e18e78440d071c398842b9c6ebef61325d9838c9c46f48
 
 
 <html>
-", "base.html.twig", "/Applications/XAMPP/xamppfiles/htdocs/Inventario/app/Resources/views/base.html.twig");
+", "base.html.twig", "/Applications/XAMPP/xamppfiles/htdocs/Inventario/2018-grupo-4/app/Resources/views/base.html.twig");
     }
 }

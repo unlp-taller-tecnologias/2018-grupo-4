@@ -306,11 +306,6 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
-        // agregar_oficina
-        if ('/agregar_oficina' === $pathinfo) {
-            return array (  '_controller' => 'AppBundle\\Controller\\AppController::indexAction',  '_route' => 'agregar_oficina',);
-        }
-
         // homepage
         if ('' === $trimmedPathinfo) {
             $ret = array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
@@ -325,6 +320,16 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return $ret;
         }
         not_homepage:
+
+        // agregar_oficina
+        if ('/agregar_oficina' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\OficinaController::indexAction',  '_route' => 'agregar_oficina',);
+        }
+
+        // ver_oficinas
+        if ('/ver_oficinas' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\OficinaController::verOficinas',  '_route' => 'ver_oficinas',);
+        }
 
         if ('/' === $pathinfo && !$allow) {
             throw new Symfony\Component\Routing\Exception\NoConfigurationException();

@@ -15,7 +15,7 @@ class AppController extends Controller {
     /**
      * @Route("/agregar_oficina", name="agregar_oficina")
      */
-    public function indexAction(Request $request){
+  /*  public function indexAction(Request $request){
       $oficina = new Oficina();
       $oficina->setNombre('');
       $oficina->setResponsable('');
@@ -29,5 +29,5 @@ class AppController extends Controller {
             'form' => $form->createView(),
         ));
 
-    }
+    }*/
 }

@@ -29,7 +29,7 @@ Class User extends BaseUser{
 
 
 
-  }
+  
 
 
 

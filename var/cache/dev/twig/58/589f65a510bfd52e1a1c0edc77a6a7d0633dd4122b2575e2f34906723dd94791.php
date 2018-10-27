@@ -51,7 +51,7 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
 
         ";
         // line 15
-        if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_HOLI")) {
+        if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_USUARIO")) {
             // line 16
             echo "          Hola ";
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["app"] ?? $this->getContext($context, "app")), "user", array()), "username", array()), "html", null, true);
@@ -100,14 +100,9 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
           <input type=\"text\" name=\"responsable\" placeholder=\"Responsable\">
         </form> -->
 
-
+<a href=\"/\">Volver</a>
     </body>
 </html>
-
-
-
-
-<html>
 ";
         
         $__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e->leave($__internal_085b0142806202599c7fe3b329164a92397d8978207a37e79d70b8c52599e33e_prof);
@@ -180,7 +175,7 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
 
     public function getDebugInfo()
     {
-        return array (  155 => 12,  138 => 11,  121 => 7,  92 => 28,  88 => 27,  84 => 26,  80 => 24,  74 => 22,  71 => 21,  67 => 19,  65 => 18,  61 => 17,  56 => 16,  54 => 15,  50 => 13,  47 => 12,  45 => 11,  38 => 8,  36 => 7,  28 => 1,);
+        return array (  150 => 12,  133 => 11,  116 => 7,  92 => 28,  88 => 27,  84 => 26,  80 => 24,  74 => 22,  71 => 21,  67 => 19,  65 => 18,  61 => 17,  56 => 16,  54 => 15,  50 => 13,  47 => 12,  45 => 11,  38 => 8,  36 => 7,  28 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -207,7 +202,7 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
         {% block javascripts %}{% endblock %}
 
 
-        {%if is_granted('ROLE_HOLI') %}
+        {%if is_granted('ROLE_USUARIO') %}
           Hola {{ app.user.username}}
           <li><a href=\"{{path('fos_user_security_logout')}}\">Logout</a></li>
           {%if is_granted('ROLE_SUPERUSER')%}
@@ -230,14 +225,9 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
           <input type=\"text\" name=\"responsable\" placeholder=\"Responsable\">
         </form> -->
 
-
+<a href=\"/\">Volver</a>
     </body>
 </html>
-
-
-
-
-<html>
-", "default/agregar_oficina.html", "/Applications/XAMPP/xamppfiles/htdocs/Inventario/app/Resources/views/default/agregar_oficina.html");
+", "default/agregar_oficina.html", "/Applications/XAMPP/xamppfiles/htdocs/Inventario/2018-grupo-4/app/Resources/views/default/agregar_oficina.html");
     }
 }

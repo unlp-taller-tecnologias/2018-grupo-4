@@ -12,7 +12,7 @@
         {% block javascripts %}{% endblock %}
 
 
-        {%if is_granted('ROLE_USER') %}
+        {%if is_granted('ROLE_USUARIO') %}
           Hola {{ app.user.username}}
           <li><a href="{{path('fos_user_security_logout')}}">Logout</a></li>
           {%if is_granted('ROLE_SUPERUSER')%}
@@ -35,11 +35,6 @@
           <input type="text" name="responsable" placeholder="Responsable">
         </form> -->
 
-
+<a href="/">Volver</a>
     </body>
 </html>
-
-
-
-
-<html>
