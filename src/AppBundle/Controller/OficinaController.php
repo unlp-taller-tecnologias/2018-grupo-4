@@ -16,9 +16,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class OficinaController extends Controller {
     /**
      * @Route("/agregar_oficina", name="agregar_oficina")
-     ** @Security("has_role('ROLE_ADMINISTRADOR')")
+     ** @Security("has_role('ROLE_SUPERADMIN')")
      */
-    public function indexAction(Request $request){
+    public function indexFormAction(Request $request){
       $oficina = new Oficina();
       $nombre = $oficina->setNombre('');
       $carpeta = $oficina->setNumCarpeta('');
@@ -33,7 +33,6 @@ class OficinaController extends Controller {
       if($form->isSubmitted()){
         $this->crearOficina($nombre, $carpeta, $responsable, $oficina, $request);
       }
-
         return $this->render('default/agregar_oficina.html', array(
             'form' => $form->createView(),
         ));

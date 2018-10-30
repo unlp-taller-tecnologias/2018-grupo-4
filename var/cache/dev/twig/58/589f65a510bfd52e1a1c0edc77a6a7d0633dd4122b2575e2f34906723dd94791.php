@@ -53,13 +53,8 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
         // line 15
         if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_USUARIO")) {
             // line 16
-            echo "          Hola ";
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["app"] ?? $this->getContext($context, "app")), "user", array()), "username", array()), "html", null, true);
             echo "
-          <li><a href=\"";
-            // line 17
-            echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("fos_user_security_logout");
-            echo "\">Logout</a></li>
+
           ";
             // line 18
             if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_SUPERUSER")) {
@@ -71,9 +66,7 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
             echo "        ";
         } else {
             // line 22
-            echo "            <li><a href=\"";
-            echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("fos_user_security_login");
-            echo "\">Login</a></li>
+            echo "          
         ";
         }
         // line 24
@@ -175,7 +168,7 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
 
     public function getDebugInfo()
     {
-        return array (  150 => 12,  133 => 11,  116 => 7,  92 => 28,  88 => 27,  84 => 26,  80 => 24,  74 => 22,  71 => 21,  67 => 19,  65 => 18,  61 => 17,  56 => 16,  54 => 15,  50 => 13,  47 => 12,  45 => 11,  38 => 8,  36 => 7,  28 => 1,);
+        return array (  143 => 12,  126 => 11,  109 => 7,  85 => 28,  81 => 27,  77 => 26,  73 => 24,  69 => 22,  66 => 21,  62 => 19,  60 => 18,  56 => 16,  54 => 15,  50 => 13,  47 => 12,  45 => 11,  38 => 8,  36 => 7,  28 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -203,13 +196,13 @@ class __TwigTemplate_7d66389f1f524dc9f47378845988672bba3dd7b54c0fdcfe69567e90f31
 
 
         {%if is_granted('ROLE_USUARIO') %}
-          Hola {{ app.user.username}}
-          <li><a href=\"{{path('fos_user_security_logout')}}\">Logout</a></li>
+
+
           {%if is_granted('ROLE_SUPERUSER')%}
           <a>Agregar oficina</a>
           {% endif %}
         {% else %}
-            <li><a href=\"{{path('fos_user_security_login')}}\">Login</a></li>
+          
         {% endif %}
 
 

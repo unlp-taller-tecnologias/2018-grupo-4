@@ -306,6 +306,26 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
 
         }
 
+        // agregar_articulo
+        if ('/agregar_articulo' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\ArticuloController::newAction',  '_route' => 'agregar_articulo',);
+        }
+
+        // agregar_oficina
+        if ('/agregar_oficina' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\OficinaController::indexFormAction',  '_route' => 'agregar_oficina',);
+        }
+
+        // ver_articulos
+        if ('/ver_articulos' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\ArticuloController::verArticulos',  '_route' => 'ver_articulos',);
+        }
+
+        // ver_oficinas
+        if ('/ver_oficinas' === $pathinfo) {
+            return array (  '_controller' => 'AppBundle\\Controller\\OficinaController::verOficinas',  '_route' => 'ver_oficinas',);
+        }
+
         // homepage
         if ('' === $trimmedPathinfo) {
             $ret = array (  '_controller' => 'AppBundle\\Controller\\DefaultController::indexAction',  '_route' => 'homepage',);
@@ -320,16 +340,6 @@ class appDevDebugProjectContainerUrlMatcher extends Symfony\Bundle\FrameworkBund
             return $ret;
         }
         not_homepage:
-
-        // agregar_oficina
-        if ('/agregar_oficina' === $pathinfo) {
-            return array (  '_controller' => 'AppBundle\\Controller\\OficinaController::indexAction',  '_route' => 'agregar_oficina',);
-        }
-
-        // ver_oficinas
-        if ('/ver_oficinas' === $pathinfo) {
-            return array (  '_controller' => 'AppBundle\\Controller\\OficinaController::verOficinas',  '_route' => 'ver_oficinas',);
-        }
 
         if ('/' === $pathinfo && !$allow) {
             throw new Symfony\Component\Routing\Exception\NoConfigurationException();

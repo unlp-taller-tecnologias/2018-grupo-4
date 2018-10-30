@@ -3,7 +3,7 @@
 use Symfony\Component\Translation\MessageCatalogue;
 
 $catalogue = new MessageCatalogue('en', array (
-  'validators' => 
+  'validators' =>
   array (
     'This value should be false.' => 'This value should be false.',
     'This value should be true.' => 'This value should be true.',
@@ -108,12 +108,12 @@ $catalogue = new MessageCatalogue('en', array (
     'fos_user.group.long' => 'The name is too long.',
     'fos_group.name.already_used' => 'The name is already used.',
   ),
-  'security' => 
+  'security' =>
   array (
     'An authentication exception occurred.' => 'An authentication exception occurred.',
     'Authentication credentials could not be found.' => 'Authentication credentials could not be found.',
     'Authentication request could not be processed due to a system problem.' => 'Authentication request could not be processed due to a system problem.',
-    'Invalid credentials.' => 'Invalid credentials.',
+    'Invalid credentials.' => 'Datos erroneos.',
     'Cookie has already been used by someone else.' => 'Cookie has already been used by someone else.',
     'Not privileged to request the resource.' => 'Not privileged to request the resource.',
     'Invalid CSRF token.' => 'Invalid CSRF token.',
@@ -127,7 +127,7 @@ $catalogue = new MessageCatalogue('en', array (
     'Account is disabled.' => 'Account is disabled.',
     'Account is locked.' => 'Account is locked.',
   ),
-  'FOSUserBundle' => 
+  'FOSUserBundle' =>
   array (
     'group.edit.submit' => 'Update group',
     'group.show.name' => 'Group name',

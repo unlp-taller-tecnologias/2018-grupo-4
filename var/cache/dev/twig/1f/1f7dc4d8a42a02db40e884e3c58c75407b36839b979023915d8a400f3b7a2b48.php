@@ -52,16 +52,16 @@ class __TwigTemplate_7f0347475b704e18e78440d071c398842b9c6ebef61325d9838c9c46f48
         $this->displayBlock('javascripts', $context, $blocks);
         // line 13
         echo "
-            <a href=\"/ver_oficinas\">Oficinas</a>
-            <a href=\"#\">Artículos</a>
 
         ";
-        // line 17
+        // line 15
         if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_USUARIO")) {
-            // line 18
+            // line 16
             echo "          <h1>Hola ";
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["app"] ?? $this->getContext($context, "app")), "user", array()), "username", array()), "html", null, true);
             echo "</h1>
+          <a href=\"/ver_oficinas\">Oficinas</a>
+          <a href=\"#\">Artículos</a>
           <li><a href=\"";
             // line 19
             echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("fos_user_security_logout");
@@ -70,28 +70,34 @@ class __TwigTemplate_7f0347475b704e18e78440d071c398842b9c6ebef61325d9838c9c46f48
             // line 20
             if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_ADMINISTRADOR")) {
                 // line 21
-                echo "          <a href=\"/agregar_oficina\">Agregar oficina</a>
+                echo "
+
+
+
+          <a href=\"/agregar_oficina\">Agregar oficina</a>
+          <a href=\"/agregar_articulo\">Agregar Artículo</a>
 
           ";
             }
-            // line 24
+            // line 29
             echo "          ";
             if ($this->env->getExtension('Symfony\Bridge\Twig\Extension\SecurityExtension')->isGranted("ROLE_SUPERADMIN")) {
-                // line 25
-                echo "          <a>Agregar Usuario</a>
+                // line 30
+                echo "          <a href='/register'>Agregar Usuario</a>
+
           ";
             }
-            // line 27
+            // line 33
             echo "        ";
         } else {
-            // line 28
+            // line 34
             echo "            <li><a href=\"";
             echo $this->env->getExtension('Symfony\Bridge\Twig\Extension\RoutingExtension')->getPath("fos_user_security_login");
             echo "\">Login</a></li>
-            asd
+
         ";
         }
-        // line 31
+        // line 37
         echo "
 
 
@@ -193,7 +199,7 @@ class __TwigTemplate_7f0347475b704e18e78440d071c398842b9c6ebef61325d9838c9c46f48
 
     public function getDebugInfo()
     {
-        return array (  168 => 12,  151 => 11,  134 => 7,  116 => 6,  95 => 31,  88 => 28,  85 => 27,  81 => 25,  78 => 24,  73 => 21,  71 => 20,  67 => 19,  62 => 18,  60 => 17,  54 => 13,  51 => 12,  49 => 11,  42 => 8,  40 => 7,  36 => 6,  29 => 1,);
+        return array (  174 => 12,  157 => 11,  140 => 7,  122 => 6,  101 => 37,  94 => 34,  91 => 33,  86 => 30,  83 => 29,  73 => 21,  71 => 20,  67 => 19,  60 => 16,  58 => 15,  54 => 13,  51 => 12,  49 => 11,  42 => 8,  40 => 7,  36 => 6,  29 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */
@@ -219,22 +225,28 @@ class __TwigTemplate_7f0347475b704e18e78440d071c398842b9c6ebef61325d9838c9c46f48
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
 
-            <a href=\"/ver_oficinas\">Oficinas</a>
-            <a href=\"#\">Artículos</a>
 
         {%if is_granted('ROLE_USUARIO') %}
           <h1>Hola {{ app.user.username}}</h1>
+          <a href=\"/ver_oficinas\">Oficinas</a>
+          <a href=\"#\">Artículos</a>
           <li><a href=\"{{path('fos_user_security_logout')}}\">Logout</a></li>
           {%if is_granted('ROLE_ADMINISTRADOR')%}
+
+
+
+
           <a href=\"/agregar_oficina\">Agregar oficina</a>
+          <a href=\"/agregar_articulo\">Agregar Artículo</a>
 
           {% endif %}
           {%if is_granted('ROLE_SUPERADMIN')%}
-          <a>Agregar Usuario</a>
+          <a href='/register'>Agregar Usuario</a>
+
           {% endif %}
         {% else %}
             <li><a href=\"{{path('fos_user_security_login')}}\">Login</a></li>
-            asd
+
         {% endif %}
 
 

@@ -42,12 +42,7 @@ class Articulo
      */
     private $idUsuario;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id_u", type="integer")
-     */
-    private $idU;
+  
 
     /**
      * @var int
@@ -244,29 +239,6 @@ class Articulo
         return $this->idUsuario;
     }
 
-    /**
-     * Set idU
-     *
-     * @param integer $idU
-     *
-     * @return Articulo
-     */
-    public function setIdU($idU)
-    {
-        $this->idU = $idU;
-
-        return $this;
-    }
-
-    /**
-     * Get idU
-     *
-     * @return int
-     */
-    public function getIdU()
-    {
-        return $this->idU;
-    }
 
     /**
      * Set idEstado
