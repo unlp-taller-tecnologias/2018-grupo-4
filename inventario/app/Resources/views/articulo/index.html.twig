@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Articulos</h1>
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Denominación</th>
+                <th scope="col">Nro Inventario</th>
+                <th scope="col">Oficina</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for articulo in articulos %}
+            <tr scope="row">
+                <td><a href="{{ path('articulo_show', { 'id': articulo.id }) }}">{{ articulo.denominacion }}</a></td>
+                <td>{{ articulo.numeroInventario }}</td>
+                <td>{{ articulo.oficina }}</td>
+                <td>{{ articulo.estadoArticulo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('articulo_show', { 'id': articulo.id }) }}">Ver</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('articulo_edit', { 'id': articulo.id }) }}">Editar</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('articulo_new') }}">Nuevo Artículo</a>
+        </li>
+    </ul>
+{% endblock %}

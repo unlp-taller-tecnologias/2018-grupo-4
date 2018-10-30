@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Condiciones de Artículos</h1>
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Habilitado</th>
+                <th scope="col">Descripcion</th>
+                <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for condicionArticulo in condicionArticulos %}
+            <tr>
+                <td><a href="{{ path('condicionarticulo_show', { 'id': condicionArticulo.id }) }}">{{ condicionArticulo.nombre }}</a></td>
+                <td>{% if condicionArticulo.habilitado %}Si{% else %}No{% endif %}</td>
+                <td>{{ condicionArticulo.descripcion }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('condicionarticulo_show', { 'id': condicionArticulo.id }) }}">Ver</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('condicionarticulo_edit', { 'id': condicionArticulo.id }) }}">Editar</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('condicionarticulo_new') }}">Nueva Condición</a>
+        </li>
+    </ul>
+{% endblock %}
