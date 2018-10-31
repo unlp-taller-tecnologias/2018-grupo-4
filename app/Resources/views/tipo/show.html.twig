@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tipo</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tipo.id }}</td>
+            </tr>
+            <tr>
+                <th>Codigo</th>
+                <td>{{ tipo.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Nomenclador</th>
+                <td>{{ tipo.nomenclador }}</td>
+            </tr>
+            <tr>
+                <th>Cuenta</th>
+                <td>{{ tipo.cuenta }}</td>
+            </tr>
+            <tr>
+                <th>Concepto</th>
+                <td>{{ tipo.concepto }}</td>
+            </tr>
+            <tr>
+                <th>Grupo</th>
+                <td>{{ tipo.grupo }}</td>
+            </tr>
+            <tr>
+                <th>Subgrupo</th>
+                <td>{{ tipo.subgrupo }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ tipo.descripcion }}</td>
+            </tr>
+            <tr>
+                <th>Vidautil</th>
+                <td>{{ tipo.vidaUtil }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tipo_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('tipo_edit', { 'id': tipo.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

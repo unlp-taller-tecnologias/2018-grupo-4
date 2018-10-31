@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tipos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Codigo</th>
+                <th>Nomenclador</th>
+                <th>Cuenta</th>
+                <th>Concepto</th>
+                <th>Grupo</th>
+                <th>Subgrupo</th>
+                <th>Descripcion</th>
+                <th>Vidautil</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tipo in tipos %}
+            <tr>
+                <td><a href="{{ path('tipo_show', { 'id': tipo.id }) }}">{{ tipo.id }}</a></td>
+                <td>{{ tipo.codigo }}</td>
+                <td>{{ tipo.nomenclador }}</td>
+                <td>{{ tipo.cuenta }}</td>
+                <td>{{ tipo.concepto }}</td>
+                <td>{{ tipo.grupo }}</td>
+                <td>{{ tipo.subgrupo }}</td>
+                <td>{{ tipo.descripcion }}</td>
+                <td>{{ tipo.vidaUtil }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('tipo_show', { 'id': tipo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('tipo_edit', { 'id': tipo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tipo_new') }}">Create a new tipo</a>
+        </li>
+    </ul>
+{% endblock %}

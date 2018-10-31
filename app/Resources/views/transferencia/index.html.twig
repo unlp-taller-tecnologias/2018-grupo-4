@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Transferencias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Observaciones</th>
+                <th>Finalizada</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for Transferencia in transferencias %}
+            <tr>
+                <td><a href="{{ path('transferencia_show', { 'id': Transferencia.id }) }}">{{ Transferencia.id }}</a></td>
+                <td>{{ Transferencia.observaciones }}</td>
+                <td>{{ Transferencia.finalizada }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('transferencia_show', { 'id': Transferencia.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('transferencia_edit', { 'id': Transferencia.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('transferencia_new') }}">Create a new Transferencia</a>
+        </li>
+    </ul>
+{% endblock %}

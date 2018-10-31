@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Nueva Oficina</h1>
+
+    {{ form_start(form) }}
+
+        <div class="container">
+
+        <div class="form-group">
+            {{ form_label(form.nombre)}}
+            {{ form_widget(form.nombre, { 'attr': {'class': 'form-control'}}) }}
+            <small id="nombreHelp" class="form-text text-muted">{{ form_errors(form.nombre)}}</small>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.numeroCarpeta)}}
+            {{ form_widget(form.numeroCarpeta, { 'attr': {'class': 'form-control'}}) }}
+            <small id="numeroCarpetaHelp" class="form-text text-muted">{{ form_errors(form.numeroCarpeta)}}</small>
+        </div>
+
+        <div class="form-group">
+            {{ form_label(form.responsableOficina)}}
+            {{ form_widget(form.responsableOficina, { 'attr': {'class': 'form-control'}}) }}
+        </div>
+        </div>
+
+        {{ form_widget(form) }}
+        <input type="submit" value="Crear" />
+    {{ form_end(form) }}
+
+    <ul>
+        <li>
+            <a href="{{ path('oficina_index') }}">Listado de oficinas</a>
+        </li>
+    </ul>
+{% endblock %}
+

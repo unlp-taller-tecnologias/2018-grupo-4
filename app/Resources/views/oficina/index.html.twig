@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Oficinas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Responsableoficina</th>
+                <th>Nombre</th>
+                <th>Numerocarpeta</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for oficina in oficinas %}
+            <tr>
+                <td><a href="{{ path('oficina_show', { 'id': oficina.id }) }}">{{ oficina.id }}</a></td>
+                <td>{{ oficina.responsableOficina }}</td>
+                <td>{{ oficina.nombre }}</td>
+                <td>{{ oficina.numeroCarpeta }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('oficina_show', { 'id': oficina.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('oficina_edit', { 'id': oficina.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('oficina_new') }}">Create a new oficina</a>
+        </li>
+    </ul>
+{% endblock %}

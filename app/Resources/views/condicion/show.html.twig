@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Condicion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ condicion.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ condicion.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Habilitado</th>
+                <td>{% if condicion.habilitado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ condicion.descripcion }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('condicion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('condicion_edit', { 'id': condicion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
