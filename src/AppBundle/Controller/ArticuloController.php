@@ -30,13 +30,13 @@ class ArticuloController extends Controller
       //   var_dump("HACE ESTO COMO OTRO USUARIO");
       // }
 
-      $user = $this->getUser();
+      //$user = $this->getUser();
 
       #$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page!');
 
         $em = $this->getDoctrine()->getManager();
 
-        $user->addRole("ROLE_ADMIN");
+        //$user->addRole("ROLE_ADMIN");
         $em->flush();
 
         $articulos = $em->getRepository('AppBundle:Articulo')->findAll();

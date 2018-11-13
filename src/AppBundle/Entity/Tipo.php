@@ -279,5 +279,8 @@ class Tipo
     {
         return $this->vidaUtil;
     }
-}
 
+    public function __toString() {
+        return $this->nomenclador;
+    }
+}

@@ -589,4 +589,37 @@ class Articulo
         return $this->oficina;
     }
 
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Tipo")
+     * @ORM\JoinColumn(name="tipo_id", referencedColumnName="id")
+     */
+    private $tipo;
+
+    /**
+     * Get tipo
+     *
+     * @return Tipo
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return Tipo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+
 }

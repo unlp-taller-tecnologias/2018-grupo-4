@@ -32,6 +32,11 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Seleccione una oficina'
             )
           ))
+          ->add('tipo', null, array(
+            'label' => 'Tipo',
+            'attr' => array('placeholder' => 'Seleccione un tipo'
+            )
+          ))
           // ->add('estado', null, array(
           //     'label'=> 'Estado'
           // ))
