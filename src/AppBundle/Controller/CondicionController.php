@@ -31,6 +31,11 @@ class CondicionController extends Controller
         ));
     }
 
+
+  
+
+
+
     /**
      * Creates a new condicion entity.
      *
