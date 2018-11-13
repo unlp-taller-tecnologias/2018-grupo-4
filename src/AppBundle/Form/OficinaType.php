@@ -15,13 +15,29 @@ class OficinaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('responsableOficina')->add('nombre')->add('numeroCarpeta', IntegerType::class, array(
+        $builder
+        ->add('nombre', null, array(
+            'label' => 'Nombre de la oficina*',
             'attr' => array(
-            'min' => 1
+            'placeholder' => 'Ingrese un nombre para la oficina'
+            )
+        ))
+        ->add('responsableOficina', null, array(
+            'label' => 'Responsable de Oficina',
+            'attr' => array(
+            'placeholder' => 'Ingrese el responsable de oficina'
+            )
+        ))
+
+        ->add('numeroCarpeta',IntegerType::class, array(
+            'label' => 'Número de carpeta*',
+            'attr' => array(
+            'min' => 1,
+            'placeholder' => 'Ingrese un número de carpeta para la oficina'
             ))
         );
     }
-    
+
     /**
      * {@inheritdoc}
      */

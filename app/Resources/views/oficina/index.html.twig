@@ -1,43 +1,39 @@
-{% extends 'base.html.twig' %}
+{% extends 'tablelist.html.twig' %}
 
 {% block body %}
-    <h1>Oficinas list</h1>
+    {% block descriptionTable %}
+    <br>
+    <h1>Oficinas</h1>
+    {% endblock %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Responsableoficina</th>
-                <th>Nombre</th>
-                <th>Numerocarpeta</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for oficina in oficinas %}
-            <tr>
-                <td><a href="{{ path('oficina_show', { 'id': oficina.id }) }}">{{ oficina.id }}</a></td>
-                <td>{{ oficina.responsableOficina }}</td>
-                <td>{{ oficina.nombre }}</td>
-                <td>{{ oficina.numeroCarpeta }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('oficina_show', { 'id': oficina.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('oficina_edit', { 'id': oficina.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% block new %}
+      <a class="btn btn-dark" href="{{ path('oficina_new') }}">Nueva Oficina</a>
+    {% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('oficina_new') }}">Create a new oficina</a>
-        </li>
-    </ul>
+    {% block headPrincipalTable %}
+      <th scope="row">Nombre</th>
+      <th scope="row">Responsable</th>
+      <th scope="row">Número de Carpeta</th>
+      <th scope="row">Acciones</th>
+    {% endblock %}
+
+    {% block bodyPrincipalTable %}
+      {% for oficina in oficinas %}
+        <tr>
+            <td><a href="{{ path('oficina_show', { 'id': oficina.id }) }}">{{ oficina.nombre }}</a></td>
+            <td>{{ oficina.responsableOficina }}</td>
+            <td>{{ oficina.numeroCarpeta }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('oficina_show', { 'id': oficina.id }) }}">Ver</a>
+                    </li>
+                    <!-- <li>
+                        <a href="{{ path('oficina_edit', { 'id': oficina.id }) }}">Editar</a>
+                    </li> -->
+                </ul>
+            </td>
+        </tr>
+      {% endfor %}
+    {% endblock %}
 {% endblock %}

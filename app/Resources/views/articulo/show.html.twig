@@ -1,0 +1,92 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <h1>Artículo</h1>
+
+    <table>
+        <tbody>
+          <tr>
+              <th>Denominación</th>
+              <td>{{ articulo.denominacion }}</td>
+          </tr>
+            <tr>
+                <th>Número de Inventario</th>
+                <td>{{ articulo.numInventario }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ articulo.estado }}</td>
+            </tr>
+            <tr>
+                <th>Material</th>
+                <td>{{ articulo.material }}</td>
+            </tr>
+            <tr>
+                <th>Marca</th>
+                <td>{{ articulo.marca }}</td>
+            </tr>
+            <tr>
+                <th>Número  de Fábrica</th>
+                <td>{{ articulo.numFabrica }}</td>
+            </tr>
+            <tr>
+                <th>Largo</th>
+                <td>{{ articulo.largo }}</td>
+            </tr>
+            <tr>
+                <th>Ancho</th>
+                <td>{{ articulo.ancho }}</td>
+            </tr>
+            <tr>
+                <th>Alto</th>
+                <td>{{ articulo.alto }}</td>
+            </tr>
+            <tr>
+                <th>Número de Estantes</th>
+                <td>{{ articulo.numsEstantes }}</td>
+            </tr>
+            <tr>
+                <th>Número de Cajones</th>
+                <td>{{ articulo.numsCajones }}</td>
+            </tr>
+            <tr>
+                <th>Detalle Origen</th>
+                <td>{{ articulo.detalleOrigen }}</td>
+            </tr>
+            <tr>
+                <th>Importe</th>
+                <td>{{ articulo.importe }}</td>
+            </tr>
+            <tr>
+                <th>Fecha Entrada</th>
+                <td>{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Código Cuenta/Subcuenta</th>
+                <td>{{ articulo.codigoCuentaSubcuenta }}</td>
+            </tr>
+            <tr>
+                <th>Número Expediente</th>
+                <td>{{ articulo.numExpediente }}</td>
+            </tr>
+            <tr>
+                <th>Observaciones</th>
+                <td>{{ articulo.observaciones }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('articulo_index') }}">Volver al listado de Artículos</a>
+        </li>
+        <li>
+            <a href="{{ path('articulo_edit', { 'id': articulo.id }) }}">Editar</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Cambiar Estado">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

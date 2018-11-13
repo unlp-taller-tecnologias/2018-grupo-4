@@ -1,39 +1,52 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block body %}
+{% block content %}
     <h1>Oficina</h1>
 
     <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ oficina.id }}</td>
-            </tr>
-            <tr>
-                <th>Responsableoficina</th>
-                <td>{{ oficina.responsableOficina }}</td>
-            </tr>
-            <tr>
-                <th>Nombre</th>
-                <td>{{ oficina.nombre }}</td>
-            </tr>
-            <tr>
-                <th>Numerocarpeta</th>
-                <td>{{ oficina.numeroCarpeta }}</td>
-            </tr>
-        </tbody>
+      <tbody>
+        <tr>
+          <th>Nombre</th>
+          <td>{{ oficina.nombre }}</td>
+        </tr>
+        <tr>
+          <th>Responsable de Oficina</th>
+          <td>{{ oficina.responsableOficina }}</td>
+        </tr>
+        <tr>
+          <th>Número Carpeta</th>
+          <td>{{ oficina.numeroCarpeta }}</td>
+        </tr>
+      </tbody>
     </table>
+
+    {% block descriptionTable %}
+    <br>
+      <h4>Artículos</h4>
+    {% endblock %}
+
+    {% block headPrincipalTable %}
+      <th scope="row">Denominación</th>
+    {% endblock %}
+
+    {% block bodyPrincipalTable %}
+      {% for articulo in oficina.articulos %}
+        <tr>
+          <td><a href="{{ path('articulo_show', { 'id': articulo.id }) }}">{{ articulo.denominacion }}</a></td>
+        </tr>
+      {% endfor %}
+    {% endblock %}
 
     <ul>
         <li>
-            <a href="{{ path('oficina_index') }}">Back to the list</a>
+            <a href="{{ path('oficina_index') }}">Volver al listado de Oficinas</a>
         </li>
         <li>
-            <a href="{{ path('oficina_edit', { 'id': oficina.id }) }}">Edit</a>
+            <a href="{{ path('oficina_edit', { 'id': oficina.id }) }}">Editar</a>
         </li>
         <li>
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input type="submit" value="Eliminar">
             {{ form_end(delete_form) }}
         </li>
     </ul>

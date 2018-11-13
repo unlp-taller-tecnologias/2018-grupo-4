@@ -1,0 +1,231 @@
+{% extends "layout.twig.html" %}
+
+{% block nav %}
+{% include "navBar.twig.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <a class="btn btn-dark" href="index.php?method=patient"><< Ir al listado</a>
+  <div class="container-fluid">
+    <div class="row justify-content-md-center">
+      <div class="col-md-8">
+        <form  method="POST" action="index.php?method=patient&action=saveChange">
+          <div class="form-group">
+            <input type="hidden" name="id" value="{{ patient.id }}">
+
+            <label>Nombre del paciente</label>
+            <input required title="Solo debe contener letras" class="form-control" id="nombre" name="nombre" value="{{patient.nombre}}" type="text">
+
+            <label>Apellido del paciente</label>
+            <input required  title="Solo debe contener letras" class="form-control" id="apellido" name="apellido" value="{{patient.apellido}}" type="text">
+
+            <label>Fecha Nacimiento</label>
+            <input class="form-control" id="fecha_nac" name="fecha_nac" value="{{patient.fecha_nac}}" type="date">
+
+            <label>Lugar de nacimiento</label>
+            <input title="Solo debe contener letras y numeros" class="form-control" id="lugar_nac" name="lugar_nac" value="{{patient.lugar_nac}}" type="text">
+
+            <label>Partido</label>
+            <select id="partido" class="form-control" name="region_sanitaria_id">
+              <option value=""> Seleecione </option>
+            </select>
+
+            <label>Region Sanitaria</label>
+            <input class="form-control" id="region_sanitaria_id" name="region_sanitaria_id_Desc" type="text"  disabled>
+
+            <label>Localidad</label>
+            <select id="localidad" class="form-control" name="localidad_id">
+              <option value=""> Seleecione </option>
+            </select>
+
+            <label>Domicilio</label>
+            <input required  title="Solo debe contener letras y numeros" class="form-control" id="domicilio" name="domicilio" value="{{patient.domicilio}}" type="text">
+
+            <label>Genero</label>
+            <select required title="Debe seleccionar una opcion" id="generoSelect" class="form-control" name="genero">
+              <option value=""> Seleecione </option>
+              <option value="1"> Otro </option>
+              <option value="2"> Femenino </option>
+              <option value="3"> Masculino </option>
+            </select>
+
+            <label>Tiene documento</label>
+            <div required title="Debe seleccionar una opcion" class="btn-group btn-group-toggle" data-toggle="buttons" id="tieneDoc">
+              <label class="btn btn-outline-dark" id="radio-option1">
+                <input name="options" id="radio-option-1" autocomplete="off" value="1" checked="" type="radio"> Si
+              </label>
+              <label class="btn btn-outline-dark" id="radio-option2">
+                <input name="options" id="radio-option-2" autocomplete="off" value="0" type="radio"> No
+              </label>
+            </div>
+
+            <br>
+            <label>Tipo documento</label>
+            <select required title="Debe seleccionar una opcion" id="tipo-documento" class="form-control" name="tipo_doc_id">
+              <option value=""> Seleecione </option>
+            </select>
+
+            <label>Nro. documento</label>
+            <input required title="Solo debe contenter numeros" class="form-control" id="numero" name="numero" value="{{patient.numero}}" type="number">
+
+            <label>Nro. historia clinica</label>
+            <input class="form-control" id="nro_historia_clinica" name="nro_historia_clinica" value="{{patient.nro_historia_clinica}}" type="number">
+
+            <label>Nro. de carpeta</label>
+            <input class="form-control" id="nro_carpeta" name="nro_carpeta" value="{{patient.nro_carpeta}}" type="number">
+
+            <label>Nro. tel/cel</label>
+            <input class="form-control" id="tel" name="tel" value="{{patient.tel}}" type="number">
+
+            <label>Obra Social</label>
+            <select id="obras-sociales" class="form-control" name="obrasocial">
+              <option value=""> Seleecione </option>
+            </select>
+
+          </div>
+          <button id="btGuardar" type="submit" class="btn btn-dark">Guardar cambios</button>
+        </form>
+        </div>
+    </div>
+  </div>
+</div>
+{{ parent() }}
+{% endblock %}
+
+{% block selectTipoDoc %}
+  {% if patient.tipo_doc_id != 0 %}
+        $("#tipo-documento").val({{patient.tipo_doc_id}});
+  {% endif %}
+{% endblock %}
+
+{% block selectObraSocial %}
+  {% if patient.obra_social_id != 0 %}
+      $("#obras-sociales").val({{patient.obra_social_id}});
+  {% endif %}
+{% endblock %}
+
+{% block selectGenero %}
+  {% if patient.genero_id != 0 %}
+      $("#generoSelect").val({{patient.genero_id}});
+  {% endif %}
+{% endblock %}
+
+{% block selectTieneDocumento %}
+  {% if patient.tiene_documento == 1 %}
+    $("#radio-option1").addClass('active');
+  {% else %}
+    $("#radio-option2").addClass('active');
+  {% endif %}
+{% endblock %}
+
+
+{% block selectPartido %}
+  {% if patient.region_sanitaria_id != 0 %}
+      $("#partido").val({{patient.region_sanitaria_id}});
+      $.ajax({
+            url: "https://api-referencias.proyecto2018.linti.unlp.edu.ar/localidad/partido/"+{{patient.region_sanitaria_id}}
+          })
+          .done(function( data ) {
+            var options = "";
+            $.each( data, function( i, option ) {
+              options += "<option value='" + option.id + "'>" + option.nombre + "</option>";
+            });
+            $("#localidad").append(options);
+            $("#localidad").val({{patient.region_sanitaria_id}});
+          });
+      $.ajax({
+            url: "https://api-referencias.proyecto2018.linti.unlp.edu.ar/region-sanitaria/"+{{patient.region_sanitaria_id}}
+          })
+          .done(function( data ) {
+            var options = "";
+            options += data.nombre;
+            $("#region_sanitaria_id").val(options);
+          });
+  {% endif %}
+{% endblock %}
+
+
+{% block selectChenge %}
+  $( "#partido" ).change(function() {
+      var sel = $( "#partido" ).val();
+      $.ajax({
+            url: "https://api-referencias.proyecto2018.linti.unlp.edu.ar/localidad/partido/"+sel
+          })
+          .done(function( data ) {
+            var options = "";
+            $.each( data, function( i, option ) {
+              options += "<option value='" + option.id + "'>" + option.nombre + "</option>";
+            });
+            $("#localidad").append(options);
+            $("#localidad").val(sel);
+          });
+      $.ajax({
+            url: "https://api-referencias.proyecto2018.linti.unlp.edu.ar/region-sanitaria/"+sel
+          })
+          .done(function( data ) {
+            var options = "";
+            options += data.nombre;
+            $("#region_sanitaria_id").val(options);
+          });
+    });
+{% endblock %}
+
+
+{% block selectEnableInputPatient %}
+  {% if stateInput == 'new' %}
+    $("#nombre").prop('disabled', false);
+    $("#apellido").prop('disabled', false);
+    $("#fecha_nac").prop('disabled', false);
+    $("#lugar_nac").prop('disabled', false);
+    $("#partido").prop('disabled', false);
+    $("#localidad").prop('disabled', false);
+    $("#domicilio").prop('disabled', false);
+    $("#generoSelect").prop('disabled', false);
+    $("#radio-option1").prop('disabled', false);
+    $("#radio-option2").prop('disabled', false);
+    $("#tipo-documento").prop('disabled', false);
+    $("#numero").prop('disabled', false);
+    $("#nro_historia_clinica").prop('disabled', false);
+    $("#nro_carpeta").prop('disabled', false);
+    $("#tel").prop('disabled', false);
+    $("#obras-sociales").prop('disabled', false);
+    $("#btGuardar").prop('disabled', false);
+  {% elseif stateInput == 'newNN'  %}
+    $("#nombre").prop('disabled', false);
+    $("#apellido").prop('disabled', false);
+    $("#fecha_nac").prop('disabled', true);
+    $("#lugar_nac").prop('disabled', true);
+    $("#partido").prop('disabled', true);
+    $("#localidad").prop('disabled', true);
+    $("#domicilio").prop('disabled', true);
+    $("#generoSelect").prop('disabled', true);
+    $("#radio-option1").prop('disabled', true);
+    $("#radio-option2").prop('disabled', true);
+    $("#tipo-documento").prop('disabled', true);
+    $("#numero").prop('disabled', true);
+    $("#nro_historia_clinica").prop('disabled', false);
+    $("#nro_carpeta").prop('disabled', true);
+    $("#tel").prop('disabled', true);
+    $("#obras-sociales").prop('disabled', false);
+    $("#btGuardar").prop('disabled', false);
+  {% else %}
+    $("#nombre").prop('disabled', false);
+    $("#apellido").prop('disabled', false);
+    $("#fecha_nac").prop('disabled', false);
+    $("#lugar_nac").prop('disabled', false);
+    $("#partido").prop('disabled', false);
+    $("#localidad").prop('disabled', false);
+    $("#domicilio").prop('disabled', false);
+    $("#generoSelect").prop('disabled', false);
+    $("#radio-option1").prop('disabled', false);
+    $("#radio-option2").prop('disabled', false);
+    $("#tipo-documento").prop('disabled', false);
+    $("#numero").prop('disabled', false);
+    $("#nro_historia_clinica").prop('disabled', false);
+    $("#nro_carpeta").prop('disabled', false);
+    $("#tel").prop('disabled', false);
+    $("#obras-sociales").prop('disabled', false);
+    $("#btGuardar").prop('disabled', false);
+  {% endif %}
+{% endblock %}

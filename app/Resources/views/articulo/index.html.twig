@@ -1,0 +1,71 @@
+{% extends 'tablelist.html.twig' %}
+
+{% block body %}
+  {% block descriptionTable %}
+  <br>
+    <h1>Articulos</h1>
+  {% endblock %}
+
+  {% block filters %}
+  <span></span>
+  <br>
+  {% endblock %}
+
+  {% block new %}
+    <a class="btn btn-dark" href="{{ path('articulo_new') }}">Nuevo Artículo</a>
+  {% endblock %}
+
+  {% block headPrincipalTable %}
+    <th scope="row">Denominación</th>
+    <th scope="row">Número de Inventario</th>
+    <th scope="row">Estado</th>
+    <!-- <th scope="row">Material</th>
+    <th scope="row">Marca</th>
+    <th scope="row">Número Fábrica</th>
+    <th scope="row">Largo</th>
+    <th scope="row">Ancho</th>
+    <th scope="row">Alto</th>
+    <th scope="row">Número de Estantes</th>
+    <th scope="row">Número de Cajones</th>
+    <th scope="row">Detalle Origen</th>
+    <th scope="row">Importe</th>
+    <th scope="row">Fecha Entrada</th>
+    <th scope="row">Código Cuenta/Subcuenta</th> -->
+    <th scope="row">Número de Expediente</th>
+    <!-- <th scope="row">Observaciones</th> -->
+    <th scope="row">Acciones</th>
+    {% endblock %}
+    {% block bodyPrincipalTable %}
+      {% for articulo in articulos %}
+        <tr>
+            <td><a href="{{ path('articulo_show', { 'id': articulo.id }) }}">{{ articulo.denominacion }}</a></td>
+            <td>{{ articulo.numInventario }}</td>
+            <td>{{ articulo.estado }}</td>
+            <!-- <td>{{ articulo.material }}</td>
+            <td>{{ articulo.marca }}</td>
+            <td>{{ articulo.numFabrica }}</td>
+            <td>{{ articulo.largo }}</td>
+            <td>{{ articulo.ancho }}</td>
+            <td>{{ articulo.alto }}</td>
+            <td>{{ articulo.numsEstantes }}</td>
+            <td>{{ articulo.numsCajones }}</td>
+            <td>{{ articulo.detalleOrigen }}</td>
+            <td>{{ articulo.importe }}</td>
+            <td>{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{{ articulo.codigoCuentaSubcuenta }}</td> -->
+            <td>{{ articulo.numExpediente }}</td>
+            <!-- <td>{{ articulo.observaciones }}</td> -->
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('articulo_show', { 'id': articulo.id }) }}">Ver</a>
+                    </li>
+                    <!-- <li>
+                        <a href="{{ path('articulo_edit', { 'id': articulo.id }) }}">Editar</a>
+                    </li> -->
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    {% endblock %}
+{% endblock %}

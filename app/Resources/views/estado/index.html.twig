@@ -1,45 +1,43 @@
-{% extends 'base.html.twig' %}
+{% extends 'tablelist.html.twig' %}
 
 {% block body %}
-    <h1>Estados list</h1>
+  {% block descriptionTable %}
+  <br>
+    <h1>Estados</h1>
+  {% endblock %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Color</th>
-                <th>Habilitado</th>
-                <th>Descripcion</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for estado in estados %}
-            <tr>
-                <td><a href="{{ path('estado_show', { 'id': estado.id }) }}">{{ estado.id }}</a></td>
-                <td>{{ estado.nombre }}</td>
-                <td>{{ estado.color }}</td>
-                <td>{% if estado.habilitado %}Yes{% else %}No{% endif %}</td>
-                <td>{{ estado.descripcion }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('estado_show', { 'id': estado.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('estado_edit', { 'id': estado.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  {% block filters %}
+  <span></span>
+  <br>
+  {% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('estado_new') }}">Create a new estado</a>
-        </li>
-    </ul>
+  {% block new %}
+    <a class="btn btn-dark" href="{{ path('estado_new') }}">Nuevo Estado</a>
+  {% endblock %}
+
+  {% block headPrincipalTable %}
+    <th scope="row">Nombre</th>
+    <th scope="row">Color</th>
+    <th scope="row">Habilitado</th>
+    <th scope="row">Actions</th>
+  {% endblock %}
+    {% block bodyPrincipalTable %}
+      {% for estado in estados %}
+        <tr>
+          <td><a href="{{ path('estado_show', { 'id': estado.id }) }}">{{ estado.nombre }}</a></td>
+          <td style="color:{{ estado.color }}">{{ estado.color }}</td>
+          <td>{% if estado.habilitado %}Yes{% else %}No{% endif %}</td>
+          <td>
+            <ul>
+                <li>
+                    <a href="{{ path('estado_show', { 'id': estado.id }) }}">Ver</a>
+                </li>
+                <!-- <li>
+                    <a href="{{ path('estado_edit', { 'id': estado.id }) }}">Editar</a>
+                </li> -->
+            </ul>
+          </td>
+        </tr>
+      {% endfor %}
+    {% endblock %}
 {% endblock %}

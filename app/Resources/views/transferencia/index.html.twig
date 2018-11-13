@@ -1,41 +1,38 @@
-{% extends 'base.html.twig' %}
+{% extends 'tablelist.html.twig' %}
 
 {% block body %}
-    <h1>Transferencias list</h1>
+  {% block descriptionTable %}
+    <br>
+    <h1>Transferencias</h1>
+  {% endblock %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Observaciones</th>
-                <th>Finalizada</th>
-                <th>Actions</th>
+  {% block filters %}
+  <span></span>
+  <br>
+  {% endblock %}
+  {% block headPrincipalTable %}
+    <th scope="row">Id</th>
+    <th scope="row">Observaciones</th>
+    <th scope="row">Finalizada</th>
+    <th scope="row">Actions</th>
+  {% endblock %}
+  {% block bodyPrincipalTable %}
+    {% for Transferencia in transferencias %}
+      <tr>
+        <td><a href="{{ path('transferencia_show', { 'id': Transferencia.id }) }}">{{ Transferencia.id }}</a></td>
+        <td>{{ Transferencia.observaciones }}</td>
+        <td>{{ Transferencia.finalizada }}</td>
+        <td>
+          <ul>
+            <li>
+              <a href="{{ path('transferencia_show', { 'id': Transferencia.id }) }}">show</a>
+            </li>
+          <!-- <li>
+            <a href="{{ path('transferencia_edit', { 'id': Transferencia.id }) }}">edit</a>
+          </li> -->
+          </ul>
+        </td>
             </tr>
-        </thead>
-        <tbody>
-        {% for Transferencia in transferencias %}
-            <tr>
-                <td><a href="{{ path('transferencia_show', { 'id': Transferencia.id }) }}">{{ Transferencia.id }}</a></td>
-                <td>{{ Transferencia.observaciones }}</td>
-                <td>{{ Transferencia.finalizada }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('transferencia_show', { 'id': Transferencia.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('transferencia_edit', { 'id': Transferencia.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('transferencia_new') }}">Create a new Transferencia</a>
-        </li>
-    </ul>
+    {% endfor %}
+  {% endblock %}
 {% endblock %}

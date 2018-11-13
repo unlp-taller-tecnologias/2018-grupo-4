@@ -59,6 +59,11 @@ class Oficina
      */
     private $numeroCarpeta;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Articulo", mappedBy="oficina")
+     */
+    private $articulos;
+
     public function __construct()
     {
         $this->articulos = new ArrayCollection();
@@ -150,5 +155,12 @@ class Oficina
         return $this->numeroCarpeta;
     }
 
-}
+    public function getArticulos() {
+        return $this->articulos;
+    }
 
+    public function addArticulo($articulo) {
+        $this->articulos[] = $articulos;
+    }
+
+}

@@ -1,43 +1,42 @@
-{% extends 'base.html.twig' %}
+{% extends 'tablelist.html.twig' %}
 
 {% block body %}
-    <h1>Condicions list</h1>
+  {% block descriptionTable %}
+  <br>
+    <h1>Condiciones</h1>
+  {% endblock %}
+  {% block filters %}
+  <span></span>
+  <br>
+  {% endblock %}
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nombre</th>
-                <th>Habilitado</th>
-                <th>Descripcion</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for condicion in condicions %}
-            <tr>
-                <td><a href="{{ path('condicion_show', { 'id': condicion.id }) }}">{{ condicion.id }}</a></td>
-                <td>{{ condicion.nombre }}</td>
-                <td>{% if condicion.habilitado %}Yes{% else %}No{% endif %}</td>
-                <td>{{ condicion.descripcion }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('condicion_show', { 'id': condicion.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('condicion_edit', { 'id': condicion.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+  {% block new %}
+    <a class="btn btn-dark" href="{{ path('condicion_new') }}">Nueva Condición</a>
+  {% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('condicion_new') }}">Create a new condicion</a>
-        </li>
-    </ul>
-{% endblock %}
+  {% block headPrincipalTable %}
+    <th scope="row">Nombre</th>
+    <th scope="row">Habilitado</th>
+    <th scope="row">Descripcion</th>
+    <th scope="row">Actions</th>
+  {% endblock %}
+  {% block bodyPrincipalTable %}
+    {% for condicion in condicions %}
+      <tr>
+          <td><a href="{{ path('condicion_show', { 'id': condicion.id }) }}">{{ condicion.nombre }}</a></td>
+          <td>{% if condicion.habilitado %}Yes{% else %}No{% endif %}</td>
+          <td>{{ condicion.descripcion }}</td>
+          <td>
+              <ul>
+                  <li>
+                      <a href="{{ path('condicion_show', { 'id': condicion.id }) }}">Ver</a>
+                  </li>
+                  <!-- <li>
+                      <a href="{{ path('condicion_edit', { 'id': condicion.id }) }}">edit</a>
+                  </li> -->
+              </ul>
+          </td>
+      </tr>
+      {% endfor %}
+      {% endblock %}
+  {% endblock %}

@@ -1,11 +1,12 @@
 {% extends 'layout.html.twig' %}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 
 {% block content %}
   <div class="container">
     <br>
-    <a href="{{ path('estado_index') }}"><i class="fas fa-angle-left"></i>Listado de Estados</a>
+    <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
     <br>
-    <h1>Nuevo Estado</h1>
+    <h1>Nuevo Artículo</h1>
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_errors(form) }}
@@ -14,5 +15,5 @@
 
     {{ form_end(form) }}
 
-    </div>
+  </div>
 {% endblock %}

@@ -32,7 +32,12 @@ security:
 
 
     access_control:
-        # - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      # IS_AUTHENTICATED_ANONYMOUSLY: No está logueado
+      # IS_AUTHENTICATED_FULLY: Esta logueado (no importa el rol)
+      - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      #- { path: ^/panel/, role: IS_AUTHENTICATED_FULLY }
+      #damos permiso a roles para una ruta
+      - { path: ^/oficina/$, role: ROLE_USER }
         # - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         # - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }

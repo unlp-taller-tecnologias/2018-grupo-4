@@ -15,9 +15,28 @@ class EstadoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('color', ColorType::class)->add('habilitado')->add('descripcion');
+        $builder
+        ->add('nombre', null, array(
+            'label' => 'Nombre del Estado*',
+            'attr' => array(
+            'placeholder' => 'Ingrese un nombre para el estado'
+            )
+        ))
+        ->add('color', ColorType::class, array(
+            'label' => 'Color para el Estado*',
+            'attr' => array(
+            'placeholder' => 'Ingrese un color para el estado'
+            )
+        ))
+        ->add('habilitado')
+        ->add('descripcion', null, array(
+            'label' => 'Descripción del Estado',
+            'attr' => array(
+            'placeholder' => 'Ingrese una descripción para el estado'
+            )
+        ));
     }
-    
+
     /**
      * {@inheritdoc}
      */
