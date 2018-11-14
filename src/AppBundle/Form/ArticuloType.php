@@ -32,6 +32,9 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Seleccione una oficina'
             )
           ))
+          ->add('condicion', null, array(
+               'label'=> 'Condición'
+          ))
           ->add('tipo', null, array(
                'label'=> 'Tipo'
           ))
@@ -79,6 +82,9 @@ class ArticuloType extends AbstractType
             'label' => 'Detalle del origen',
             'attr' => array('placeholder' => 'Ingrese el detalle del origen del artículo'
             )
+          ))
+          ->add('moneda', null, array(
+            'label' => 'Moneda'
           ))
           ->add('importe', null, array(
             'label' => 'Importe',

@@ -621,5 +621,68 @@ class Articulo
         return $this;
     }
 
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Moneda")
+     * @ORM\JoinColumn(name="moneda_id", referencedColumnName="id")
+     */
+    private $moneda;
+
+    /**
+     * Get Moneda
+     *
+     * @return Moneda
+     */
+    public function getMoneda()
+    {
+        return $this->moneda;
+    }
+
+    /**
+     * Set Moneda
+     *
+     * @param string $moneda
+     *
+     * @return Moneda
+     */
+    public function setMoneda($moneda)
+    {
+        $this->moneda = $moneda;
+
+        return $this;
+    }
+    
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Condicion")
+     * @ORM\JoinColumn(name="moneda_id", referencedColumnName="id")
+     */
+    private $condicion;
+
+    /**
+     * Get Condicion
+     *
+     * @return Condicion
+     */
+    public function getCondicion()
+    {
+        return $this->condicion;
+    }
+
+    /**
+     * Set Condicion
+     *
+     * @param string $condicion
+     *
+     * @return Condicion
+     */
+    public function setCondicion($condicion)
+    {
+        $this->moneda = $condicion;
+
+        return $this;
+    }
 
 }

@@ -1,53 +1,38 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+  <br>
     <h1>Oficina</h1>
-
-    <table>
+    <table class="table table">
       <tbody>
         <tr>
-          <th>Nombre</th>
-          <td>{{ oficina.nombre }}</td>
+          <th scope="row">Nombre</th>
+          <td scope="row">{{ oficina.nombre }}</td>
         </tr>
         <tr>
-          <th>Responsable de Oficina</th>
-          <td>{{ oficina.responsableOficina }}</td>
+          <th scope="row">Responsable de Oficina</th>
+          <td scope="row">{{ oficina.responsableOficina }}</td>
         </tr>
         <tr>
-          <th>Número Carpeta</th>
-          <td>{{ oficina.numeroCarpeta }}</td>
+          <th scope="row">Número Carpeta</th>
+          <td scope="row">{{ oficina.numeroCarpeta }}</td>
         </tr>
       </tbody>
     </table>
-
-    {% block descriptionTable %}
+    <a class="btn btn-dark" href="{{ path('oficina_edit', { 'id': oficina.id }) }}">Editar</a>
     <br>
-      <h4>Artículos</h4>
-    {% endblock %}
-
-    {% block headPrincipalTable %}
-      <th scope="row">Denominación</th>
-    {% endblock %}
-
-    {% block bodyPrincipalTable %}
-      {% for articulo in oficina.articulos %}
+    <br>
+    <br>
+      <h4>Artículos de la oficina</h4>
+      <table class="table table">
+        <th scope="row">Denominación</th>
+        {% for articulo in oficina.articulos %}
         <tr>
-          <td><a href="{{ path('articulo_show', { 'id': articulo.id }) }}">{{ articulo.denominacion }}</a></td>
+          <td scope="row"><a href="{{ path('articulo_show', { 'id': articulo.id }) }}">{{ articulo.denominacion }}</a></td>
         </tr>
       {% endfor %}
-    {% endblock %}
-
-    <ul>
-        <li>
-            <a href="{{ path('oficina_index') }}">Volver al listado de Oficinas</a>
-        </li>
-        <li>
-            <a href="{{ path('oficina_edit', { 'id': oficina.id }) }}">Editar</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Eliminar">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    </table>
 {% endblock %}
