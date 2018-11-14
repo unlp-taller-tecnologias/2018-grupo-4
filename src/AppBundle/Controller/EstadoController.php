@@ -45,6 +45,8 @@ class EstadoController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $habilitado = $em->getRepository('AppBundle:Estado')->findOneByHabilitado('1');
+            $estado->setHabilitado($estado);
             $em->persist($estado);
             $em->flush();
 

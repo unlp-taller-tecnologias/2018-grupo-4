@@ -1,21 +1,13 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <h1>Editar Articulo</h1>
-
+    <div class="container">
+    <br>
+    <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+    <br>
+    <h1>Editar Artículo</h1>
     {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Editar" />
+    {{ form_widget(edit_form) }}
+    <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
     {{ form_end(edit_form) }}
-
-    <ul>
-        <li>
-            <a href="{{ path('articulo_index') }}">Volver al listado de Artículos</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Cambiar Estado">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
 {% endblock %}

@@ -13,9 +13,14 @@ class CondicionType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('habilitado')->add('descripcion');
+        $builder
+        ->add('nombre')
+        ->add('habilitado')
+        ->add('descripcion', null, array(
+          'label' => 'Descripción'
+        ));
     }
-    
+
     /**
      * {@inheritdoc}
      */

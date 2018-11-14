@@ -1,92 +1,85 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+  <br>
     <h1>Artículo</h1>
-
-    <table>
+    <table class="table table">
         <tbody>
           <tr>
-              <th>Denominación</th>
-              <td>{{ articulo.denominacion }}</td>
+              <th scope="row">Denominación</th>
+              <td scope="row">{{ articulo.denominacion }}</td>
           </tr>
             <tr>
-                <th>Número de Inventario</th>
-                <td>{{ articulo.numInventario }}</td>
+                <th scope="row">Número de Inventario</th>
+                <td scope="row"{{ articulo.numInventario }}</td>
             </tr>
             <tr>
-                <th>Estado</th>
-                <td>{{ articulo.estado }}</td>
+                <th scope="row">Estado</th>
+                <td scope="row">{{ articulo.estado }}</td>
             </tr>
             <tr>
-                <th>Material</th>
-                <td>{{ articulo.material }}</td>
+                <th scope="row">Material</th>
+                <td scope="row">{{ articulo.material }}</td>
             </tr>
             <tr>
-                <th>Marca</th>
-                <td>{{ articulo.marca }}</td>
+                <th scope="row">Marca</th>
+                <td scope="row">{{ articulo.marca }}</td>
             </tr>
             <tr>
-                <th>Número  de Fábrica</th>
-                <td>{{ articulo.numFabrica }}</td>
+                <th scope="row">Número  de Fábrica</th>
+                <td scope="row">{{ articulo.numFabrica }}</td>
             </tr>
             <tr>
-                <th>Largo</th>
-                <td>{{ articulo.largo }}</td>
+                <th scope="row" scope="row">Largo</th>
+                <td scope="row">{{ articulo.largo }}</td>
             </tr>
             <tr>
-                <th>Ancho</th>
-                <td>{{ articulo.ancho }}</td>
+                <th scope="row">Ancho</th>
+                <td scope="row">{{ articulo.ancho }}</td>
             </tr>
             <tr>
-                <th>Alto</th>
-                <td>{{ articulo.alto }}</td>
+                <th scope="row">Alto</th>
+                <td scope="row">{{ articulo.alto }}</td>
             </tr>
             <tr>
-                <th>Número de Estantes</th>
-                <td>{{ articulo.numsEstantes }}</td>
+                <th scope="row">Número de Estantes</th>
+                <td scope="row">{{ articulo.numsEstantes }}</td>
             </tr>
             <tr>
-                <th>Número de Cajones</th>
-                <td>{{ articulo.numsCajones }}</td>
+                <th scope="row">Número de Cajones</th>
+                <td scope="row">{{ articulo.numsCajones }}</td>
             </tr>
             <tr>
-                <th>Detalle Origen</th>
-                <td>{{ articulo.detalleOrigen }}</td>
+                <th scope="row">Detalle Origen</th>
+                <td scope="row">{{ articulo.detalleOrigen }}</td>
             </tr>
             <tr>
-                <th>Importe</th>
-                <td>{{ articulo.importe }}</td>
+                <th scope="row">Importe</th>
+                <td scope="row">{{ articulo.importe }}</td>
             </tr>
             <tr>
-                <th>Fecha Entrada</th>
-                <td>{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <th scope="row">Fecha Entrada</th>
+                <td scope="row">{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('Y-m-d H:i:s') }}{% endif %}</td>
             </tr>
             <tr>
-                <th>Código Cuenta/Subcuenta</th>
-                <td>{{ articulo.codigoCuentaSubcuenta }}</td>
+                <th scope="row">Código Cuenta/Subcuenta</th>
+                <td scope="row">{{ articulo.codigoCuentaSubcuenta }}</td>
             </tr>
             <tr>
-                <th>Número Expediente</th>
-                <td>{{ articulo.numExpediente }}</td>
+                <th scope="row">Número Expediente</th>
+                <td scope="row">{{ articulo.numExpediente }}</td>
             </tr>
             <tr>
-                <th>Observaciones</th>
-                <td>{{ articulo.observaciones }}</td>
+                <th scope="row">Observaciones</th>
+                <td scope="row">{{ articulo.observaciones }}</td>
             </tr>
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('articulo_index') }}">Volver al listado de Artículos</a>
-        </li>
-        <li>
-            <a href="{{ path('articulo_edit', { 'id': articulo.id }) }}">Editar</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Cambiar Estado">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <br>
+    <a class="btn btn-dark" href="{{ path('articulo_edit', { 'id': articulo.id }) }}">Editar</a>
+    <br>
+</div>
 {% endblock %}

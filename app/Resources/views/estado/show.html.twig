@@ -1,44 +1,34 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('estado_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+  <br>
     <h1>Estado</h1>
 
-    <table>
+    <table class="table table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ estado.id }}</td>
+                <th scope="row">Nombre</th>
+                <td scope="row">{{ estado.nombre }}</td>
             </tr>
             <tr>
-                <th>Nombre</th>
-                <td>{{ estado.nombre }}</td>
+                <th scope="row">Color</th>
+                <td style="color:{{ estado.color }}" scope="row">{{ estado.color }}</td>
             </tr>
             <tr>
-                <th>Color</th>
-                <td>{{ estado.color }}</td>
+                <th scope="row">Habilitado</th>
+                <td scope="row">{% if estado.habilitado %}Si{% else %}No{% endif %}</td>
             </tr>
             <tr>
-                <th>Habilitado</th>
-                <td>{% if estado.habilitado %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Descripcion</th>
-                <td>{{ estado.descripcion }}</td>
+                <th scope="row">Descripción</th>
+                <td scope="row">{{ estado.descripcion }}</td>
             </tr>
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('estado_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('estado_edit', { 'id': estado.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <br>
+    <a class="btn btn-dark" href="{{ path('estado_edit', { 'id': estado.id }) }}">Editar</a>
+    <br>
+</div>
 {% endblock %}

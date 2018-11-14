@@ -28,12 +28,13 @@ class EstadoType extends AbstractType
             'placeholder' => 'Ingrese un color para el estado'
             )
         ))
+        //TO DO ver como se muestra en el form de editar solamente la opcion de habilitado
         ->add('habilitado')
         ->add('descripcion', null, array(
             'label' => 'Descripción del Estado',
             'attr' => array(
             'placeholder' => 'Ingrese una descripción para el estado'
-            )
+          )
         ));
     }
 
