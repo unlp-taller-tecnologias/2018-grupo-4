@@ -6,26 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TransferenciaType extends AbstractType
+class HistorialType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('observaciones')
-                ->add('finalizada')
-                ->add('oficina_destino');
-
-    }
-
-    /**
+        $builder->add('fecha');
+    }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Transferencia'
+            'data_class' => 'AppBundle\Entity\Historial'
         ));
     }
 
@@ -34,7 +29,7 @@ class TransferenciaType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_transferencia';
+        return 'appbundle_historial';
     }
 
 

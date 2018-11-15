@@ -622,4 +622,37 @@ class Articulo
     }
 
 
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Condicion")
+     * @ORM\JoinColumn(name="condicion_id", referencedColumnName="id")
+     */
+    private $condicion;
+
+    /**
+     * Get condicion
+     *
+     * @return Condicion
+     */
+    public function getCondicion()
+    {
+        return $this->condicion;
+    }
+
+    /**
+     * Set condicion
+     *
+     * @param string $condicion
+     *
+     * @return Condicion
+     */
+    public function setCondicion($condicion)
+    {
+        $this->condicion = $condicion;
+
+        return $this;
+    }
+
+
 }
