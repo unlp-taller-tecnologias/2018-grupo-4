@@ -36,6 +36,7 @@
 </div>
 {% endblock %}
 
+<<<<<<< HEAD
 {% block javascripts %}
 {{ parent() }}
 <script>
@@ -54,6 +55,12 @@
       exportTypes: ['pdf', 'excel'],
       exportOptions: {}
   });
+=======
+  {% block new %}
+    <a class="btn btn-dark" href="{{ path('articulo_new') }}">Nuevo Artículo</a>
+  
+  {% endblock %}
+>>>>>>> dev
 
   $.extend($.fn.bootstrapTable.defaults.icons, {
       export: 'fas fa-file-export'
