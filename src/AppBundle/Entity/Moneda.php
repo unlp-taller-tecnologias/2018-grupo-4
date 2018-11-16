@@ -22,9 +22,15 @@ class Moneda
     private $id;
 
     /**
+<<<<<<< HEAD
      * @var string
      *
      * @ORM\Column(name="moneda", type="string", length=50)
+=======
+     * @var string|null
+     *
+     * @ORM\Column(name="moneda", type="string", length=50, nullable=true)
+>>>>>>> 40b9756b45a6c890848d1c0ca4ab7634bd3a9c72
      */
     private $moneda;
 
@@ -42,11 +48,19 @@ class Moneda
     /**
      * Set moneda.
      *
+<<<<<<< HEAD
      * @param string $moneda
      *
      * @return Moneda
      */
     public function setMoneda($moneda)
+=======
+     * @param string|null $moneda
+     *
+     * @return Moneda
+     */
+    public function setMoneda($moneda = null)
+>>>>>>> 40b9756b45a6c890848d1c0ca4ab7634bd3a9c72
     {
         $this->moneda = $moneda;
 
@@ -56,7 +70,11 @@ class Moneda
     /**
      * Get moneda.
      *
+<<<<<<< HEAD
      * @return string
+=======
+     * @return string|null
+>>>>>>> 40b9756b45a6c890848d1c0ca4ab7634bd3a9c72
      */
     public function getMoneda()
     {

@@ -670,6 +670,7 @@ class Articulo
     }
 
     /**
+<<<<<<< HEAD
      * Set moneda.
      *
      * @param string $moneda
@@ -687,6 +688,19 @@ class Articulo
      * Get moneda.
      *
      * @return string
+=======
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Moneda")
+     * @ORM\JoinColumn(name="moneda_id", referencedColumnName="id")
+     */
+    private $moneda;
+
+    /**
+     * Get Moneda
+     *
+     * @return Moneda
+>>>>>>> 40b9756b45a6c890848d1c0ca4ab7634bd3a9c72
      */
     public function getMoneda()
     {
@@ -694,6 +708,7 @@ class Articulo
     }
 
     /**
+<<<<<<< HEAD
      * Set nombre
      *
      * @param string $nombre
@@ -763,6 +778,51 @@ class Articulo
     public function getUser()
     {
         return $this->user;
+=======
+     * Set Moneda
+     *
+     * @param string $moneda
+     *
+     * @return Moneda
+     */
+    public function setMoneda($moneda)
+    {
+        $this->moneda = $moneda;
+
+        return $this;
+    }
+    
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Condicion")
+     * @ORM\JoinColumn(name="moneda_id", referencedColumnName="id")
+     */
+    private $condicion;
+
+    /**
+     * Get Condicion
+     *
+     * @return Condicion
+     */
+    public function getCondicion()
+    {
+        return $this->condicion;
+    }
+
+    /**
+     * Set Condicion
+     *
+     * @param string $condicion
+     *
+     * @return Condicion
+     */
+    public function setCondicion($condicion)
+    {
+        $this->moneda = $condicion;
+
+        return $this;
+>>>>>>> 40b9756b45a6c890848d1c0ca4ab7634bd3a9c72
     }
 
 }
