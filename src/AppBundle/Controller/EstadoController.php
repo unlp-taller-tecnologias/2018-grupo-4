@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Estado;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Estado controller.
@@ -29,6 +31,69 @@ class EstadoController extends Controller
         return $this->render('estado/index.html.twig', array(
             'estados' => $estados,
         ));
+    }
+
+    /**
+     * Lists all articulo entities.
+     *
+     * @Route("/listado", name="estado_list")
+     * @Method("GET")
+     */
+    public function listadoAction(Request $request){
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $em = $this->getDoctrine()->getManager();
+      $repository = $em->getRepository('AppBundle:Estado');
+      $estadosQuery = $repository
+        ->createQueryBuilder('estado');
+
+      if (!is_null($search) && strlen($search) > 0) {
+        $estadosQuery
+          ->where('estado.nombre like :nombre')
+          ->setParameter('nombre', '%'.$search.'%');
+      }
+
+      if (!is_null($sort) && !is_null($order)) {
+        $estadosQuery
+          ->orderBy('estado.'.$sort, $order);
+      }
+
+      $estados = $estadosQuery
+        ->setMaxResults($limit)
+        ->setFirstResult($offset)
+        ->getQuery()
+        ->getResult();
+
+      $totalQuery = $repository->createQueryBuilder('estado')
+        ->select('count(estado.id)');
+      if (!is_null($search) && strlen($search) > 0) {
+        $totalQuery
+          ->where('estado.nombre like :nombre')
+          ->setParameter('nombre', '%'.$search.'%');
+      }
+      $total = $totalQuery
+        ->getQuery()
+        ->getSingleScalarResult();
+
+      $rawResponse = array(
+        'total' => $total,
+        'rows' => array()
+      );
+
+      foreach($estados as $estado) {
+        $rawResponse['rows'][] = array(
+          'id' => $estado->getId(),
+          'nombre' => $estado->getNombre(),
+          'color' => $estado->getColor(),
+          'habilitado' => ($estado->getHabilitado() == 1)?'Si':'No'
+        );
+      };
+
+      return new JsonResponse($rawResponse);
     }
 
     /**

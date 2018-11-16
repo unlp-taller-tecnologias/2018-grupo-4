@@ -3,9 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Articulo;
+use AppBundle\Entity\Oficina;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Articulo controller.
@@ -47,6 +50,42 @@ class ArticuloController extends Controller
     }
 
     /**
+     * Lists all articulo entities.
+     *
+     * @Route("/listado", name="articulo_list", defaults={"oficina"=null})
+     * @Method("GET")
+     */
+    public function listadoAction(Request $request){
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
+      $articulos = $repository->getBy($offset, $limit, $sort, $order, $search);
+      $total = $repository->countBy($search);
+
+      $rawResponse = array(
+        'total' => $total,
+        'rows' => array()
+      );
+
+      foreach($articulos as $articulo) {
+        $rawResponse['rows'][] = array(
+          'id' => $articulo->getId(),
+          'numInventario' => $articulo->getNumInventario(),
+          'numExpendiente' => $articulo->getNumExpediente(),
+          'denominacion' => $articulo->getDenominacion(),
+          'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+          'estado' => $articulo->getEstado()->getNombre()
+        );
+      };
+
+      return new JsonResponse($rawResponse);
+    }
+
+    /**
      * Creates a new articulo entity.
      *
      * @Route("/new", name="articulo_new")
@@ -61,6 +100,7 @@ class ArticuloController extends Controller
             $em = $this->getDoctrine()->getManager();
             $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
             $articulo->setEstado($estado);
+            $articulo->setUser($this->getUser());
             $em->persist($articulo);
             $em->flush();
             return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));

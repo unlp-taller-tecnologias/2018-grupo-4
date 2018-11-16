@@ -5,7 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Oficina;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Oficina controller.
@@ -29,6 +31,69 @@ class OficinaController extends Controller
         return $this->render('oficina/index.html.twig', array(
             'oficinas' => $oficinas,
         ));
+    }
+
+    /**
+     * Lists all oficinas entities.
+     *
+     * @Route("/listado", name="oficina_list")
+     * @Method("GET")
+     */
+    public function listadoAction(Request $request){
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $em = $this->getDoctrine()->getManager();
+      $repository = $em->getRepository('AppBundle:Oficina');
+      $oficinasQuery = $repository
+        ->createQueryBuilder('oficina');
+
+      if (!is_null($search) && strlen($search) > 0) {
+        $oficinasQuery
+          ->where('oficina.nombre like :nombre')
+          ->setParameter('nombre', '%'.$search.'%');
+      }
+
+      if (!is_null($sort) && !is_null($order)) {
+        $oficinasQuery
+          ->orderBy('oficina.'.$sort, $order);
+      }
+
+      $oficinas = $oficinasQuery
+        ->setMaxResults($limit)
+        ->setFirstResult($offset)
+        ->getQuery()
+        ->getResult();
+
+      $totalQuery = $repository->createQueryBuilder('oficina')
+        ->select('count(oficina.id)');
+      if (!is_null($search) && strlen($search) > 0) {
+        $totalQuery
+          ->where('oficina.nombre like :nombre')
+          ->setParameter('nombre', '%'.$search.'%');
+      }
+      $total = $totalQuery
+        ->getQuery()
+        ->getSingleScalarResult();
+
+      $rawResponse = array(
+        'total' => $total,
+        'rows' => array()
+      );
+
+      foreach($oficinas as $oficina) {
+        $rawResponse['rows'][] = array(
+          'id' => $oficina->getId(),
+          'nombre' => $oficina->getNombre(),
+          'numeroCarpeta' => $oficina->getNumeroCarpeta(),
+          'responsableOficina' => $oficina->getResponsableOficina()
+        );
+      };
+
+      return new JsonResponse($rawResponse);
     }
 
     /**
@@ -71,6 +136,42 @@ class OficinaController extends Controller
             'oficina' => $oficina,
             'delete_form' => $deleteForm->createView(),
         ));
+    }
+
+    /**
+     * Lists all articulo entities.
+     *
+     * @Route("/{oficina}/articulos/listado", name="oficina_show_listado")
+     * @Method("GET")
+     */
+    public function showListadoAction(Request $request, Oficina $oficina) {
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
+      $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
+      $total = $repository->countBy($search, $oficina);
+
+      $rawResponse = array(
+        'total' => $total,
+        'rows' => array()
+      );
+
+      foreach($articulos as $articulo) {
+        $rawResponse['rows'][] = array(
+          'id' => $articulo->getId(),
+          'numInventario' => $articulo->getNumInventario(),
+          'numExpendiente' => $articulo->getNumExpediente(),
+          'denominacion' => $articulo->getDenominacion(),
+          'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+          'estado' => $articulo->getEstado()->getNombre()
+        );
+      };
+
+      return new JsonResponse($rawResponse);
     }
 
     /**

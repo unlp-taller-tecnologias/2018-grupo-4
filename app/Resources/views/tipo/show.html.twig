@@ -1,56 +1,49 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+  <br>
     <h1>Tipo</h1>
-
-    <table>
+    <table class="table table">
         <tbody>
             <tr>
-                <th>Codigo</th>
-                <td>{{ tipo.codigo }}</td>
+                <th scope="row">Codigo</th>
+                <td scope="row">{{ tipo.codigo }}</td>
             </tr>
             <tr>
-                <th>Nomenclador</th>
-                <td>{{ tipo.nomenclador }}</td>
+                <th scope="row">Nomenclador</th>
+                <td scope="row">{{ tipo.nomenclador }}</td>
             </tr>
             <tr>
-                <th>Cuenta</th>
-                <td>{{ tipo.cuenta }}</td>
+                <th scope="row">Cuenta</th>
+                <td scope="row">{{ tipo.cuenta }}</td>
             </tr>
             <tr>
-                <th>Concepto</th>
-                <td>{{ tipo.concepto }}</td>
+                <th scope="row">Concepto</th>
+                <td scope="row">{{ tipo.concepto }}</td>
             </tr>
             <tr>
-                <th>Grupo</th>
-                <td>{{ tipo.grupo }}</td>
+                <th scope="row">Grupo</th>
+                <td scope="row">{{ tipo.grupo }}</td>
             </tr>
             <tr>
-                <th>Subgrupo</th>
-                <td>{{ tipo.subgrupo }}</td>
+                <th scope="row">Subgrupo</th>
+                <td scope="row">{{ tipo.subgrupo }}</td>
             </tr>
             <tr>
-                <th>Descripcion</th>
-                <td>{{ tipo.descripcion }}</td>
+                <th scope="row">Descripcion</th>
+                <td scope="row">{{ tipo.descripcion }}</td>
             </tr>
             <tr>
-                <th>Vidautil</th>
-                <td>{{ tipo.vidaUtil }}</td>
+                <th scope="row">Vidautil</th>
+                <td scope="row">{{ tipo.vidaUtil }}</td>
             </tr>
         </tbody>
     </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('tipo_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('tipo_edit', { 'id': tipo.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+    <br>
+    <a class="btn btn-dark" href="{{ path('tipo_edit', { 'id': tipo.id }) }}">Editar</a>
+    <br>
+</div>
 {% endblock %}

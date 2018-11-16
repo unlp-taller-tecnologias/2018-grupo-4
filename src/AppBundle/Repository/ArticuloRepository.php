@@ -10,4 +10,69 @@ namespace AppBundle\Repository;
  */
 class ArticuloRepository extends \Doctrine\ORM\EntityRepository
 {
+  protected $offset;
+  protected $limit;
+  protected $search;
+  protected $sort;
+  protected $order;
+  protected $oficina;
+
+  function getBy($offset = null, $limit = null, $sort = null, $order = null, $search = null, $oficina = null) {
+    $this->offset = (!is_null($offset)) ? $offset : 0;
+    $this->$limit = (!is_null($limit)) ? $limit : 10;
+    $this->search = $search;
+    $this->sort = $sort;
+    $this->order = $order;
+    $this->oficina = $oficina;
+
+    $articulosQuery = $this->createQueryBuilder('a');
+
+    if (!is_null($this->oficina)) {
+      $articulosQuery
+        ->andWhere('a.oficina = :oficina')
+        ->setParameter('oficina', $this->oficina);
+
+    }
+    if (!is_null($this->search) && strlen($this->search) > 0) {
+      $articulosQuery
+        ->andWhere('a.numInventario like :numInventario')
+        ->setParameter('numInventario', '%'.$this->search.'%');
+    }
+
+    if (!is_null($this->sort) && !is_null($this->order)) {
+      $articulosQuery->orderBy('a.'.$this->sort, $this->order);
+    }
+
+    return $articulosQuery
+      ->setMaxResults($this->limit)
+      ->setFirstResult($this->offset)
+      ->getQuery()
+      ->getResult();
+  }
+
+  function countBy($search = null, $oficina = null) {
+    $this->search = $search;
+    $this->oficina = $oficina;
+
+    $articulosQuery = $this
+      ->createQueryBuilder('a')
+      ->select('count(a.id)');
+
+
+    if (!is_null($this->oficina)) {
+      $articulosQuery
+        ->andWhere('a.oficina = :oficina')
+        ->setParameter('oficina', $this->oficina);
+
+    }
+    if (!is_null($this->search) && strlen($this->search) > 0) {
+      $articulosQuery
+        ->andWhere('a.numInventario like :numInventario')
+        ->setParameter('numInventario', '%'.$this->search.'%');
+    }
+
+    return $articulosQuery
+      ->getQuery()
+      ->getSingleScalarResult();
+  }
 }

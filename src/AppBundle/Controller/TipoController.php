@@ -6,6 +6,7 @@ use AppBundle\Entity\Tipo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Tipo controller.
@@ -55,6 +56,68 @@ class TipoController extends Controller
             'tipo' => $tipo,
             'form' => $form->createView(),
         ));
+    }
+
+    /**
+     * Lists all tipo entities.
+     *
+     * @Route("/listado", name="tipo_list")
+     * @Method("GET")
+     */
+    public function listadoAction(Request $request){
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $em = $this->getDoctrine()->getManager();
+      $repository = $em->getRepository('AppBundle:Tipo');
+      $tiposQuery = $repository
+        ->createQueryBuilder('tipo');
+
+      if (!is_null($search) && strlen($search) > 0) {
+        $tiposQuery
+          ->where('tipo.nomenclador like :nomenclador')
+          ->setParameter('nomenclador', '%'.$search.'%');
+      }
+
+      if (!is_null($sort) && !is_null($order)) {
+        $tiposQuery
+          ->orderBy('tipo.'.$sort, $order);
+      }
+
+      $tipos = $tiposQuery
+        ->setMaxResults($limit)
+        ->setFirstResult($offset)
+        ->getQuery()
+        ->getResult();
+
+      $totalQuery = $repository->createQueryBuilder('tipo')
+        ->select('count(tipo.id)');
+      if (!is_null($search) && strlen($search) > 0) {
+        $totalQuery
+          ->where('tipo.nomenclador like :nomenclador')
+          ->setParameter('nomenclador', '%'.$search.'%');
+      }
+      $total = $totalQuery
+        ->getQuery()
+        ->getSingleScalarResult();
+
+      $rawResponse = array(
+        'total' => $total,
+        'rows' => array()
+      );
+
+      foreach($tipos as $tipo) {
+        $rawResponse['rows'][] = array(
+          'id' => $tipo->getId(),
+          'codigo' => $tipo->getCodigo(),
+          'nomenclador' => $tipo->getNomenclador()
+        );
+      };
+
+      return new JsonResponse($rawResponse);
     }
 
     /**
