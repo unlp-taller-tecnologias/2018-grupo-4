@@ -1,0 +1,37 @@
+{% extends 'layout.html.twig' %}
+{% block nav %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+          <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+            <div class="card card-signin my-5">
+              <div class="card-body">
+                <h4 class="card-title text-center">Acceso al Sistema de Inventario</h4>
+                <h6 class="card-title text-center">Facultad de Cs. Médicas - UNLP</h6>
+                <form action="{{ path("fos_user_security_check") }}"  method="POST" class="form-signin">
+                  <div class="form-label-group">
+                    <label for="inputEmail">Nombre de Usuario</label>
+                    <input type="text"  id="username" name="_username" value="{{ last_username }}"  class="form-control" placeholder="Usuario" required autofocus><br>
+
+                  </div>
+
+                  <div class="form-label-group">
+                    <label for="inputPassword">Contraseña</label>
+                    <input type="password" id="password" name="_password"  class="form-control" placeholder="Contraseña" required><br>
+
+                  </div>
+
+                  {% if csrf_token %}
+                      <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                  {% endif %}
+
+                  <button class="btn btn-lg btn-dark btn-block" id="_submit" name="_submit">Acceder</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  {% endblock %}
