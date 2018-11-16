@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
 class TransferenciaType extends AbstractType
@@ -19,12 +20,14 @@ class TransferenciaType extends AbstractType
                 ->add('observaciones', TextareaType::class, array(
                   'attr' => array('class' => 'tinymce'),
                 ))
-                //->add('finalizada', NumberType::class, array(
-
-                //  'attr' => array('class' => 'tinymce'),
-              //  ))
+                ->add('finalizada', null, array(
+                  'data'=>'0'
+                ))
+                ->add('fecha', null, array(
+                  'format' => 'yyyy-MM-dd',
+                ))
                 //->add('observaciones')
-                ->add('finalizada')
+                //->add('finalizada')
                 ->add('oficina_destino');
 
     }

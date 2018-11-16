@@ -58,6 +58,39 @@ class TransferenciaController extends Controller
     }
 
     /**
+      * Elegir articulos para la transferencia
+      *
+     * @Route("/new", name="agregar_articulos")
+     * @Method({"GET", "POST"})
+     */
+    public function agregarArticulos(Request $request)
+    {
+        $Transferencia = new Transferencia();
+        $form = $this->createForm('AppBundle\Form\TransferenciaType', $Transferencia);
+        $form->handleRequest($request);
+        $articulos = $em->getRepository('AppBundle:Articulo')->findAll();
+        /*if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($Transferencia);
+            $em->flush();
+
+            return $this->redirectToRoute('transferencia_show', array('id' => $Transferencia->getId()));
+        }*/
+
+        return $this->render('transferencia/agregar_articulos.html.twig', array(
+            'Transferencia' => $Transferencia,
+            'articulos' => $articulos,
+            'form' => $form->createView(),
+        ));
+    }
+
+
+
+
+
+
+
+    /**
      * Finds and displays a Transferencia entity.
      *
      * @Route("/{id}", name="transferencia_show")

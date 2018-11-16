@@ -60,6 +60,39 @@ class Transferencia
         return $this;
     }
 
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="date")
+     */
+    private $fecha;
+
+
+    /**
+     * Set fecha.
+     *
+     * @param \DateTime $fecha
+     *
+     * @return Historial
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha.
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
     /**
      * Get observaciones
      *
