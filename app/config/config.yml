@@ -79,3 +79,6 @@ fos_user:
     from_email:
         address: "p@p.com"
         sender_name: "asd"
+    registration:
+       form:
+           type: AppBundle\Form\Type\RegistrationFormType

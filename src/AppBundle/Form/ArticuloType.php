@@ -32,16 +32,14 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Seleccione una oficina'
             )
           ))
-<<<<<<< HEAD
-          ->add('user')
-          ->add('condicion')
-=======
           ->add('condicion', null, array(
                'label'=> 'Condición'
           ))
->>>>>>> 40b9756b45a6c890848d1c0ca4ab7634bd3a9c72
           ->add('tipo', null, array(
                'label'=> 'Tipo'
+          ))
+          ->add('condicion', null, array(
+               'label'=> 'Condicion'
           ))
           ->add('material', null, array(
             'label' => 'Material',
@@ -88,13 +86,9 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Ingrese el detalle del origen del artículo'
             )
           ))
-<<<<<<< HEAD
-          ->add('moneda')
-=======
           ->add('moneda', null, array(
             'label' => 'Moneda'
           ))
->>>>>>> 40b9756b45a6c890848d1c0ca4ab7634bd3a9c72
           ->add('importe', null, array(
             'label' => 'Importe',
             'attr' => array('placeholder' => 'Ingrese el importe del artículo'
