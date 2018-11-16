@@ -37,7 +37,7 @@ security:
       #- { path: ^/panel/, role: IS_AUTHENTICATED_FULLY }
       #damos permiso a roles para una ruta
       - { path: ^/oficina/$, role: ROLE_USER }
-        # - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/*, role: IS_AUTHENTICATED_FULLY }
       - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
