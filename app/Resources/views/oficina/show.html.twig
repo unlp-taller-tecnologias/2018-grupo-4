@@ -6,7 +6,7 @@
   <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
   <br>
     <h1>Oficina</h1>
-      <a class="btn btn-dark" href="{{ path('transferencia_new') }}">Iniciar Transferencia</a>
+     <a class="btn btn-dark" href="{{ path('transferencia_new', {id: oficina.id} ) }}"  >Iniciar Transferencia</a>
 
     <table>
       <tbody>

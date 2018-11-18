@@ -1,16 +1,84 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block body %}
+{% block content %}
     <h1>Transferencia creation</h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
         <input type="submit" value="Create" />
+            <a class="btn btn-dark" href="{{ path('transferir')}}"  >Transferir</a>
     {{ form_end(form) }}
+
 
     <ul>
         <li>
             <a href="{{ path('transferencia_index') }}">Back to the list</a>
         </li>
     </ul>
+    <h4>Artículos de la oficina</h4>
+        <div id="toolbar">
+            <button id="button" class="btn btn-default">getAllSelections</button>
+        </div>
+        <table id="table"
+                class="table table-hover table-striped"
+                data-side-pagination="server"
+               data-toggle="table"
+               data-toolbar="#toolbar"
+               data-height="460"
+               data-pagination="true"
+               data-search="true"
+               data-click-to-select="true"
+               data-url="{{ path('articulo_list')}}">
+               <thead>
+                 <tr>
+                   <th data-field="state" data-checkbox="true"></th>
+                   <th scope="row" data-field="numInventario" data-sortable="true">Nro.Inventario</th>
+                   <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+                   <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                   <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+                   <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                 </tr>
+               </thead>
+        </table>
+
+
+
+
+        <table id="table2"
+                class="table table-hover table-striped"
+                data-side-pagination="server"
+               data-toggle="table"
+               data-toolbar="#toolbar"
+               data-height="460"
+               data-pagination="true"
+               data-search="true"
+               data-click-to-select="true"
+               data-url=
+               >
+               <thead>
+                 <tr>
+                   <th data-field="state" data-checkbox="true"></th>
+                   <th scope="row" data-field="numInventario" data-sortable="true">Nro.Inventario</th>
+                   <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+                   <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                   <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+                   <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                 </tr>
+               </thead>
+        </table>
+{% endblock %}
+
+
+
+{% block transferenciaJs %}
+<script>
+    var $table = $('#table'),
+        $button = $('#button');
+    $(function () {
+        $button.click(function () {
+            return('getSelections: ' + JSON.stringify($table.bootstrapTable('getAllSelections')));
+        });
+    });
+</script>
+
 {% endblock %}

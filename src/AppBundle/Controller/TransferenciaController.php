@@ -6,6 +6,8 @@ use AppBundle\Entity\Transferencia;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Entity\Oficina;
 
 /**
  * Transferencia controller.
@@ -34,16 +36,45 @@ class TransferenciaController extends Controller
     /**
      * Creates a new Transferencia entity.
      *
-     * @Route("/new", name="transferencia_new")
+     * @Route("/new/{id}", name="transferencia_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, $id)
     {
         $Transferencia = new Transferencia();
         $form = $this->createForm('AppBundle\Form\TransferenciaType', $Transferencia);
         $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $oficinas = $em->getRepository('AppBundle:Articulo')->findByOficina($id);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $em2 = $this->getDoctrine()->getManager();
+            $em2->persist($Transferencia);
+            $em2->flush();
+
+            return $this->redirectToRoute('transferencia_show', array('id' => $Transferencia->getId()));
+        }
+
+        return $this->render('transferencia/new.html.twig', array(
+            'oficinas' => $oficinas,
+            'Transferencia' => $Transferencia,
+            'form' => $form->createView(),
+        ));
+    }
+
+    /**
+      * Elegir articulos para la transferencia
+      *
+     * @Route("/new/{id}", name="agregar_articulos")
+     * @Method({"GET", "POST"})
+     */
+  /*  public function agregarArticulos(Request $request, Oficina $oficina)
+    {
+        $Transferencia = new Transferencia();
+        $form = $this->createForm('AppBundle\Form\TransferenciaType', $Transferencia);
+        $form->handleRequest($request);
+        $articulos = $em->getRepository('AppBundle:Articulo')->findAll();
+        /*if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($Transferencia);
             $em->flush();
@@ -51,11 +82,18 @@ class TransferenciaController extends Controller
             return $this->redirectToRoute('transferencia_show', array('id' => $Transferencia->getId()));
         }
 
-        return $this->render('transferencia/new.html.twig', array(
+        return $this->render('transferencia/agregar_articulos.html.twig', array(
             'Transferencia' => $Transferencia,
+            'articulos' => $articulos,
             'form' => $form->createView(),
         ));
-    }
+    }*/
+
+
+
+
+
+
 
     /**
      * Finds and displays a Transferencia entity.
@@ -133,4 +171,57 @@ class TransferenciaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Transfiere articulos.
+     *
+     * @Route("/transferir", name="transferir")
+     * @Method("POST")
+     */
+
+    private function Transferir($articulos){
+      
+    }
+
+
+
+
+        /**
+         * Lists all articulo entities.
+         *
+         * @Route("/{oficina}/articulos/listado", name="oficina_show_listado")
+         * @Method("GET")
+         */
+  /*      public function showListadoAction(Request $request, Oficina $oficina) {
+          $offset = $request->query->get('offset', 0);
+          $limit = $request->query->get('limit', 10);
+          $search = $request->query->get('search', null);
+          $sort = $request->query->get('sort', null);
+          $order = $request->query->get('order', null);
+
+          $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
+          $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
+          $total = $repository->countBy($search, $oficina);
+
+          $rawResponse = array(
+            'total' => $total,
+            'rows' => array()
+          );
+
+          foreach($articulos as $articulo) {
+            $rawResponse['rows'][] = array(
+              'id' => $articulo->getId(),
+              'numInventario' => $articulo->getNumInventario(),
+              'numExpendiente' => $articulo->getNumExpediente(),
+              'denominacion' => $articulo->getDenominacion(),
+              'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+              'estado' => $articulo->getEstado()->getNombre()
+            );
+          };
+
+          return new JsonResponse($rawResponse);
+        }*/
+
+
+
 }
