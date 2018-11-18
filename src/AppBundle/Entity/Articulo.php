@@ -46,6 +46,38 @@ class Articulo
     /**
      * @var string
      *
+     * @ORM\ManyToOne(targetEntity="Condicion")
+     * @ORM\JoinColumn(name="condicion_id", referencedColumnName="id")
+     */
+    private $condicion;
+
+    /**
+     * @var Moneda
+     *
+     * @ORM\ManyToOne(targetEntity="Moneda")
+     * @ORM\JoinColumn(name="moneda_id", referencedColumnName="id")
+     */
+    private $moneda;
+
+    /**
+     * @var Tipo
+     *
+     * @ORM\ManyToOne(targetEntity="Tipo")
+     * @ORM\JoinColumn(name="tipo_id", referencedColumnName="id")
+     */
+    private $tipo;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="material", type="string", length=100, nullable=true)
      */
     private $material;
@@ -590,14 +622,6 @@ class Articulo
     }
 
     /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="Tipo")
-     * @ORM\JoinColumn(name="tipo_id", referencedColumnName="id")
-     */
-    private $tipo;
-
-    /**
      * Get tipo
      *
      * @return Tipo
@@ -621,14 +645,102 @@ class Articulo
         return $this;
     }
 
+    /**
+     * Set moneda.
+     *
+     * @param string $moneda
+     *
+     * @return Moneda
+     */
+    public function setMoneda($moneda)
+    {
+        $this->moneda = $moneda;
+
+        return $this;
+    }
 
     /**
-     * @var string
+     * Get moneda.
      *
-     * @ORM\ManyToOne(targetEntity="Condicion")
-     * @ORM\JoinColumn(name="condicion_id", referencedColumnName="id")
+     * @return string
      */
-    private $condicion;
+    public function getMoneda()
+    {
+        return $this->moneda;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return Articulo
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Set habilitado
+     *
+     * @param boolean $habilitado
+     *
+     * @return Articulo
+     */
+    public function setHabilitado($habilitado)
+    {
+        $this->habilitado = $habilitado;
+
+        return $this;
+    }
+
+    /**
+     * Get habilitado
+     *
+     * @return bool
+     */
+    public function getHabilitado()
+    {
+        return $this->habilitado;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param string $user
+     *
+     * @return User
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $user;
+    }
+
+    /**
+     * Get user.
+     *
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
+
+    }
 
     /**
      * Get condicion

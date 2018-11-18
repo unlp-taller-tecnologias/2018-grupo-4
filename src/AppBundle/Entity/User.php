@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="  user")
+ * @ORM\Table(name="user")
  */
 class User extends BaseUser
 {
@@ -34,14 +34,6 @@ class User extends BaseUser
      */
      protected $name;
 
-     public function getName(){
-       return $this->name;
-     }
-
-     public function setName($n){
-       $this->name=$n;
-     }
-
      /**
       * @ORM\Column(type="string", length=255, options={"default":"name"})  )
       *
@@ -56,6 +48,12 @@ class User extends BaseUser
       */
       protected $lastname;
 
+      public function __construct()
+      {
+          parent::__construct();
+          // your own logic
+      }
+
       public function getLastname(){
         return $this->lastname;
       }
@@ -64,10 +62,11 @@ class User extends BaseUser
         $this->lastname=$l;
       }
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->name='name';
-        $this->lastname='lastname';
-    }
+      public function getName(){
+        return $this->name;
+      }
+
+      public function setName($n){
+        $this->name=$n;
+      }
 }

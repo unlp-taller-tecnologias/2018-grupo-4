@@ -1,54 +1,79 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+  <br>
     <h1>Oficina</h1>
-      <a class="btn btn-dark" href="{{ path('transferencia_new') }}">Iniciar Transferencia</a>
+     <a class="btn btn-dark" href="{{ path('transferencia_new', {id: oficina.id} ) }}"  >Iniciar Transferencia</a>
 
     <table>
       <tbody>
         <tr>
-          <th>Nombre</th>
-          <td>{{ oficina.nombre }}</td>
+          <th scope="row">Nombre</th>
+          <td scope="row">{{ oficina.nombre }}</td>
         </tr>
         <tr>
-          <th>Responsable de Oficina</th>
-          <td>{{ oficina.responsableOficina }}</td>
+          <th scope="row">Responsable de Oficina</th>
+          <td scope="row">{{ oficina.responsableOficina }}</td>
         </tr>
         <tr>
-          <th>Número Carpeta</th>
-          <td>{{ oficina.numeroCarpeta }}</td>
+          <th scope="row">Número Carpeta</th>
+          <td scope="row">{{ oficina.numeroCarpeta }}</td>
         </tr>
       </tbody>
     </table>
-
-    {% block descriptionTable %}
     <br>
-      <h4>Artículos</h4>
-    {% endblock %}
+      <h4>Artículos de la oficina</h4>
+      <div class="table-responsive">
+        <table  id="tablaArticulos"
+                class="table table-hover table-striped"
+                data-toggle="table"
+                data-height="400"
+                data-side-pagination="server"
+                data-pagination="true"
+                data-page-list="[2, 5, 10, 20, 50, 100, 200]"
+                data-search="true"
+                data-show-columns="true"
+                data-show-export="true"
+                data-url="{{ path('articulo_list') }}"
+                >
+          <thead>
+            <tr>
+              <th scope="row" data-field="numInventario" data-sortable="true">Nro.Inventario</th>
+              <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+              <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+              <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+              <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+              <th data-field="id" data-formatter="operateFormatter">Acciones</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+{% endblock %}
 
-    {% block headPrincipalTable %}
-      <th scope="row">Denominación</th>
-    {% endblock %}
+{% block javascripts %}
+{{ parent() }}
+<script>
+  function operateFormatter(value, row, index) {
+    show = "{{ path('articulo_show', {id: -1})}}";
+    show = show.replace('-1', value);
+    return [
+      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
+    ].join('');
+  }
+  var $table = $('#tablaArticulos');
+  $.extend($.fn.bootstrapTable.defaults, {
+      showExport: false,
+      exportDataType: 'basic', // basic, all, selected
+      // 'json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'powerpoint', 'pdf'
+      exportTypes: ['pdf', 'excel'],
+      exportOptions: {}
+  });
 
-    {% block bodyPrincipalTable %}
-      {% for articulo in oficina.articulos %}
-        <tr>
-          <td><a href="{{ path('articulo_show', { 'id': articulo.id }) }}">{{ articulo.denominacion }}</a></td>
-        </tr>
-      {% endfor %}
-    {% endblock %}
-
-    <ul>
-        <li>
-            <a href="{{ path('oficina_index') }}">Volver al listado de Oficinas</a>
-        </li>
-        <li>
-            <a href="{{ path('oficina_edit', { 'id': oficina.id }) }}">Editar</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Eliminar">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+  $.extend($.fn.bootstrapTable.defaults.icons, {
+      export: 'fas fa-file-export'
+  });
+</script>
 {% endblock %}

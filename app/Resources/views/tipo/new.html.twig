@@ -1,15 +1,17 @@
 {% extends 'layout.html.twig' %}
 {% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i>Listado de Tipos</a>
+  <br>
     <h1>Nuevo Tipo</h1>
-
     {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
+    {{ form_widget(form) }}
+    {{ form_errors(form) }}
+
+    <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+
     {{ form_end(form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('tipo_index') }}">Back to the list</a>
-        </li>
-    </ul>
-{% endblock %}
+    </div>
+    {% endblock %}

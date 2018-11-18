@@ -138,12 +138,34 @@ class Transferencia
         $this->historiales = new ArrayCollection();
     }
 
+
     public function __toString() {
         return $this->nombre;
     }
 
+    /**
+     * Get historiales
+     *
+     * @return int
+     */
+    public function getHistoriales()
+    {
+        return $this->historiales;
+    }
 
+    /**
+     * Set historiales
+     *
+     * @param string $historiales
+     *
+     * @return Historial
+     */
+    public function setHistoriales($historiales)
+    {
+        $this->historiales = $historiales;
 
+        return $this;
+    }
 
     /**
      * @var string
@@ -235,7 +257,6 @@ class Transferencia
         $this->usuario = $usuario;
         return $this;
     }
-
 
 
 }
