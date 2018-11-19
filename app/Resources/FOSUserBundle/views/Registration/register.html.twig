@@ -1,10 +1,25 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
+
+{% trans_default_domain 'FOSUserBundle' %}
 <div class="container border" style="padding: 30px">
   <div class="py-5">
     <h3>Alta de usuario</h3>
-    <h5 class="mb-3">Completar los datos para dar de alta un usuario</h5>
+    <h6 class="mb-3">Completar los datos para dar de alta un usuario</h6>
+  </div>
+  {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
+      {{ form_widget(form) }}
+      <div>
+          <input class="btn btn-dark btn-lg" type="submit" value="{{ 'Aceptar'|trans }}" />
+      </div>
+  {{ form_end(form) }}
+</div>
+
+<div class="container border" style="padding: 30px">
+  <div class="py-5">
+    <h3>Alta de usuario</h3>
+    <h6 class="mb-3">Completar los datos para dar de alta un usuario</h6>
   </div>
   <div class="row">
     <div class="col-md-8 order-md-1">
@@ -70,14 +85,4 @@
     </div>
   </div>
 </div>
-
-{% trans_default_domain 'FOSUserBundle' %}
-
-{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
-    {{ form_widget(form) }}
-    <div>
-        <input type="submit" value="{{ 'Aceptar'|trans }}" />
-    </div>
-{{ form_end(form) }}
-
 {% endblock %}
