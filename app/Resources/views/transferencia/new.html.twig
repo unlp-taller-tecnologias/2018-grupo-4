@@ -1,16 +1,132 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block body %}
-    <h1>Transferencia creation</h1>
-
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
+{% block content %}
+    <h1>Transferencia</h1>
     <ul>
         <li>
-            <a href="{{ path('transferencia_index') }}">Back to the list</a>
+            <a href="{{ path('transferencia_index') }}">Volver al listado de oficinas</a>
         </li>
     </ul>
+  <div class="container-fluid border" style="padding: 30px">
+  <div class="row">
+    <div class="col-md-6 order-md-1">
+      <h4>Artículos de la oficina</h4>
+          <div id="toolbar">
+              <button id="button" class="btn btn-dark">(+) Agregar a la tranferecia</button>
+          </div>
+          <table id="table"
+                 class="table table-hover table-striped"
+                 data-side-pagination="server"
+                 data-toggle="table"
+                 data-toolbar="#toolbar"
+                 data-height="460"
+                 data-pagination="true"
+                 data-search="true"
+                 data-click-to-select="true"
+                 data-url="{{ path('articulo_list')}}">
+                 <thead>
+                   <tr>
+                     <th data-field="state" data-checkbox="true"></th>
+                     <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
+                     <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+                     <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                     <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+                     <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                   </tr>
+                 </thead>
+          </table>
+      </div>
+      <div class="col-md-6 order-md-1">
+        <h4>Artículo/s a transferir</h4>
+        <div id="toolbar1">
+            <button id="button1" class="btn btn-dark">(-) Quitar de la tranferecia</button>
+        </div>
+        <table id="table1"
+                class="table table-hover table-striped"
+                data-side-pagination="server"
+               data-toggle="table"
+               data-toolbar="#toolbar1"
+               data-height="460"
+               data-pagination="true"
+               data-search="true"
+               data-click-to-select="true"
+               data-url=>
+               <thead>
+                 <tr>
+                   <th data-field="state" data-checkbox="true"></th>
+                   <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
+                   <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+                   <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                   <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+                   <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                 </tr>
+               </thead>
+        </table>
+  </div>
+</div>
+</div>
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input type="submit" class="btn btn-dark" value="Create" />
+        <a class="btn btn-dark" href="{{ path('transferir')}}"  >Transferir</a>
+{{ form_end(form) }}
+
+{% endblock %}
+
+{% block transferenciaJs %}
+
+<script>
+    var $table = $('#table'),
+        $tableTest = $('#table1'),
+        $button = $('#button');
+        $buttonTest = $('#button1');
+    $(function () {
+        $button.click(function () {
+          var $dataT = $table.bootstrapTable('getAllSelections');//devuelve un json
+          var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
+          var $esta = false;
+            for(var data in $dataT) {
+              $esta = false;
+              for(var itemTranfe in $dataTranfe){
+                if ((data, $dataT[data]).numInventario == (itemTranfe,$dataTranfe[itemTranfe]).numInventario) {
+                  $esta = true;
+                  break;
+                }
+              }
+              if ($esta == false) {
+                $tableTest.bootstrapTable('insertRow', {
+                    index: 0,
+                    row: {
+                        numInventario: (data, $dataT[data]).numInventario,
+                        numExpediente: (data, $dataT[data]).numExpediente,
+                        denominacion: (data, $dataT[data]).denominacion,
+                        tipo: (data, $dataT[data]).tipo,
+                        estado: (data, $dataT[data]).estado
+                    }
+                });
+              }
+            }
+        });
+    });
+    $(function () {
+      $buttonTest.click(function () {
+        var $dataTranfe = $tableTest.bootstrapTable('getAllSelections');//devuelve un json
+          var $arrayRemove = [];
+          for(var itemTranfe in $dataTranfe) {
+            //console.log((itemTranfe, $dataTranfe[itemTranfe]));
+            $table.bootstrapTable('uncheckBy', {field:'numInventario', values:[(itemTranfe, $dataTranfe[itemTranfe]).numInventario]});
+          }
+        var ids = $.map($tableTest.bootstrapTable('getAllSelections'), function (row) {
+              return row.numInventario;
+          });
+        $tableTest.bootstrapTable('remove', {
+              field: 'numInventario',
+              values: ids
+          });
+        });
+    });
+
+</script>
+
 {% endblock %}

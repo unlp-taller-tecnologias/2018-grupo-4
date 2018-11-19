@@ -79,6 +79,36 @@ class Historial
         return $this->nombre;
     }
 
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="Articulo")
+     * @ORM\JoinColumn(name="articulo_id", referencedColumnName="id")
+     */
+    private $articulo;
+
+    /**
+     * Get articulo
+     *
+     * @return Articulo
+     */
+    public function getArticulo()
+    {
+        return $this->articulo;
+    }
+
+    /**
+     * Set articulo
+     *
+     * @param string $articulo
+     * @return Articulo
+     */
+    public function setArticulo($articulo)
+    {
+        $this->articulo = $articulo;
+
+        return $this;
+    }
 
 
 
