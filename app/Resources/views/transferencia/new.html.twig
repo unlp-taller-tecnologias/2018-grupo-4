@@ -79,6 +79,23 @@
             return('getSelections: ' + JSON.stringify($table.bootstrapTable('getAllSelections')));
         });
     });
+
+//
+
+var $table = $('#table2');
+    var mydata =[
+
+    ];
+$(function () {
+    $('#table2').bootstrapTable({
+        data: mydata
+    });
+});
+
+
+
+
+
 </script>
 
 {% endblock %}
