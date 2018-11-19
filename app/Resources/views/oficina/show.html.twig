@@ -7,7 +7,7 @@
   <br>
     <h1>Oficina</h1>
     <div class="">
-      <a class="btn btn-dark" href="{{ path('transferencia_new') }}">Iniciar Transferencia</a>
+      <a class="btn btn-dark" href="{{ path('transferencia_new', {'id': oficina.id}) }}">Iniciar Transferencia</a>
       <a class="btn btn-dark" href="{{ path('baja_new') }}">Iniciar Baja</a>
       <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}">Agregar nuevo articulo</a>
     </div>
