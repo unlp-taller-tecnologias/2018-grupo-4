@@ -12,7 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 
 class TransferenciaType extends AbstractType
@@ -29,17 +29,12 @@ class TransferenciaType extends AbstractType
                 ->add('finalizada', null, array(
                   'data'=>'0'
                 ))
+
                 ->add('fecha', null, array(
                   'format' => 'yyyy-MM-dd',
+                  'data' => new \DateTime("now")
                 ))
-                //->add('oficina', CollectionType::class, array(
-                  //  'entry_type' => ArticuloType::class,
-                    //'entry_options' => array('label' => false),
-                //))
 
-
-                //->add('observaciones')
-                //->add('finalizada')
                 ->add('oficina_destino');
 
     }

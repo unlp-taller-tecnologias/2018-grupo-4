@@ -136,6 +136,7 @@ class Transferencia
     public function __construct()
     {
         $this->historiales = new ArrayCollection();
+        $this->finalizada = 0;
     }
 
 
