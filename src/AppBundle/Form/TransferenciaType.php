@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use \DateTime;
 
@@ -28,9 +29,11 @@ class TransferenciaType extends AbstractType
                   'widget' => 'single_text',
                   'required' => true
                 ))
+
                 ->add('oficina_destino', null, array(
                   'label' => 'Oficina destino*'
                 ))
+
                 ->add('observaciones', TextareaType::class, array(
                   'attr' => array('class' => 'tinymce'),
                   'required' => false
@@ -42,6 +45,7 @@ class TransferenciaType extends AbstractType
                   //  'entry_type' => ArticuloType::class,
                     //'entry_options' => array('label' => false),
                 //))
+
     }
 
 
