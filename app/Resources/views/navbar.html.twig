@@ -28,10 +28,7 @@
       </li>
       {% block login %}
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white" href="/login">Iniciar Sesión</a>
-      </li>
-      <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white" href="#">Nombre Usuario</a>
+        <a class="btn mr-sm-2" style="color:white" href="#">{{app.user.username}}</a>
       </li>
       <li class="nav-item">
         <a class="btn mr-sm-2" style="color:white" href="#">Cerrar Sesión</a>
