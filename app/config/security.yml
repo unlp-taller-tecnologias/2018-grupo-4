@@ -36,7 +36,24 @@ security:
       - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
       #- { path: ^/panel/, role: IS_AUTHENTICATED_FULLY }
       #damos permiso a roles para una ruta
-      - { path: ^/oficina/index, role: ROLE_USER }
+      - { path: ^/oficina/$, role: ROLE_USER }
+      - { path: ^/oficina/listado, role: ROLE_USER }
+      - { path: ^/oficina/, role: ROLE_ADMIN }
+
+      - { path: ^/articulo/$, role: ROLE_USER }
+      - { path: ^/articulo/listado, role: ROLE_USER }
+      - { path: ^/articulo/, role: ROLE_ADMIN }
+
+      - { path: ^/transferencia/, role: ROLE_ADMIN }
+      - { path: ^/baja/, role: ROLE_ADMIN }
+      - { path: ^/historial/, role: ROLE_ADMIN }
+
+      - { path: ^/condicion/, role: ROLE_SUPER_ADMIN }
+      - { path: ^/tipo/, role: ROLE_SUPER_ADMIN }
+      - { path: ^/estado/, role: ROLE_SUPER_ADMIN }
+      - { path: ^/importe/, role: ROLE_SUPER_ADMIN }
+      - { path: ^/moneda/, role: ROLE_SUPER_ADMIN }
+
       - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/*, role: IS_AUTHENTICATED_FULLY }
       - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }

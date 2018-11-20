@@ -6,9 +6,15 @@
   <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
   <br>
     <h1>Oficina</h1>
-     <a class="btn btn-dark" href="{{ path('transferencia_new', {id: oficina.id} ) }}"  >Iniciar Transferencia</a>
-
-    <table>
+    {% if is_granted("ROLE_ADMIN") %}
+    <div class="">
+      <a class="btn btn-dark" href="{{ path('transferencia_new', {'id': oficina.id}) }}">Iniciar Transferencia</a>
+      <a class="btn btn-dark" href="{{ path('baja_new') }}">Iniciar Baja</a>
+      <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}">Agregar nuevo articulo</a>
+    </div>
+    {% endif %}
+  <br>
+    <table class="table table">
       <tbody>
         <tr>
           <th scope="row">Nombre</th>
@@ -37,7 +43,7 @@
                 data-search="true"
                 data-show-columns="true"
                 data-show-export="true"
-                data-url="{{ path('articulo_list') }}"
+                data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
                 >
           <thead>
             <tr>
@@ -46,7 +52,9 @@
               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
               <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
               <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+              {% if is_granted("ROLE_ADMIN") %}
               <th data-field="id" data-formatter="operateFormatter">Acciones</th>
+              {% endif %}
             </tr>
           </thead>
         </table>
