@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Transferencia;
+use AppBundle\Entity\Historial;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -40,28 +41,28 @@ class TransferenciaController extends Controller
      */
     public function newAction(Request $request, $id)
     {
-        $Transferencia = new Transferencia();
-        $form = $this->createForm('AppBundle\Form\TransferenciaType', $Transferencia);
+
+        $transferencia = new Transferencia();
+        $form = $this->createForm('AppBundle\Form\TransferenciaType', $transferencia);
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
         $oficinas = $em->getRepository('AppBundle:Articulo')->findByOficina($id);
         if ($form->isSubmitted() && $form->isValid()) {
             $articulosId = $request->request->get('transferenciasIds');
             //$transferenciasId = explode(',', $transferenciasId);
-            $Transferencia->setFinalizada('1');
-
-            //die($transferenciasId);
-            //habria que cambiarle el valor a finalizada
-            $em->persist($Transferencia);
+            $transferencia->setFinalizada('1');
+            //die($id);
+            //$transferencia->setOficinaOrigen($oficinas);
+            $em->persist($transferencia);
             $em->flush();
             return $this->redirectToRoute('select_condition', array(
-            'id' => $Transferencia->getId(),
+            'id' => $transferencia->getId(),
             'articulosId' => $articulosId
           ));
         }
         return $this->render('transferencia/new.html.twig', array(
             'oficinas' => $oficinas,
-            'Transferencia' => $Transferencia,
+            'Transferencia' => $transferencia,
             'form' => $form->createView(),
         ));
     }
@@ -153,23 +154,41 @@ class TransferenciaController extends Controller
     public function selectCondition(Request $request, Transferencia $transferencia){
       $articulosId = $request->query->get('articulosId');
       $articulosId = explode(",", $articulosId);
-      $articulos = array();
       $em = $this->getDoctrine()->getManager();
       $articuloRepository = $em->getRepository('AppBundle:Articulo');
+      $articulos = array();
       foreach ($articulosId as $id){
-        $articulos[] =  $articuloRepository->findOneById($id);
+        $articulos[] =  $articuloRepository->findByNumInventario($id);
       }
-      print_r($articulos);
       $condiciones = $em->getRepository('AppBundle:Condicion')->findAll();
-      $selectConditionForm = $this->createForm('AppBundle\Form\TransferenciaType', $transferencia);
-      $selectConditionForm->handleRequest($request);
       return $this->render('transferencia/select_condition.html.twig', array(
-        //  'select_condition_form' => $select_conditionForm->createView(),
+          'transferencia' => $transferencia,
           'articulos' => $articulos,
           'condiciones' => $condiciones
       ));
+    }
+
+    /**
+     * Termina la transferencia
+     * @Route("select_condition/finish/{id}", name="transferencia_finished")
+     * @Method({"GET", "POST"})
+     */
+
+    public function finishTransferencia(Request $request, Transferencia $transferencia){
+      //crear 1 historial por articulos
+      // crear 1 condicion x articulo
+      // la transferencia conoce los ids de articulos??
+
+      //$articulo = $transferencia->getHistoriales();
+      //foreach ($articulo as $a ) {
+      //  $historial = new Historial();
+      //  $historial->set
+    //  }
 
 
+      return $this->render('transferencia/transferencia_finish.html.twig', array(
+        'transferencias' => $transferencia
+      ));
     }
 
 

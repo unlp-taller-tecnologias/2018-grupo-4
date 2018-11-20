@@ -14,7 +14,7 @@
           </tr>
             <tr>
                 <th scope="row">Número de Inventario</th>
-                <td scope="row"{{ articulo.numInventario }}</td>
+                <td scope="row">{{ articulo.numInventario }}</td>
             </tr>
             <tr>
                 <th scope="row">Estado</th>
@@ -79,7 +79,9 @@
         </tbody>
     </table>
     <br>
+    {% if is_granted("ROLE_ADMIN") %}
     <a class="btn btn-dark" href="{{ path('articulo_edit', { 'id': articulo.id }) }}">Editar</a>
+    {% endif %}
     <br>
 </div>
 {% endblock %}

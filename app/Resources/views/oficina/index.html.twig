@@ -4,9 +4,11 @@
   <div class="container">
     <br>
     <h1>Oficinas</h1>
+    {% if is_granted("ROLE_ADMIN") %}
     <div class="">
       <a class="btn btn-dark" href="{{ path('oficina_new') }}">Agregar nueva oficina</a>
     </div>
+    {% endif %}
     <br>
     <div class="table-responsive">
       <table  id="tablaOficinas"
@@ -25,7 +27,9 @@
             <th scope="row" data-field="nombre" data-sortable="true">Nombre</th>
             <th scope="row" data-field="numeroCarpeta" data-sortable="true">Nro.Carpta</th>
             <th scope="row" data-field="responsableOficina" data-sortable="true">Responsable</th>
+            {% if is_granted("ROLE_ADMIN") %}
             <th data-field="id" data-formatter="operateFormatter">Acciones</th>
+            {% endif %}
           </tr>
         </thead>
       </table>

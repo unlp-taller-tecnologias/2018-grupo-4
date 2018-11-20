@@ -11,8 +11,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use \DateTime;
 
 
 class TransferenciaType extends AbstractType
@@ -23,19 +24,27 @@ class TransferenciaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+                ->add('fecha', DateType::class, array(
+                  'label' => 'Fecha*',
+                  'widget' => 'single_text',
+                  'required' => true
+                ))
+
+                ->add('oficina_destino', null, array(
+                  'label' => 'Oficina destino*'
+                ))
+
                 ->add('observaciones', TextareaType::class, array(
                   'attr' => array('class' => 'tinymce'),
-                ))
-                ->add('finalizada', null, array(
-                  'data'=>'0'
-                ))
-
-                ->add('fecha', null, array(
-                  'format' => 'yyyy-MM-dd',
-                  'data' => new \DateTime("now")
-                ))
-
-                ->add('oficina_destino');
+                  'required' => false
+                ));
+                // ->add('finalizada', null, array(
+                //   'data'=>'0'
+                // ))
+                //->add('oficina', CollectionType::class, array(
+                  //  'entry_type' => ArticuloType::class,
+                    //'entry_options' => array('label' => false),
+                //))
 
     }
 

@@ -32,6 +32,10 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Seleccione una oficina'
             )
           ))
+          ->add('fechaEntrada', DateType::class, array(
+            'label' => 'Fecha de entrada',
+            'widget' => 'single_text'
+          ))
           ->add('condicion', null, array(
                'label'=> 'Condición'
           ))
@@ -93,10 +97,6 @@ class ArticuloType extends AbstractType
             'label' => 'Importe',
             'attr' => array('placeholder' => 'Ingrese el importe del artículo'
             )
-          ))
-          ->add('fechaEntrada', DateType::class, array(
-            'label' => 'Fecha de entrada',
-            'widget' => 'single_text'
           ))
           ->add('codigoCuentaSubcuenta', null, array(
             'label' => 'Codigo de Cuenta/Subcuenta',

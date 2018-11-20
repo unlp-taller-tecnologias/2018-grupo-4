@@ -1,18 +1,18 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
+<div class="container">
+  <br>
     <h1>Transferencia</h1>
-    <ul>
-        <li>
-            <a href="{{ path('transferencia_index') }}">Volver al listado de oficinas</a>
-        </li>
-    </ul>
+
+    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+    <br>
   <div class="container-fluid border" style="padding: 30px">
   <div class="row">
     <div class="col-md-6 order-md-1">
       <h4>Artículos de la oficina</h4>
           <div id="toolbar">
-              <button id="button" class="btn btn-dark">(+) Agregar a la transferecia</button>
+              <button id="button" class="btn btn-dark"><i class="fas fa-plus"></i> Agregar a la transferecia</button>
           </div>
           <table id="table"
                  class="table table-hover table-striped"
@@ -39,7 +39,7 @@
       <div class="col-md-6 order-md-1">
         <h4>Artículo/s a transferir</h4>
         <div id="toolbar1">
-            <button id="button1" class="btn btn-dark">(-) Quitar de la transferecia</button>
+            <button id="button1" class="btn btn-dark"><i class="fas fa-minus"></i> Quitar de la transferecia</button>
         </div>
         <table id="table1"
                 class="table table-hover table-striped"
@@ -64,13 +64,12 @@
         </table>
   </div>
 </div>
-</div>
 
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <input type="submit" class="btn btn-dark" value="Create" />
     <input type="hidden" id="transferenciasIds" name="transferenciasIds" value="">
-    {#    <a class="btn btn-dark" href="{{ path('select_condition' )}}"  >Transferir</a>#}
+    <input type="hidden" id="oficinaOrigen" name="oficinaOrigen" value="">
+    <input type="submit" class="btn btn-dark" value="Siguiente" />
 {{ form_end(form) }}
 
 {% endblock %}

@@ -24,7 +24,7 @@ class Transferencia
     /**
      * @var string
      *
-     * @ORM\Column(name="observaciones", type="string", length=255)
+       * @ORM\Column(name="observaciones", type="string", length=255, nullable=true )
      */
     private $observaciones;
 
@@ -34,7 +34,6 @@ class Transferencia
      * @ORM\Column(name="finalizada", type="integer")
      */
     private $finalizada;
-
 
     /**
      * Get id
@@ -137,11 +136,12 @@ class Transferencia
     {
         $this->historiales = new ArrayCollection();
         $this->finalizada = 0;
+        $this->fecha = new \DateTime();
     }
 
 
     public function __toString() {
-        return $this->nombre;
+        
     }
 
     /**

@@ -10,14 +10,20 @@ class RegistrationFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
       $builder
-          ->add('name', null, array( ))
-          ->add('lastname', null, array( ))
+          ->add('name', null, array(
+          'label' => 'Nombre*',
+          'required' => 'true'
+          ))
+          ->add('lastname', null, array(
+          'label' => 'Apellido*',
+          'required' => 'true'
+          ))
           ->add('roles', ChoiceType::class, array(
                 'multiple'=> true,
                 'choices' => array(
-                    'ROLE_SUPER_ADMIN' => 'Administración',
-                    'ROLE_ADMIN'  => 'Edición y carga',
-                    'ROLE_USER'  => 'Solo lectura'
+                    'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
+                    'ROLE_ADMIN'  => 'ROLE_ADMIN',
+                    'ROLE_USER'  => 'ROLE_USER'
                 ),
           ));
     }
