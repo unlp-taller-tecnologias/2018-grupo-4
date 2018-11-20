@@ -79,7 +79,9 @@
         </tbody>
     </table>
     <br>
+    {% if is_granted("ROLE_ADMIN") %}
     <a class="btn btn-dark" href="{{ path('articulo_edit', { 'id': articulo.id }) }}">Editar</a>
+    {% endif %}
     <br>
 </div>
 {% endblock %}

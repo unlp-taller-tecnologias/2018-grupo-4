@@ -23,9 +23,9 @@
     {{ form_widget(form.oficina, { 'attr': {'class': 'form-control', 'hidden': 'true' }}) }}
     {{ form_widget(form) }}
     {{ form_errors(form) }}
-
+    {% if is_granted("ROLE_ADMIN") %}
     <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
-
+    {% endif %}
     {{ form_end(form) }}
     {% endif %}
   </div>
