@@ -175,7 +175,7 @@ class Articulo
 
     /**
     * @ORM\ManyToOne(targetEntity="Oficina", inversedBy="articulos")
-    * @ORM\JoinColumn(name="oficina_id", referencedColumnName="id")
+    * @ORM\JoinColumn(name="oficina_id", referencedColumnName="id", nullable=false)
     */
     private $oficina;
 

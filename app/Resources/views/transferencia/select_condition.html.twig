@@ -1,0 +1,19 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <h1>Transferencia</h1>
+    <form class="" action="{{ path('transferencia_finished', {id:transferencia.id} )}} " method="post">
+          {% for items in articulos %}
+            {% for articles in items %}
+              {{articles.denominacion}}
+              <select class="form-control" id="supervisor">
+                  {% for condicion in condiciones %}
+                      <option value="{{condicion}}}" >{{condicion}} </option>
+                  {% endfor %}
+              </select>
+            {% endfor %}
+          {% endfor %}
+          <input type="hidden" name="" value="{{transferencia.id}}">
+          <input type="submit" name="" value="Transferir">
+    </form>
+{% endblock %}

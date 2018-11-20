@@ -91,25 +91,45 @@ class ArticuloController extends Controller
      * @Route("/new", name="articulo_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
-    {
-        $articulo = new Articulo();
-        $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
-            $articulo->setEstado($estado);
-            $articulo->setUser($this->getUser());
-            $em->persist($articulo);
-            $em->flush();
-            return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
-        }
+    public function newAction(Request $request){
+      $articulo = new Articulo();
+      $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
+      $form->handleRequest($request);
+      $errors = array();
+      $backPath = 'articulos_index';
+      $backTitle = 'articulos';
 
-        return $this->render('articulo/new.html.twig', array(
-            'articulo' => $articulo,
-            'form' => $form->createView(),
-        ));
+      $em = $this->getDoctrine()->getManager();
+      $oficinaId = $request->query->get('id', null);
+      if (!is_null($oficinaId)) {
+        $backPath = 'oficina_index';
+        $backTitle = 'oficinas';
+        $oficinaId = trim($oficinaId);
+        $oficina = $em->getRepository('AppBundle:Oficina')->find($oficinaId);
+        if (!$oficina) {
+          $errors[] = 'La oficina ingresada no existe.';
+        }
+      }
+
+      if ($form->isSubmitted() && $form->isValid() && count($errors) == 0) {
+          $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
+          $articulo->setEstado($estado);
+          $articulo->setUser($this->getUser());
+          if ($oficina) {
+            $articulo->setOficina($oficina);
+          }
+          $em->persist($articulo);
+          $em->flush();
+          return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
+      }
+
+      return $this->render('articulo/new.html.twig', array(
+          'articulo' => $articulo,
+          'form' => $form->createView(),
+          'errors' => $errors,
+          'backPath' => $backPath,
+          'backTitle' => $backTitle
+      ));
     }
 
     /**
