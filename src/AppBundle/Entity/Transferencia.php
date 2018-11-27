@@ -141,7 +141,7 @@ class Transferencia
 
 
     public function __toString() {
-        
+
     }
 
     /**

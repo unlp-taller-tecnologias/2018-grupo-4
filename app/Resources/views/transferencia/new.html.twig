@@ -23,7 +23,7 @@
                  data-pagination="true"
                  data-search="true"
                  data-click-to-select="true"
-                 data-url="{{ path('articulo_list')}}">
+                 data-url="{{ path('oficina_show_listado', { 'oficina': oficina }) }}">
                  <thead>
                    <tr>
                      <th data-field="state" data-checkbox="true"></th>
@@ -67,9 +67,13 @@
 
 {{ form_start(form) }}
     {{ form_widget(form) }}
-    <input type="hidden" id="transferenciasIds" name="transferenciasIds" value="">
-    <input type="hidden" id="oficinaOrigen" name="oficinaOrigen" value="">
+
+    <input type="hidden" id="articulosIds" name="articulosIds" value="">
+
     <input type="submit" class="btn btn-dark" value="Siguiente" />
+    <a href="{{ path('transferencia_cancel') }}" class="btn btn-dark" name="button">Guardar</a>
+    <a href="#" class="btn btn-dark" name="button">Cancelar</a>
+
 {{ form_end(form) }}
 
 {% endblock %}
@@ -82,7 +86,7 @@
         $button = $('#button');
         $buttonTest = $('#button1');
         $form = $('form');
-        $transferenciasId = $('#transferenciasIds');
+        $transferenciasId = $('#articulosIds');
         $form.submit(function(){
           //alert('anduvo');
           var a = "";
