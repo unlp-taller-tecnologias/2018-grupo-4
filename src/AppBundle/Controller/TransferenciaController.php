@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Transferencia;
+use AppBundle\Entity\Historial;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Oficina;
 
@@ -35,64 +37,35 @@ class TransferenciaController extends Controller
 
     /**
      * Creates a new Transferencia entity.
-     *
      * @Route("/new/{id}", name="transferencia_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request, $id)
     {
-        $Transferencia = new Transferencia();
-        $form = $this->createForm('AppBundle\Form\TransferenciaType', $Transferencia);
+
+        $transferencia = new Transferencia();
+        $form = $this->createForm('AppBundle\Form\TransferenciaType', $transferencia);
         $form->handleRequest($request);
         $em = $this->getDoctrine()->getManager();
-        $oficinas = $em->getRepository('AppBundle:Articulo')->findByOficina($id);
-
+        $oficina = $em->getRepository('AppBundle:Oficina')->findOneById($id);
+        $transferencia->setOficinaOrigen($oficina);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em2 = $this->getDoctrine()->getManager();
-            $em2->persist($Transferencia);
-            $em2->flush();
-
-            return $this->redirectToRoute('transferencia_show', array('id' => $Transferencia->getId()));
+            $articulosIds = $request->request->get('articulosIds');
+            $oficinaOrigenId = $id;
+            $em->persist($transferencia);
+            $em->flush();
+            return $this->redirectToRoute('select_condition', array(
+              'id' => $transferencia->getId(),
+              'articulosIds' => $articulosIds,
+              'idOficinaOrigen' => $id
+          ));
         }
-
         return $this->render('transferencia/new.html.twig', array(
-            'oficinas' => $oficinas,
-            'Transferencia' => $Transferencia,
+            'oficina' => $id,
+            'Transferencia' => $transferencia,
             'form' => $form->createView(),
         ));
     }
-
-    /**
-      * Elegir articulos para la transferencia
-      *
-     * @Route("/new/{id}", name="agregar_articulos")
-     * @Method({"GET", "POST"})
-     */
-  /*  public function agregarArticulos(Request $request, Oficina $oficina)
-    {
-        $Transferencia = new Transferencia();
-        $form = $this->createForm('AppBundle\Form\TransferenciaType', $Transferencia);
-        $form->handleRequest($request);
-        $articulos = $em->getRepository('AppBundle:Articulo')->findAll();
-        /*if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($Transferencia);
-            $em->flush();
-
-            return $this->redirectToRoute('transferencia_show', array('id' => $Transferencia->getId()));
-        }
-
-        return $this->render('transferencia/agregar_articulos.html.twig', array(
-            'Transferencia' => $Transferencia,
-            'articulos' => $articulos,
-            'form' => $form->createView(),
-        ));
-    }*/
-
-
-
-
-
 
 
     /**
@@ -173,55 +146,81 @@ class TransferenciaController extends Controller
     }
 
     /**
-     * Transfiere articulos.
-     *
-     * @Route("/transferir", name="transferir")
-     * @Method("POST")
+     * Solicita condicion de los articulos a transferir
+     * @Route("/select_condition/{id}", name="select_condition")
+     * @Method({"GET", "POST"})
      */
 
-    private function Transferir($articulos){
-      
+    public function selectCondition(Request $request, Transferencia $transferencia){
+      $articulosIds = $request->query->get('articulosIds');
+
+      $oficinaOrigenId = $request->query->get('idOficinaOrigen');
+      $articulosIds = explode(",", $articulosIds);
+      $em = $this->getDoctrine()->getManager();
+      $articuloRepository = $em->getRepository('AppBundle:Articulo');
+      $articulos = array();
+      $transferencia->setOficinaOrigen($oficinaOrigenId);
+      foreach ($articulosIds as $id){
+        $articulos[] =  $articuloRepository->findByNumInventario($id);
+      }
+      $condiciones = $em->getRepository('AppBundle:Condicion')->findAll();
+      return $this->render('transferencia/select_condition.html.twig', array(
+          'oficinaOrigenId' => $oficinaOrigenId,
+          'transferencia' => $transferencia,
+          'articulos' => $articulos,
+          'condiciones' => $condiciones
+      ));
     }
 
+    /**
+     * Termina la transferencia
+     * @Route("select_condition/finish/{id}", name="transferencia_finished")
+     * @Method({"GET", "POST"})
+     */
+
+    public function finishTransferencia(Request $request, Transferencia $transferencia){
+      $em = $this->getDoctrine()->getManager();
+      $condicionRepository = $em->getRepository('AppBundle:Condicion');
+      $transferenciaId = $request->request->get('transferenciaId');
+      $transfer = $em->getRepository('AppBundle:Transferencia')->findOneById($transferenciaId);
+      $oficina_destino = $transfer->getOficinaDestino();
+      $fecha = $transfer->getFecha();
+      $articulos = array();
+      $articulosIds = $request->request->get('articulosIds');
+      $articulosIds = explode(",", $articulosIds);
+      $articuloRepository = $em->getRepository('AppBundle:Articulo');
+      $i=0;
+      foreach ($articulosIds as $id){
+        $articulos[$i] =  $articuloRepository->findOneById($id);
+        $condicionSeleccionada = $request->request->get($id);
+        $condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
+        $articuloActual = $articulos[$i];
+        $articuloActual->setOficina($oficina_destino);
+        $historial = new Historial;
+        $historial
+            ->setCondicion($condicionReal)
+            ->setFecha($fecha)
+            ->setArticulo($articulos[$i])
+            ->setTransferencia($transfer);
+        $em->persist($historial);
+        $em->flush();
+        $i++;
+      }
+      return $this->render('transferencia/transferencia_finish.html.twig', array(
+        'transferencias' => $transferencia
+      ));
+    }
+
+    /**
+     * Cancela la transferencia
+     * @Route("/transferencia_cancel/{id}", name="transferencia_cancel")
+     * @Method({"GET", "POST"})
+     */
+
+    public function transferenciaCancel(Request $request, Transferencia $transferencia){
+    
 
 
-
-        /**
-         * Lists all articulo entities.
-         *
-         * @Route("/{oficina}/articulos/listado", name="oficina_show_listado")
-         * @Method("GET")
-         */
-  /*      public function showListadoAction(Request $request, Oficina $oficina) {
-          $offset = $request->query->get('offset', 0);
-          $limit = $request->query->get('limit', 10);
-          $search = $request->query->get('search', null);
-          $sort = $request->query->get('sort', null);
-          $order = $request->query->get('order', null);
-
-          $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
-          $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
-          $total = $repository->countBy($search, $oficina);
-
-          $rawResponse = array(
-            'total' => $total,
-            'rows' => array()
-          );
-
-          foreach($articulos as $articulo) {
-            $rawResponse['rows'][] = array(
-              'id' => $articulo->getId(),
-              'numInventario' => $articulo->getNumInventario(),
-              'numExpendiente' => $articulo->getNumExpediente(),
-              'denominacion' => $articulo->getDenominacion(),
-              'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-              'estado' => $articulo->getEstado()->getNombre()
-            );
-          };
-
-          return new JsonResponse($rawResponse);
-        }*/
-
-
+    }
 
 }

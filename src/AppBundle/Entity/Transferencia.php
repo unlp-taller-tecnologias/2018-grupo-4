@@ -134,13 +134,14 @@ class Transferencia
 
     public function __construct()
     {
-      $this->fecha = new \DateTime();
-      $this->historiales = new ArrayCollection();
+        $this->historiales = new ArrayCollection();
+        $this->finalizada = 0;
+        $this->fecha = new \DateTime();
     }
 
 
     public function __toString() {
-        return $this->nombre;
+
     }
 
     /**

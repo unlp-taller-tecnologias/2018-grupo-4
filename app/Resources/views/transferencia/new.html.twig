@@ -12,7 +12,7 @@
     <div class="col-md-6 order-md-1">
       <h4>Artículos de la oficina</h4>
           <div id="toolbar">
-              <button id="button" class="btn btn-dark"><i class="fas fa-plus"></i> Agregar a la tranferecia</button>
+              <button id="button" class="btn btn-dark"><i class="fas fa-plus"></i> Agregar a la transferecia</button>
           </div>
           <table id="table"
                  class="table table-hover table-striped"
@@ -23,7 +23,7 @@
                  data-pagination="true"
                  data-search="true"
                  data-click-to-select="true"
-                 data-url="{{ path('articulo_list')}}">
+                 data-url="{{ path('oficina_show_listado', { 'oficina': oficina }) }}">
                  <thead>
                    <tr>
                      <th data-field="state" data-checkbox="true"></th>
@@ -39,7 +39,7 @@
       <div class="col-md-6 order-md-1">
         <h4>Artículo/s a transferir</h4>
         <div id="toolbar1">
-            <button id="button1" class="btn btn-dark"><i class="fas fa-minus"></i> Quitar de la tranferecia</button>
+            <button id="button1" class="btn btn-dark"><i class="fas fa-minus"></i> Quitar de la transferecia</button>
         </div>
         <table id="table1"
                 class="table table-hover table-striped"
@@ -67,7 +67,13 @@
 
 {{ form_start(form) }}
     {{ form_widget(form) }}
+
+    <input type="hidden" id="articulosIds" name="articulosIds" value="">
+
     <input type="submit" class="btn btn-dark" value="Siguiente" />
+    <a href="{{ path('transferencia_cancel') }}" class="btn btn-dark" name="button">Guardar</a>
+    <a href="#" class="btn btn-dark" name="button">Cancelar</a>
+
 {{ form_end(form) }}
 
 {% endblock %}
@@ -79,6 +85,21 @@
         $tableTest = $('#table1'),
         $button = $('#button');
         $buttonTest = $('#button1');
+        $form = $('form');
+        $transferenciasId = $('#articulosIds');
+        $form.submit(function(){
+          //alert('anduvo');
+          var a = "";
+          var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
+          var ids = $.map($tableTest.bootstrapTable('getData'), function (row) {
+                return row.numInventario;
+            });
+            a = ids.join(",");
+                     //  alert(a);
+            $transferenciasId.val(a);
+            return true;
+        });
+        console.log($form);
     $(function () {
         $button.click(function () {
           var $dataT = $table.bootstrapTable('getAllSelections');//devuelve un json

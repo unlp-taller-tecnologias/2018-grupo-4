@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -49,7 +50,6 @@ class Historial
     public function setFecha($fecha)
     {
         $this->fecha = $fecha;
-
         return $this;
     }
 
@@ -63,16 +63,72 @@ class Historial
         return $this->fecha;
     }
 
+    /**
+    * @ORM\ManyToOne(targetEntity="Transferencia", inversedBy="historial")
+    * @ORM\JoinColumn(name="transferencia_id", referencedColumnName="id", nullable=false)
+    */
+    private $transferencia;
+    /**
+     * Get transferencia
+     *
+     * @return Transferencia
+     */
+    public function getTransferencia()
+    {
+        return $this->transferencia;
+    }
+
+    /**
+     * Set transferencia
+     *
+     * @param string $transferencia
+     * @return Transferencia
+     */
+    public function setTransferencia($transferencia)
+    {
+        $this->transferencia = $transferencia;
+        return $this;
+    }
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Transferencia", inversedBy="historiales")
+     * @var Condicion
+     *
+     * @ORM\ManyToOne(targetEntity="Condicion")
+     * @ORM\JoinColumn(name="condicion_id", referencedColumnName="id")
      */
-    private $transferencia;
+    private $condicion;
+
+
+
+    /**
+     * Set condicion
+     *
+     * @param string $condicion
+     *
+     * @return Condicion
+     */
+    public function setCondicion($condicion)
+    {
+        $this->condicion = $condicion;
+
+        return $this;
+    }
+
+    /**
+     * Get condicion
+     *
+     * @return string
+     */
+    public function getCondicion()
+    {
+        return $this->condicion;
+    }
+
 
     public function __construct()
     {
-        $this->transferencia = new ArrayCollection();
+
     }
 
     public function __toString() {

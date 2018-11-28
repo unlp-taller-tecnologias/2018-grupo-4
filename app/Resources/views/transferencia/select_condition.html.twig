@@ -1,0 +1,49 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+    <h1>Transferencia</h1>
+    <form class="" name="form_condition" id="form_condition" action="{{ path('transferencia_finished', {id:transferencia.id} )}} " method="post">
+          {% for items in articulos %}
+            {% for articles in items %}
+              {{articles.denominacion}}
+              <select class="form-control" name="{{articles.id}}" id="{{articles.id}}">
+                  {% for condicion in condiciones %}
+                      {% set selected = '' %}
+                      {% if (condicion.nombre)  == articles.condicion %}
+                         {% set selected = 'selected' %}
+                      {% endif %}
+                      <option value="{{condicion}}" {{ selected }}>{{condicion}}</option>
+                  {% endfor %}
+              </select>
+            {% endfor %}
+          {% endfor %}
+          <input type="hidden" name="articulosIds" id="articulosIds" value="">
+            <input type="hidden" name="condiciones" id="condiciones" value="">
+          <input type="hidden" name="transferenciaId" value="{{transferencia.id}}">
+          <input type="hidden" name="oficinaOrigenId" value="{{oficinaOrigenId}}">
+          <input type="submit" name="" value="Transferir">
+    </form>
+{%for item in articulos %}
+  {% for id in item %}
+    <input type="hidden" class="oculto" id="articulos" name="articulo[]" value="{{id.id}}">
+  {% endfor %}
+{% endfor %}
+
+{% endblock %}
+
+{% block transferenciaJs %}
+<script>
+      $form = $('form');
+      $articulosIds = $('#articulosIds');
+      var idsArray = [];
+      $form.submit(function(){
+        var a = "";
+        var ids = $('.oculto').each(function() {
+          idsArray.push($(this).val());
+        });
+        console.log(idsArray);
+        a = idsArray.join(",");
+        $articulosIds.val(a);
+      });
+</script>
+{% endblock %}
