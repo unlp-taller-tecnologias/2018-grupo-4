@@ -20,8 +20,8 @@
                  data-toggle="table"
                  data-toolbar="#toolbar"
                  data-height="460"
-                 data-pagination="true"
                  data-search="true"
+                 data-pagination="true"
                  data-click-to-select="true"
                  data-url="{{ path('oficina_show_listado', { 'oficina': oficina }) }}">
                  <thead>
@@ -71,15 +71,19 @@
     <input type="hidden" id="articulosIds" name="articulosIds" value="">
 
     <input type="submit" class="btn btn-dark" value="Siguiente" />
-    <a href="{{ path('transferencia_cancel') }}" class="btn btn-dark" name="button">Guardar</a>
-    <a href="#" class="btn btn-dark" name="button">Cancelar</a>
+
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block transferenciaJs %}
-
+<style>
+  /*TODO: SACARLO DE ACA Y PONERLO EN LOS ESTILOS DE LA PAGINA */
+  .pagination-info {
+    display:none!important
+  }
+</style>
 <script>
     var $table = $('#table'),
         $tableTest = $('#table1'),
@@ -100,50 +104,37 @@
             return true;
         });
         console.log($form);
-    $(function () {
-        $button.click(function () {
-          var $dataT = $table.bootstrapTable('getAllSelections');//devuelve un json
-          var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
-          var $esta = false;
-            for(var data in $dataT) {
-              $esta = false;
-              for(var itemTranfe in $dataTranfe){
-                if ((data, $dataT[data]).numInventario == (itemTranfe,$dataTranfe[itemTranfe]).numInventario) {
-                  $esta = true;
-                  break;
-                }
-              }
-              if ($esta == false) {
-                $tableTest.bootstrapTable('insertRow', {
-                    index: 0,
-                    row: {
-                        numInventario: (data, $dataT[data]).numInventario,
-                        numExpediente: (data, $dataT[data]).numExpediente,
-                        denominacion: (data, $dataT[data]).denominacion,
-                        tipo: (data, $dataT[data]).tipo,
-                        estado: (data, $dataT[data]).estado
-                    }
-                });
-              }
-            }
+
+    function moveTransferencias ($tableIn, $tableOut) {
+      const $dataT = $tableIn.bootstrapTable('getAllSelections');
+      const ids = $.map($tableIn.bootstrapTable('getAllSelections'), function (row) {
+        return row.numInventario;
+      });
+
+      $dataT.forEach(data => {
+        $tableOut.bootstrapTable('insertRow', {
+            index: 0,
+            row: data
         });
-    });
+      });
+
+      $tableIn.bootstrapTable('remove', {
+        field: 'numInventario',
+        values: ids
+      });
+
+      $tableIn.bootstrapTable('uncheckAll');
+      $tableOut.bootstrapTable('uncheckAll');
+    }
+
     $(function () {
-      $buttonTest.click(function () {
-        var $dataTranfe = $tableTest.bootstrapTable('getAllSelections');//devuelve un json
-          var $arrayRemove = [];
-          for(var itemTranfe in $dataTranfe) {
-            //console.log((itemTranfe, $dataTranfe[itemTranfe]));
-            $table.bootstrapTable('uncheckBy', {field:'numInventario', values:[(itemTranfe, $dataTranfe[itemTranfe]).numInventario]});
-          }
-        var ids = $.map($tableTest.bootstrapTable('getAllSelections'), function (row) {
-              return row.numInventario;
-          });
-        $tableTest.bootstrapTable('remove', {
-              field: 'numInventario',
-              values: ids
-          });
-        });
+      $button.click(() => {
+        moveTransferencias($table, $tableTest);
+      });
+
+      $buttonTest.click(() => {
+        moveTransferencias($tableTest, $table);
+      });
     });
 
 </script>
