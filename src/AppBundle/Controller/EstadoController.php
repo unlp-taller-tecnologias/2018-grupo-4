@@ -32,7 +32,6 @@ class EstadoController extends Controller
             'estados' => $estados,
         ));
     }
-
     /**
      * Lists all articulo entities.
      *

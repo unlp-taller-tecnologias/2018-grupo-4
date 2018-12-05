@@ -3,14 +3,17 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
   <br>
-    <h1>Oficina</h1>
+    <h1>Oficina: {{oficina.nombre}}</h1>
     {% if is_granted("ROLE_ADMIN") %}
+    <div style="margin-bottom: 15px;">
+      <a href="#">Actualmente, existe una operación en curso. Continuar</a><br>
+    </div>
     <div class="">
+      <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}">Agregar nuevo artículo</a>
       <a class="btn btn-dark" href="{{ path('transferencia_new', {'id': oficina.id}) }}">Iniciar Transferencia</a>
       <a class="btn btn-dark" href="{{ path('baja_new') }}">Iniciar Baja</a>
-      <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}">Agregar nuevo articulo</a>
     </div>
     {% endif %}
   <br>
@@ -30,8 +33,45 @@
         </tr>
       </tbody>
     </table>
+    <a style="margin: 15px;" class="btn btn-dark" href="{{ path('oficina_edit', { 'id': oficina.id }) }}">Editar</a><br>
     <br>
-      <h4>Artículos de la oficina</h4>
+
+      {% block filters %}
+
+      <div class="jumbotron">
+        <h4>Buscar artículos por:</h4>
+         <div class="form-row" >
+           <div class="form-group col-md-6">
+             <label>Nro. de expediente</label>
+             <input type="text" id="expediente" class="form-control" placeholder="Nro. de expediente" name="expediente">
+           </div>
+          <div class="form-group col-md-6">
+            <label>Nro. de inventario</label>
+            <input type="text" class="form-control" placeholder="Nro. de inventario" name="inventario">
+          </div>
+          <div class="form-group col-md-6">
+            <label>Denominación</label>
+            <input type="text" class="form-control" placeholder="Denominación" name="denominacion">
+          </div>
+          <div class="form-group col-md-3">
+            <label>Estado</label>
+            <select id="estado" class="form-control" name="estado">
+              <option value=""> Seleecione </option>
+            </select>
+          </div>
+          <div class="form-group col-md-3">
+            <label>Tipo</label>
+            <select id="tipo" class="form-control" name="tipo">
+              <option value=""> Seleecione </option>
+            </select>
+          </div>
+          <div class="form-group col-md-12">
+            <button id="aaa" class="btn btn-dark">Buscar</button>
+          </div>
+        </div>
+      </div>
+      {% endblock %}
+      <h4>Artículos de {{oficina.nombre}}</h4>
       <div class="table-responsive">
         <table  id="tablaArticulos"
                 class="table table-hover table-striped"
@@ -47,8 +87,8 @@
                 >
           <thead>
             <tr>
-              <th scope="row" data-field="numInventario" data-sortable="true">Nro.Inventario</th>
-              <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+              <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
+              <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
               <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
               <th scope="row" data-field="estado" data-sortable="true">Estado</th>

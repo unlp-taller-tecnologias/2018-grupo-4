@@ -3,9 +3,9 @@
 {% block content %}
   <div class="container">
     <br>
-    <a href="{{ path('condicion_index') }}"><i class="fas fa-angle-left"></i>Listado de Condiciones</a>
+    <a href="{{ path('condicion_index') }}"><i class="fas fa-angle-left"></i> Listado de Condiciones</a>
     <br>
-    <h1>Editar Condición</h1>
+    <h1>Editar Condición: {{condicion.nombre}}</h1>
       {{ form_start(edit_form) }}
       {{ form_widget(edit_form) }}
       {{ form_end(edit_form) }}

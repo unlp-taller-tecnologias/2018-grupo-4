@@ -218,7 +218,7 @@ class TransferenciaController extends Controller
      */
 
     public function transferenciaCancel(Request $request, Transferencia $transferencia){
-    
+
 
 
     }
