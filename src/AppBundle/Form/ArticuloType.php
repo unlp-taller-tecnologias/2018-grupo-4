@@ -42,9 +42,7 @@ class ArticuloType extends AbstractType
           ->add('tipo', null, array(
                'label'=> 'Tipo'
           ))
-          ->add('condicion', null, array(
-               'label'=> 'Condicion'
-          ))
+
           ->add('material', null, array(
             'label' => 'Material',
             'attr' => array('placeholder' => 'Ingrese el material del artículo'

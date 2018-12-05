@@ -10,6 +10,10 @@
     <table style="margin: 15px;" class="table table">
         <tbody>
           <tr>
+              <th scope="row">Oficina</th>
+              <td scope="row">{{ articulo.oficina }}</td>
+          </tr>
+          <tr>
               <th scope="row">Denominación</th>
               <td scope="row">{{ articulo.denominacion }}</td>
           </tr>
@@ -64,6 +68,10 @@
             <tr>
                 <th scope="row">Fecha Entrada</th>
                 <td scope="row">{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th scope="row">Condicion</th>
+                <td scope="row">{{ articulo.condicion }}</td>
             </tr>
             <tr>
                 <th scope="row">Código Cuenta/Subcuenta</th>
