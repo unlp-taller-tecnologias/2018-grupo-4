@@ -36,6 +36,7 @@
         </div>
         <div class="form-group col-md-12">
           <button id="button" class="btn btn-dark">Buscar</button>
+          <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
         </div>
       </div>
     </div>
@@ -46,12 +47,15 @@
         <button id="button1" hidden class="btn btn-default">filterBy</button>
       </div>
       <table  id="tablaArticulos"
+              data-toolbar="#toolbar"
+              data-show-export="true"
               class="table table-hover table-striped"
               data-toggle="table"
-              data-toolbar="#toolbar"
               data-height="400"
-
-              data-show-export="true"
+              data-side-pagination="server"
+              data-pagination="true"
+              data-page-list="[2, 5, 10, 20, 50, 100, 200]"
+              data-show-columns="true"
               data-url="{{ path('articulo_list') }}"
               >
         <thead>
@@ -83,7 +87,7 @@ xhttpEstados.onreadystatechange = function() {
     var estados = listado.rows;
     var opciones = "";
     for(es in estados){
-      opciones += "<option value'"+ estados[es].id + "'>"+ estados[es].nombre +"</option>";
+      opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
     }
     $("#estado").append(opciones);
   }
@@ -98,7 +102,7 @@ xhttpTipos.onreadystatechange = function() {
     var tipos = listado.rows;
     var opciones = "";
     for(ti in tipos){
-      opciones += "<option value'"+ tipos[ti].id + "'>"+ tipos[ti].nomenclador +"</option>";
+      opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nomenclador +"</option>";
     }
     $("#tipo").append(opciones);
   }
@@ -130,16 +134,58 @@ xhttpTipos.send();
 
 {% block serchArticulos  %}
 <script>
-//var $table = $('#tablaArticulos');
+var $table = $('#tablaArticulos');
+
 $("button").click(function(){
+  var nroInventario = $('#nroInventario').val();
+  var expediente = $('#expediente').val();
+  var denominacion = $('#denominacion').val();
+  var estado = $('#estado').val();
+  var tipo = $('#tipo').val();
   $.ajax({
     method: "POST",
     url: "articulo_listFilter",
-    data: {"nroInventario":147} ,
+    data: {
+            "nroInventario":nroInventario,
+            "expediente":expediente,
+            "denominacion":denominacion,
+            "estado":estado,
+            "tipo":tipo
+          } ,
     success: function(data) {
-        alert(data);
+      //alert(data);
+      $table.bootstrapTable('load',data);
       }
     });
   });
+
+  $("#buttonBorrar").click(function(){
+    $('#nroInventario').val('');
+    $('#expediente').val('');
+    $('#denominacion').val('');
+    $('#estado').val('');
+    $('#tipo').val('');
+    var nroInventario = $('#nroInventario').val();
+    var expediente = $('#expediente').val();
+    var denominacion = $('#denominacion').val();
+    var estado = $('#estado').val();
+    var tipo = $('#tipo').val();
+    $.ajax({
+      method: "POST",
+      url: "articulo_listFilter",
+      data: {
+              "nroInventario":nroInventario,
+              "expediente":expediente,
+              "denominacion":denominacion,
+              "estado":estado,
+              "tipo":tipo
+            } ,
+      success: function(data) {
+        //alert(data);
+        $table.bootstrapTable('load',data);
+        }
+      });
+    });
+
 </script>
 {% endblock %}

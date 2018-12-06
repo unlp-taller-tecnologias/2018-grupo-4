@@ -97,6 +97,61 @@ class OficinaController extends Controller
     }
 
     /**
+     * Lists all oficinas entities.
+     *
+     * @Route("/oficina_listFilter", name="oficina_listFilter")
+     * @Method({"GET", "POST"})
+     */
+    public function listadoActionFilter(Request $request){
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $nombre = $request->request->get('nombre');
+      $nroCarpeta = $request->request->get('nroCarpeta');
+      $responsable = $request->request->get('responsable');
+
+      $nombre = ($nombre == "")? NULL:"%".$nombre."%";
+      $nroCarpeta = ($nroCarpeta == "")? NULL:$nroCarpeta;
+      $responsable = ($responsable == "")? NULL:"%".$responsable."%";
+
+
+      $em = $this->getDoctrine()->getEntityManager();
+      $dql = "select a from AppBundle:Oficina a where (((a.nombre like :nombre and :nombre is not null) or (:nombre is null))
+              and ((a.numeroCarpeta = :numeroCarpeta and :numeroCarpeta is not null) or (:numeroCarpeta is null))
+              and ((a.responsableOficina like :responsableOficina and :responsableOficina is not null) or (:responsableOficina is null)))
+              or (:nombre is null and :numeroCarpeta is null and :responsableOficina is null) order by a.nombre asc";
+      $query = $em->createQuery($dql);
+
+      $query->setParameter('nombre', $nombre);
+      $query->setParameter('numeroCarpeta', $nroCarpeta);
+      $query->setParameter('responsableOficina', $responsable);
+
+      $oficinas = $query->getResult();
+
+      $total = count($oficinas);
+
+
+      $rawResponse = array(
+        'total' => $total,
+        'rows' => array()
+      );
+
+      foreach($oficinas as $oficina) {
+        $rawResponse['rows'][] = array(
+          'id' => $oficina->getId(),
+          'nombre' => $oficina->getNombre(),
+          'numeroCarpeta' => $oficina->getNumeroCarpeta(),
+          'responsableOficina' => $oficina->getResponsableOficina()
+        );
+      };
+
+      return new JsonResponse($rawResponse);
+    }
+
+    /**
      * Creates a new oficina entity.
      *
      * @Route("/new", name="oficina_new")
