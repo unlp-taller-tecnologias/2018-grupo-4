@@ -109,6 +109,8 @@ class CondicionController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $habilitado = $em->getRepository('AppBundle:Condicion')->findOneByHabilitado('1');
+            $condicion->setHabilitado($habilitado);
             $em->persist($condicion);
             $em->flush();
 
@@ -146,7 +148,7 @@ class CondicionController extends Controller
     public function editAction(Request $request, Condicion $condicion)
     {
         $deleteForm = $this->createDeleteForm($condicion);
-        $editForm = $this->createForm('AppBundle\Form\CondicionType', $condicion);
+        $editForm = $this->createForm('AppBundle\Form\CondicionType', $condicion, array("edit" => true));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

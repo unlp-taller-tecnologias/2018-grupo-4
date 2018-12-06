@@ -68,10 +68,16 @@
 {{ form_start(form) }}
     {{ form_widget(form) }}
 
+    <div id="condiciones" >
+      <h3 id="condiciones-title">Seleccione condición</h3>
+
+    </div>
+
+
     <input type="hidden" id="articulosIds" name="articulosIds" value="">
-
-    <input type="submit" class="btn btn-dark" value="Siguiente" />
-
+    <input class="btn btn-dark" type="submit"  value="Transferir" style="margin-top: 10px;">
+    <input class="btn btn-dark" type="submit"  value="Guardar" style="margin-top: 10px;">
+    <input class="btn btn-dark" type="submit"   value="Cancelar" style="margin-top: 10px;">
 
 {{ form_end(form) }}
 
@@ -104,8 +110,12 @@
             return true;
         });
         console.log($form);
+        $('#condiciones-title').hide();
 
-    function moveTransferencias ($tableIn, $tableOut) {
+
+
+
+    function moveTransferencias ($tableIn, $tableOut, createInput) {
       const $dataT = $tableIn.bootstrapTable('getAllSelections');
       const ids = $.map($tableIn.bootstrapTable('getAllSelections'), function (row) {
         return row.numInventario;
@@ -116,6 +126,21 @@
             index: 0,
             row: data
         });
+        let id = `condicion_${data.numInventario}`;
+
+        if (createInput) {
+          $('#condiciones').append(`
+            <div class="form-group ${id}_container">
+              <label for="condiciones['${data.numInventario}']" >${data.denominacion}</label>
+              <select id="${data.numInventario}" name="condiciones['${data.numInventario}']" class="form-control">
+                <option>Pepe</option>
+              </select>
+            </div>
+            `
+          );
+        } else {
+          $(`.${id}_container`).remove();
+        }
       });
 
       $tableIn.bootstrapTable('remove', {
@@ -123,17 +148,23 @@
         values: ids
       });
 
+      if (createInput && $tableOut.bootstrapTable('getData').length > 0) {
+        $('#condiciones-title').show();
+      } else if (!createInput && $tableIn.bootstrapTable('getData').length == 0) {
+        $('#condiciones-title').hide();
+      }
+
       $tableIn.bootstrapTable('uncheckAll');
       $tableOut.bootstrapTable('uncheckAll');
     }
 
     $(function () {
       $button.click(() => {
-        moveTransferencias($table, $tableTest);
+        moveTransferencias($table, $tableTest, true);
       });
 
       $buttonTest.click(() => {
-        moveTransferencias($tableTest, $table);
+        moveTransferencias($tableTest, $table, false);
       });
     });
 

@@ -3,12 +3,17 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Estado
  *
  * @ORM\Table(name="estado")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\EstadoRepository")
+ * @UniqueEntity(
+ *   fields={"nombre"},
+ *   message="El nombre de estado ya existe."
+ * )
  */
 class Estado
 {

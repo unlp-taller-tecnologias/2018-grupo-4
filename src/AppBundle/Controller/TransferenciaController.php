@@ -51,6 +51,8 @@ class TransferenciaController extends Controller
         $transferencia->setOficinaOrigen($oficina);
         if ($form->isSubmitted() && $form->isValid()) {
             $articulosIds = $request->request->get('articulosIds');
+            $condiciones = $request->request->get('condiciones');
+
             $oficinaOrigenId = $id;
             $em->persist($transferencia);
             $em->flush();

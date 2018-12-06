@@ -202,7 +202,7 @@ class OficinaController extends Controller
     /**
      * Deletes a oficina entity.
      *
-     * @Route("/{id}", name="oficina_delete")
+     * @Route("/{id}/delete", name="oficina_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Oficina $oficina)

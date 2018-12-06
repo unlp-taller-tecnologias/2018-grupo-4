@@ -29,6 +29,14 @@ class Tipo
     private $codigo;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="habilitado", type="boolean")
+     */
+    private $habilitado;
+
+
+    /**
      * @var string
      *
      * @ORM\Column(name="nomenclador", type="string", length=100)
@@ -111,6 +119,31 @@ class Tipo
     {
         return $this->codigo;
     }
+
+    /**
+     * Set habilitado
+     *
+     * @param boolean $habilitado
+     *
+     * @return Condicion
+     */
+    public function setHabilitado($habilitado)
+    {
+        $this->habilitado = $habilitado;
+
+        return $this;
+    }
+
+    /**
+     * Get habilitado
+     *
+     * @return bool
+     */
+    public function getHabilitado()
+    {
+        return $this->habilitado;
+    }
+
 
     /**
      * Set nomenclador

@@ -46,6 +46,8 @@ class TipoController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $habilitado = $em->getRepository('AppBundle:Tipo')->findOneByHabilitado('1');
+            $tipo->setHabilitado($habilitado);
             $em->persist($tipo);
             $em->flush();
 
@@ -145,7 +147,7 @@ class TipoController extends Controller
     public function editAction(Request $request, Tipo $tipo)
     {
         $deleteForm = $this->createDeleteForm($tipo);
-        $editForm = $this->createForm('AppBundle\Form\TipoType', $tipo);
+        $editForm = $this->createForm('AppBundle\Form\TipoType', $tipo, array("edit" => true));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

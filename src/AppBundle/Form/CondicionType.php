@@ -15,10 +15,15 @@ class CondicionType extends AbstractType
     {
         $builder
         ->add('nombre')
-        ->add('habilitado')
         ->add('descripcion', null, array(
-          'label' => 'Descripción'
-        ));
+            'label' => 'Descripción del la condición',
+            'attr' => array(
+              'placeholder' => 'Ingrese una descripción para el estado'
+            )
+      ));
+      if ($options['edit']) {
+        $builder->add('habilitado');
+      }
     }
 
     /**
@@ -27,7 +32,8 @@ class CondicionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Condicion'
+            'data_class' => 'AppBundle\Entity\Condicion',
+            'edit' => false
         ));
     }
 
