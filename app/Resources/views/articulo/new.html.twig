@@ -30,3 +30,15 @@
     {% endif %}
   </div>
 {% endblock %}
+
+
+{% block serchArticulos  %}
+<script>
+{% for id in CondDeshabilitadas %}
+  $("#appbundle_articulo_condicion").find('[value="{{id}}"]').remove();
+{% endfor %}
+{% for id in TiposDeshabilitadas %}
+  $("#appbundle_articulo_tipo").find('[value="{{id}}"]').remove();
+{% endfor %}
+</script>
+{% endblock %}

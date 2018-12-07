@@ -185,13 +185,26 @@ class ArticuloController extends Controller
           $em->flush();
           return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
       }
-
+      $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
+      $arrayDesCond = [];
+      $count = count($arrayValuesCond);
+      for ($i=0; $i < $count; $i++) {
+        array_push($arrayDesCond,$arrayValuesCond[$i]->getId());
+      }
+      $arrayValuesTipo = $em->getRepository('AppBundle:Tipo')->findBy(array('habilitado' => '0'));
+      $arrayDesTipo = [];
+      $count = count($arrayValuesTipo);
+      for ($i=0; $i < $count; $i++) {
+        array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
+      }
       return $this->render('articulo/new.html.twig', array(
           'articulo' => $articulo,
           'form' => $form->createView(),
           'errors' => $errors,
           'backPath' => $backPath,
-          'backTitle' => $backTitle
+          'backTitle' => $backTitle,
+          'CondDeshabilitadas' => $arrayDesCond,
+          'TiposDeshabilitadas' => $arrayDesTipo
       ));
     }
 

@@ -115,7 +115,8 @@ class TipoController extends Controller
         $rawResponse['rows'][] = array(
           'id' => $tipo->getId(),
           'codigo' => $tipo->getCodigo(),
-          'nomenclador' => $tipo->getNomenclador()
+          'nomenclador' => $tipo->getNomenclador(),
+          'habilitado' => ($tipo->getHabilitado() == 1)?'Si':'No'
         );
       };
 

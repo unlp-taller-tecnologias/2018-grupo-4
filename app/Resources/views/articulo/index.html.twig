@@ -87,7 +87,9 @@ xhttpEstados.onreadystatechange = function() {
     var estados = listado.rows;
     var opciones = "";
     for(es in estados){
-      opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
+      if (estados[es].habilitado == 'Si') {
+        opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
+      }
     }
     $("#estado").append(opciones);
   }
@@ -102,7 +104,9 @@ xhttpTipos.onreadystatechange = function() {
     var tipos = listado.rows;
     var opciones = "";
     for(ti in tipos){
-      opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nomenclador +"</option>";
+      if (tipos[ti].habilitado == 'Si') {
+        opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nomenclador +"</option>";
+      }
     }
     $("#tipo").append(opciones);
   }
