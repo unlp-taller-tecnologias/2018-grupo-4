@@ -75,4 +75,5 @@ class ArticuloRepository extends \Doctrine\ORM\EntityRepository
       ->getQuery()
       ->getSingleScalarResult();
   }
+
 }

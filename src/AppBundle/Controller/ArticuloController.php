@@ -154,15 +154,20 @@ class ArticuloController extends Controller
      * @Route("/new", name="articulo_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request){
-      $articulo = new Articulo();
+    public function newAction(Request $request)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
+      $numInv = ($artNumInv->getNumInventario())+1;
+      $condiciones = $em->getRepository('AppBundle:Condicion')->findByHabilitado(1);
+      $articulo = new Articulo($numInv);
       $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
       $form->handleRequest($request);
       $errors = array();
       $backPath = 'articulos_index';
       $backTitle = 'articulos';
 
-      $em = $this->getDoctrine()->getManager();
+      //$em = $this->getDoctrine()->getManager();
       $oficinaId = $request->query->get('id', null);
       if (!is_null($oficinaId)) {
         $backPath = 'oficina_index';
@@ -175,6 +180,12 @@ class ArticuloController extends Controller
       }
 
       if ($form->isSubmitted() && $form->isValid() && count($errors) == 0) {
+
+        $cantidad = $request->request->get('cantidad');
+        $ultimoNum = $request->request->get('numInvent');
+
+        if ($cantidad == '1')
+        {
           $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
           $articulo->setEstado($estado);
           $articulo->setUser($this->getUser());
@@ -184,19 +195,38 @@ class ArticuloController extends Controller
           $em->persist($articulo);
           $em->flush();
           return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
+        } else {
+
+          for ($i=1; $i <= $cantidad; $i++) {
+            $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
+            $articulo->setEstado($estado);
+            $articulo->setUser($this->getUser());
+            if ($oficina) {
+              $articulo->setOficina($oficina);
+            }
+            $em->persist($articulo);
+            $em->flush();
+            //$articulo->setNumInventario($ultimoNum);
+            $ultimoNum = $ultimoNum + 1;
+            $desc = $articulo->getDenominacion();
+            $articulo = new Articulo($ultimoNum);
+            $articulo->setDenominacion($desc);
+          }
+        }
       }
-      $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
-      $arrayDesCond = [];
-      $count = count($arrayValuesCond);
-      for ($i=0; $i < $count; $i++) {
-        array_push($arrayDesCond,$arrayValuesCond[$i]->getId());
-      }
-      $arrayValuesTipo = $em->getRepository('AppBundle:Tipo')->findBy(array('habilitado' => '0'));
-      $arrayDesTipo = [];
-      $count = count($arrayValuesTipo);
-      for ($i=0; $i < $count; $i++) {
-        array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
-      }
+
+
+    $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
+    $arrayDesCond = [];
+    $count = count($arrayValuesCond);
+    for ($i=0; $i < $count; $i++) {
+      array_push($arrayDesCond,$arrayValuesCond[$i]->getId());
+    }
+    $arrayValuesTipo = $em->getRepository('AppBundle:Tipo')->findBy(array('habilitado' => '0'));
+    $arrayDesTipo = [];
+    $count = count($arrayValuesTipo);
+    for ($i=0; $i < $count; $i++) {
+      array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
       return $this->render('articulo/new.html.twig', array(
           'articulo' => $articulo,
           'form' => $form->createView(),
@@ -207,6 +237,8 @@ class ArticuloController extends Controller
           'TiposDeshabilitadas' => $arrayDesTipo
       ));
     }
+
+  }
 
     /**
      * Finds and displays a articulo entity.
@@ -237,9 +269,10 @@ class ArticuloController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('articulo_edit', array('id' => $articulo->getId()));
+          $this->getDoctrine()->getManager()->flush();
+
+          return $this->redirectToRoute('articulo_edit', array('id' => $articulo->getId()));
         }
 
         return $this->render('articulo/edit.html.twig', array(
@@ -284,10 +317,5 @@ class ArticuloController extends Controller
             ->getForm()
         ;
     }
-
-
-
-
-
 
 }
