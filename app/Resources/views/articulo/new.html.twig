@@ -16,17 +16,33 @@
           <p><a href="{{ path(backPath) }}">Volver a {{ backTitle }}</a></p>
       </div>
     {% else %}
-    <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
+    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
     <br>
     <h1>Nuevo Artículo</h1>
     {{ form_start(form) }}
     {{ form_widget(form.oficina, { 'attr': {'class': 'form-control', 'hidden': 'true' }}) }}
     {{ form_widget(form) }}
     {{ form_errors(form) }}
+    <label>Cantidad de Artículos a crear: </label>
+    <input id="cantidad" type="number" name="cantidad" value="1" min ="1" required><br>
+    <input id="num" type="number" name="numInvent" value="1" hidden><br>
+    <label>El número que ingrese en cantidad, se crearán artículos idénticos con numero de inventario consecutivo.</label><br><br>
     {% if is_granted("ROLE_ADMIN") %}
-    <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+    <button id="button" type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
     {% endif %}
     {{ form_end(form) }}
     {% endif %}
   </div>
+{% endblock %}
+
+{% block transferenciaJs %}
+<script>
+      $form = $('form');
+      $num = $('#num');
+      $numActual = $('#appbundle_articulo_numInventario');
+      $form.submit(function(){
+        alert("Se van a insertar "+ $('#cantidad').val() + " artículos." );
+        $num.val($numActual.val());
+      });
+</script>
 {% endblock %}

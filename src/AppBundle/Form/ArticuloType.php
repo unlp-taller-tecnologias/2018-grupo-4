@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use \DateTime;
 
 class ArticuloType extends AbstractType
 {
@@ -18,12 +19,14 @@ class ArticuloType extends AbstractType
         $builder
           ->add('numInventario', null, array(
               'label' => 'Número de inventario*',
+              'required' => true,
               'attr' => array(
               'placeholder' => 'Ingrese el número de inventario'
               )
           ))
           ->add('denominacion', null, array(
             'label' => 'Denominación*',
+            'required' => true,
             'attr' => array('placeholder' => 'Ingrese denominación'
              )
           ))
@@ -34,14 +37,13 @@ class ArticuloType extends AbstractType
           ))
           ->add('fechaEntrada', DateType::class, array(
             'label' => 'Fecha de entrada',
-            'widget' => 'single_text'
+            'widget' => 'single_text',
+            'required' => true
           ))
           ->add('condicion', null, array(
                'label'=> 'Condición'
           ))
-          ->add('tipo', null, array(
-               'label'=> 'Tipo'
-          ))
+          ->add('tipo')
 
           ->add('material', null, array(
             'label' => 'Material',

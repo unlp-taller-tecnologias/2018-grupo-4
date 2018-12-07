@@ -26,6 +26,18 @@
                 <td scope="row">{{ articulo.estado }}</td>
             </tr>
             <tr>
+                <th scope="row">Condicion</th>
+                <td scope="row">{{ articulo.condicion }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Tipo</th>
+                <td scope="row">{{ articulo.tipo }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Fecha Entrada</th>
+                <td scope="row">{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('d-m-y') }}{% endif %}</td>
+            </tr>
+            <tr>
                 <th scope="row">Material</th>
                 <td scope="row">{{ articulo.material }}</td>
             </tr>
@@ -64,14 +76,6 @@
             <tr>
                 <th scope="row">Importe</th>
                 <td scope="row">{{ articulo.importe }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Fecha Entrada</th>
-                <td scope="row">{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th scope="row">Condicion</th>
-                <td scope="row">{{ articulo.condicion }}</td>
             </tr>
             <tr>
                 <th scope="row">Código Cuenta/Subcuenta</th>
