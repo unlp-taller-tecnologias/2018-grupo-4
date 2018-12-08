@@ -154,7 +154,8 @@ class ArticuloController extends Controller
      * @Route("/new", name="articulo_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request){
+    public function newAction(Request $request)
+    {
       $em = $this->getDoctrine()->getManager();
       $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
       $numInv = ($artNumInv->getNumInventario())+1;
@@ -214,16 +215,32 @@ class ArticuloController extends Controller
             $articulo->setDenominacion($desc);
           }
         }
-
       }
+
+
+    $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
+    $arrayDesCond = [];
+    $count = count($arrayValuesCond);
+    for ($i=0; $i < $count; $i++) {
+      array_push($arrayDesCond,$arrayValuesCond[$i]->getId());
+    }
+    $arrayValuesTipo = $em->getRepository('AppBundle:Tipo')->findBy(array('habilitado' => '0'));
+    $arrayDesTipo = [];
+    $count = count($arrayValuesTipo);
+    for ($i=0; $i < $count; $i++) {
+      array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
       return $this->render('articulo/new.html.twig', array(
           'articulo' => $articulo,
           'form' => $form->createView(),
           'errors' => $errors,
           'backPath' => $backPath,
-          'backTitle' => $backTitle
+          'backTitle' => $backTitle,
+          'CondDeshabilitadas' => $arrayDesCond,
+          'TiposDeshabilitadas' => $arrayDesTipo
       ));
     }
+
+  }
 
     /**
      * Finds and displays a articulo entity.
@@ -233,11 +250,11 @@ class ArticuloController extends Controller
      */
     public function showAction(Articulo $articulo)
     {
-        $deleteForm = $this->createDeleteForm($articulo);
+        // $deleteForm = $this->createDeleteForm($articulo);
 
         return $this->render('articulo/show.html.twig', array(
             'articulo' => $articulo,
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -249,7 +266,7 @@ class ArticuloController extends Controller
      */
     public function editAction(Request $request, Articulo $articulo)
     {
-        $deleteForm = $this->createDeleteForm($articulo);
+        // $deleteForm = $this->createDeleteForm($articulo);
         $editForm = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
         $editForm->handleRequest($request);
 
@@ -303,10 +320,5 @@ class ArticuloController extends Controller
     //         ->getForm()
     //     ;
     // }
-
-
-
-
-
 
 }

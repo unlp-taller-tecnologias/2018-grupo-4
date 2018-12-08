@@ -132,11 +132,11 @@ class EstadoController extends Controller
      */
     public function showAction(Estado $estado)
     {
-        $deleteForm = $this->createDeleteForm($estado);
+        // $deleteForm = $this->createDeleteForm($estado);
 
         return $this->render('estado/show.html.twig', array(
             'estado' => $estado,
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -148,7 +148,7 @@ class EstadoController extends Controller
      */
     public function editAction(Request $request, Estado $estado)
     {
-        $deleteForm = $this->createDeleteForm($estado);
+        // $deleteForm = $this->createDeleteForm($estado);
         $editForm = $this->createForm('AppBundle\Form\EstadoType', $estado, array("edit" => false ));
         $editForm->handleRequest($request);
 

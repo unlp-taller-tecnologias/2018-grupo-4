@@ -65,11 +65,11 @@ class HistorialController extends Controller
      */
     public function showAction(Historial $historial)
     {
-        $deleteForm = $this->createDeleteForm($historial);
+        // $deleteForm = $this->createDeleteForm($historial);
 
         return $this->render('historial/show.html.twig', array(
             'historial' => $historial,
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 

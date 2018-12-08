@@ -34,10 +34,11 @@ class BajaController extends Controller
     /**
      * Creates a new baja entity.
      *
-     * @Route("/new", name="baja_new")
+     * @Route("/new/{id}", name="baja_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+
+    public function newAction(Request $request, $id)
     {
         $baja = new Baja();
         $form = $this->createForm('AppBundle\Form\BajaType', $baja);

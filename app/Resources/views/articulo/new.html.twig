@@ -35,14 +35,23 @@
   </div>
 {% endblock %}
 
-{% block transferenciaJs %}
+
+{% block serchArticulos  %}
 <script>
-      $form = $('form');
-      $num = $('#num');
-      $numActual = $('#appbundle_articulo_numInventario');
-      $form.submit(function(){
-        alert("Se van a insertar "+ $('#cantidad').val() + " artículos." );
-        $num.val($numActual.val());
-      });
+$form = $('form');
+$num = $('#num');
+$numActual = $('#appbundle_articulo_numInventario');
+$form.submit(function(){
+  alert("Se van a insertar "+ $('#cantidad').val() + " artículos." );
+  $num.val($numActual.val());
+});
+
+{% for id in CondDeshabilitadas %}
+  $("#appbundle_articulo_condicion").find('[value="{{id}}"]').remove();
+{% endfor %}
+{% for id in TiposDeshabilitadas %}
+  $("#appbundle_articulo_tipo").find('[value="{{id}}"]').remove();
+{% endfor %}
+
 </script>
 {% endblock %}

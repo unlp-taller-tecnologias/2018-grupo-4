@@ -115,7 +115,8 @@ class TipoController extends Controller
         $rawResponse['rows'][] = array(
           'id' => $tipo->getId(),
           'codigo' => $tipo->getCodigo(),
-          'nomenclador' => $tipo->getNomenclador()
+          'nomenclador' => $tipo->getNomenclador(),
+          'habilitado' => ($tipo->getHabilitado() == 1)?'Si':'No'
         );
       };
 
@@ -130,11 +131,11 @@ class TipoController extends Controller
      */
     public function showAction(Tipo $tipo)
     {
-        $deleteForm = $this->createDeleteForm($tipo);
+        // $deleteForm = $this->createDeleteForm($tipo);
 
         return $this->render('tipo/show.html.twig', array(
             'tipo' => $tipo,
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -146,7 +147,7 @@ class TipoController extends Controller
      */
     public function editAction(Request $request, Tipo $tipo)
     {
-        $deleteForm = $this->createDeleteForm($tipo);
+        // $deleteForm = $this->createDeleteForm($tipo);
         $editForm = $this->createForm('AppBundle\Form\TipoType', $tipo, array("edit" => false));
         $editForm->handleRequest($request);
 
