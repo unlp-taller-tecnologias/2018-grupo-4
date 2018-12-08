@@ -1,0 +1,25 @@
+{% extends "layout.html.twig" %}
+
+{% block content %}
+  {{ form_start(form) }}
+    <div class="content">
+      {% block descriptionTable %}
+      {% endblock %}
+      <div class="container-fluid">
+        <div class="row justify-content-md-center">
+          <div class="col-md-8">
+            {% block form %}
+            {% endblock %}
+          </div>
+          {% block input %}
+            {{ form_widget(form) }}
+            <input  class="btn btn-dark" type="submit" value="Crear" />
+  {{ form_end(form) }}
+          {% endblock %}
+
+          {% block volver%}
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+{% endblock %}

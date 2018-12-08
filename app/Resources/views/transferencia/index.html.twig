@@ -1,0 +1,38 @@
+{% extends 'tablelist.html.twig' %}
+
+{% block body %}
+  {% block descriptionTable %}
+    <br>
+    <h1>Transferencias</h1>
+  {% endblock %}
+
+  {% block filters %}
+  <span></span>
+  <br>
+  {% endblock %}
+  {% block headPrincipalTable %}
+    <th scope="row">Id</th>
+    <th scope="row">Observaciones</th>
+    <th scope="row">Finalizada</th>
+    <th scope="row">Actions</th>
+  {% endblock %}
+  {% block bodyPrincipalTable %}
+    {% for Transferencia in transferencias %}
+      <tr>
+        <td><a href="{{ path('transferencia_show', { 'id': Transferencia.id }) }}">{{ Transferencia.id }}</a></td>
+        <td>{{ Transferencia.observaciones }}</td>
+        <td>{{ Transferencia.finalizada }}</td>
+        <td>
+          <ul>
+            <li>
+              <a href="{{ path('transferencia_show', { 'id': Transferencia.id }) }}">show</a>
+            </li>
+          <!-- <li>
+            <a href="{{ path('transferencia_edit', { 'id': Transferencia.id }) }}">edit</a>
+          </li> -->
+          </ul>
+        </td>
+            </tr>
+    {% endfor %}
+  {% endblock %}
+{% endblock %}

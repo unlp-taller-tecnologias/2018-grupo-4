@@ -1,0 +1,18 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <div class="container">
+    <br>
+    <a href="{{ path('condicion_index') }}"><i class="fas fa-angle-left"></i> Listado de Condiciones</a>
+    <br>
+    <h1>Nueva Condición</h1>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_errors(form) }}
+
+    <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+
+    {{ form_end(form) }}
+
+    </div>
+{% endblock %}
