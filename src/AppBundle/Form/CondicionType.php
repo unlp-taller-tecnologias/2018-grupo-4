@@ -14,11 +14,16 @@ class CondicionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('nombre')
-        ->add('descripcion', null, array(
-            'label' => 'Descripción del la condición',
+        ->add('nombre', null, array(
+            'label' => 'Nombre(*)',
             'attr' => array(
-              'placeholder' => 'Ingrese una descripción para el estado'
+              'placeholder' => 'Ingrese una nombre para la condición'
+            ))
+      )
+        ->add('descripcion', null, array(
+            'label' => 'Descripción(*)',
+            'attr' => array(
+              'placeholder' => 'Ingrese una descripción para la condición'
             )
       ));
       if ($options['edit']) {
@@ -33,7 +38,7 @@ class CondicionType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Condicion',
-            'edit' => false
+            'edit' => true
         ));
     }
 

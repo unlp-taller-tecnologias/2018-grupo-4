@@ -16,19 +16,16 @@ class EstadoType extends AbstractType
     {
         $builder
           ->add('nombre', null, array(
-              'label' => 'Nombre del Estado*',
+              'label' => 'Nombre(*)',
               'attr' => array(
               'placeholder' => 'Ingrese un nombre para el estado'
               )
           ))
           ->add('color', ColorType::class, array(
-              'label' => 'Color para el Estado*',
-              'attr' => array(
-              'placeholder' => 'Ingrese un color para el estado'
-              )
+              'label' => 'Color (*)'
           ))
           ->add('descripcion', null, array(
-              'label' => 'Descripción del Estado',
+              'label' => 'Descripción(*)',
               'attr' => array(
                 'placeholder' => 'Ingrese una descripción para el estado'
               )
@@ -45,7 +42,7 @@ class EstadoType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Estado',
-            'edit' => false
+            'edit' => true
         ));
     }
 

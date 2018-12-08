@@ -114,7 +114,7 @@ class CondicionController extends Controller
             $em->persist($condicion);
             $em->flush();
 
-            return $this->redirectToRoute('condicion_show', array('id' => $condicion->getId()));
+            return $this->redirectToRoute('condicion_index');
         }
 
         return $this->render('condicion/new.html.twig', array(
@@ -148,7 +148,7 @@ class CondicionController extends Controller
     public function editAction(Request $request, Condicion $condicion)
     {
         $deleteForm = $this->createDeleteForm($condicion);
-        $editForm = $this->createForm('AppBundle\Form\CondicionType', $condicion, array("edit" => true));
+        $editForm = $this->createForm('AppBundle\Form\CondicionType', $condicion, array("edit" => false));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -160,43 +160,43 @@ class CondicionController extends Controller
         return $this->render('condicion/edit.html.twig', array(
             'condicion' => $condicion,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    /**
-     * Deletes a condicion entity.
-     *
-     * @Route("/{id}", name="condicion_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Condicion $condicion)
-    {
-        $form = $this->createDeleteForm($condicion);
-        $form->handleRequest($request);
+    // /**
+    //  * Deletes a condicion entity.
+    //  *
+    //  * @Route("/{id}", name="condicion_delete")
+    //  * @Method("DELETE")
+    //  */
+    // public function deleteAction(Request $request, Condicion $condicion)
+    // {
+    //     $form = $this->createDeleteForm($condicion);
+    //     $form->handleRequest($request);
+    //
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $em = $this->getDoctrine()->getManager();
+    //         $em->remove($condicion);
+    //         $em->flush();
+    //     }
+    //
+    //     return $this->redirectToRoute('condicion_index');
+    // }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($condicion);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('condicion_index');
-    }
-
-    /**
-     * Creates a form to delete a condicion entity.
-     *
-     * @param Condicion $condicion The condicion entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Condicion $condicion)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('condicion_delete', array('id' => $condicion->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+    // /**
+    //  * Creates a form to delete a condicion entity.
+    //  *
+    //  * @param Condicion $condicion The condicion entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createDeleteForm(Condicion $condicion)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('condicion_delete', array('id' => $condicion->getId())))
+    //         ->setMethod('DELETE')
+    //         ->getForm()
+    //     ;
+    // }
 }

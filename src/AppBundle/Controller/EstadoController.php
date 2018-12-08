@@ -114,7 +114,8 @@ class EstadoController extends Controller
             $em->persist($estado);
             $em->flush();
 
-            return $this->redirectToRoute('estado_show', array('id' => $estado->getId()));
+            // return $this->redirectToRoute('estado_show', array('id' => $estado->getId()));
+            return $this->redirectToRoute('estado_index');
         }
 
         return $this->render('estado/new.html.twig', array(
@@ -148,55 +149,56 @@ class EstadoController extends Controller
     public function editAction(Request $request, Estado $estado)
     {
         $deleteForm = $this->createDeleteForm($estado);
-        $editForm = $this->createForm('AppBundle\Form\EstadoType', $estado, array("edit" => true));
+        $editForm = $this->createForm('AppBundle\Form\EstadoType', $estado, array("edit" => false ));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('estado_edit', array('id' => $estado->getId()));
+            // return $this->redirectToRoute('estado_edit', array('id' => $estado->getId()));
+            return $this->redirectToRoute('estado_index');
         }
 
         return $this->render('estado/edit.html.twig', array(
             'estado' => $estado,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    /**
-     * Deletes a estado entity.
-     *
-     * @Route("/{id}", name="estado_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Estado $estado)
-    {
-        $form = $this->createDeleteForm($estado);
-        $form->handleRequest($request);
+    // /**
+    //  * Deletes a estado entity.
+    //  *
+    //  * @Route("/{id}", name="estado_delete")
+    //  * @Method("DELETE")
+    //  */
+    // public function deleteAction(Request $request, Estado $estado)
+    // {
+    //     $form = $this->createDeleteForm($estado);
+    //     $form->handleRequest($request);
+    //
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $em = $this->getDoctrine()->getManager();
+    //         $em->remove($estado);
+    //         $em->flush();
+    //     }
+    //
+    //     return $this->redirectToRoute('estado_index');
+    // }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($estado);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('estado_index');
-    }
-
-    /**
-     * Creates a form to delete a estado entity.
-     *
-     * @param Estado $estado The estado entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Estado $estado)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('estado_delete', array('id' => $estado->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+    // /**
+    //  * Creates a form to delete a estado entity.
+    //  *
+    //  * @param Estado $estado The estado entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createDeleteForm(Estado $estado)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('estado_delete', array('id' => $estado->getId())))
+    //         ->setMethod('DELETE')
+    //         ->getForm()
+    //     ;
+    // }
 }

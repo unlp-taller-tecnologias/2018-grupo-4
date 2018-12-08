@@ -3,9 +3,9 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('condicion_index') }}"><i class="fas fa-angle-left"></i> Listado de Condiciones</a>
+  <a href="{{ path('condicion_index') }}"><i class="fas fa-angle-left"></i> Listado de Condiciones de Artículos</a>
   <br>
-    <h1>Condición: {{condicion.nombre}}</h1>
+    <h2>Condición de Artículo: {{condicion.nombre}}</h2>
     <table class="table table">
         <tbody>
             <tr>
@@ -22,7 +22,5 @@
             </tr>
         </tbody>
     </table>
-
-  <a class="btn btn-dark" style="margin: 15px;" href="{{ path('condicion_edit', { 'id': condicion.id }) }}">Editar</a>
 
 {% endblock %}

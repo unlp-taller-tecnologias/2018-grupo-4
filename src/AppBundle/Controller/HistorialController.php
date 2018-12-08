@@ -94,43 +94,43 @@ class HistorialController extends Controller
         return $this->render('historial/edit.html.twig', array(
             'historial' => $historial,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    /**
-     * Deletes a historial entity.
-     *
-     * @Route("/{id}", name="historial_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Historial $historial)
-    {
-        $form = $this->createDeleteForm($historial);
-        $form->handleRequest($request);
+    // /**
+    //  * Deletes a historial entity.
+    //  *
+    //  * @Route("/{id}", name="historial_delete")
+    //  * @Method("DELETE")
+    //  */
+    // public function deleteAction(Request $request, Historial $historial)
+    // {
+    //     $form = $this->createDeleteForm($historial);
+    //     $form->handleRequest($request);
+    //
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $em = $this->getDoctrine()->getManager();
+    //         $em->remove($historial);
+    //         $em->flush();
+    //     }
+    //
+    //     return $this->redirectToRoute('historial_index');
+    // }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($historial);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('historial_index');
-    }
-
-    /**
-     * Creates a form to delete a historial entity.
-     *
-     * @param Historial $historial The historial entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Historial $historial)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('historial_delete', array('id' => $historial->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+    // /**
+    //  * Creates a form to delete a historial entity.
+    //  *
+    //  * @param Historial $historial The historial entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createDeleteForm(Historial $historial)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('historial_delete', array('id' => $historial->getId())))
+    //         ->setMethod('DELETE')
+    //         ->getForm()
+    //     ;
+    // }
 }

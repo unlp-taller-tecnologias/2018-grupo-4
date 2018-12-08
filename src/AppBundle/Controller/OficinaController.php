@@ -168,7 +168,8 @@ class OficinaController extends Controller
             $em->persist($oficina);
             $em->flush();
 
-            return $this->redirectToRoute('oficina_show', array('id' => $oficina->getId()));
+            // return $this->redirectToRoute('oficina_show', array('id' => $oficina->getId()));
+            return $this->redirectToRoute('oficina_index');
         }
 
         return $this->render('oficina/new.html.twig', array(
@@ -244,49 +245,50 @@ class OficinaController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('oficina_edit', array('id' => $oficina->getId()));
+            // return $this->redirectToRoute('oficina_edit', array('id' => $oficina->getId()));
+              return $this->redirectToRoute('oficina_index');
         }
 
         return $this->render('oficina/edit.html.twig', array(
             'oficina' => $oficina,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    /**
-     * Deletes a oficina entity.
-     *
-     * @Route("/{id}/delete", name="oficina_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Oficina $oficina)
-    {
-        $form = $this->createDeleteForm($oficina);
-        $form->handleRequest($request);
+    // /**
+    //  * Deletes a oficina entity.
+    //  *
+    //  * @Route("/{id}/delete", name="oficina_delete")
+    //  * @Method("DELETE")
+    //  */
+    // public function deleteAction(Request $request, Oficina $oficina)
+    // {
+    //     $form = $this->createDeleteForm($oficina);
+    //     $form->handleRequest($request);
+    //
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $em = $this->getDoctrine()->getManager();
+    //         $em->remove($oficina);
+    //         $em->flush();
+    //     }
+    //
+    //     return $this->redirectToRoute('oficina_index');
+    // }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($oficina);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('oficina_index');
-    }
-
-    /**
-     * Creates a form to delete a oficina entity.
-     *
-     * @param Oficina $oficina The oficina entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Oficina $oficina)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('oficina_delete', array('id' => $oficina->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+    // /**
+    //  * Creates a form to delete a oficina entity.
+    //  *
+    //  * @param Oficina $oficina The oficina entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createDeleteForm(Oficina $oficina)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('oficina_delete', array('id' => $oficina->getId())))
+    //         ->setMethod('DELETE')
+    //         ->getForm()
+    //     ;
+    // }
 }

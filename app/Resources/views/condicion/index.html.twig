@@ -3,21 +3,20 @@
 {% block content %}
   <div class="container">
     <br>
-    <h1>Condiciones</h1>
+    <h2>Condiciones de Artículos</h2>
+    <hr>
     <div class="">
-      <a class="btn btn-dark" href="{{ path('condicion_new') }}">Agregar nueva condición</a>
+      <a class="btn btn-dark" href="{{ path('condicion_new') }}">Agregar condición</a>
     </div>
     <br>
     <div class="table-responsive">
       <table  id="tablaCondiciones"
               class="table table-hover table-striped"
               data-toggle="table"
-              data-height="400"
+              data-height="700"
               data-side-pagination="server"
               data-pagination="true"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
-              data-search="true"
-              data-show-columns="true"
               data-url="{{ path('condicion_list') }}"
               >
         <thead>
@@ -25,7 +24,8 @@
             <th scope="row" data-field="nombre" data-sortable="true">Nombre</th>
             <th scope="row" data-field="habilitado" data-sortable="true">Habilitado</th>
             <th scope="row" data-field="descripcion" data-sortable="true">Descripción</th>
-            <th data-field="id" data-formatter="operateFormatter">Acciones</th>
+            <th data-field="id" data-formatter="operateFormatterShow">Ver</th>
+            <th data-field="id" data-formatter="operateFormatterEdit">Editar</th>
           </tr>
         </thead>
       </table>
@@ -36,11 +36,18 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-  function operateFormatter(value, row, index) {
+  function operateFormatterShow(value, row, index) {
     show = "{{ path('condicion_show', {id: -1})}}";
     show = show.replace('-1', value);
     return [
       `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
+    ].join('');
+  }
+  function operateFormatterEdit(value, row, index) {
+    edit = "{{ path('condicion_edit', {id: -1})}}";
+    edit = edit.replace('-1', value);
+    return [
+      `<a class="edit ml10" href="${edit}" title="Editar"><i class="fas fa-edit"></i></a>`,
     ].join('');
   }
   var $table = $('#tablaCondiciones');

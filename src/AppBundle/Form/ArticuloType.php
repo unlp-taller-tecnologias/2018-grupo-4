@@ -18,27 +18,26 @@ class ArticuloType extends AbstractType
     {
         $builder
           ->add('numInventario', null, array(
-              'label' => 'Número de inventario*',
+              'label' => 'Número de inventario(*)',
               'required' => true,
               'attr' => array(
               'placeholder' => 'Ingrese el número de inventario'
               )
           ))
           ->add('denominacion', null, array(
-            'label' => 'Denominación*',
+            'label' => 'Denominación(*)',
             'required' => true,
             'attr' => array('placeholder' => 'Ingrese denominación'
              )
           ))
           ->add('oficina', null, array(
-            'label' => 'Oficina*',
+            'label' => 'Oficina(*)',
             'attr' => array('placeholder' => 'Seleccione una oficina'
             )
           ))
           ->add('fechaEntrada', DateType::class, array(
             'label' => 'Fecha de entrada',
-            'widget' => 'single_text',
-            'required' => true
+            'widget' => 'single_text'
           ))
           ->add('condicion', null, array(
                'label'=> 'Condición'

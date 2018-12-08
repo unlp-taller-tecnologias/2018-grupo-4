@@ -18,7 +18,7 @@
     {% else %}
     <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
     <br>
-    <h1>Nuevo Artículo</h1>
+    <h2>Nuevo Artículo</h2>
     {{ form_start(form) }}
     {{ form_widget(form.oficina, { 'attr': {'class': 'form-control', 'hidden': 'true' }}) }}
     {{ form_widget(form) }}

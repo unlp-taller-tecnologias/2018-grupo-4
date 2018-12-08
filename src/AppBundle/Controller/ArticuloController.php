@@ -193,7 +193,9 @@ class ArticuloController extends Controller
           }
           $em->persist($articulo);
           $em->flush();
-          return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
+
+          return $this->redirectToRoute('oficina_show', array('id' => (($articulo->getOficina())->getId())));
+          // return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
         } else {
 
           for ($i=1; $i <= $cantidad; $i++) {
@@ -255,51 +257,52 @@ class ArticuloController extends Controller
 
           $this->getDoctrine()->getManager()->flush();
 
-          return $this->redirectToRoute('articulo_edit', array('id' => $articulo->getId()));
+          // return $this->redirectToRoute('articulo_edit', array('id' => $articulo->getId()));
+          return $this->redirectToRoute('oficina_show', array('id' => (($articulo->getOficina())->getId())));
         }
 
         return $this->render('articulo/edit.html.twig', array(
             'articulo' => $articulo,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    /**
-     * Deletes a articulo entity.
-     *
-     * @Route("/{id}", name="articulo_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Articulo $articulo)
-    {
-        $form = $this->createDeleteForm($articulo);
-        $form->handleRequest($request);
+    // /**
+    //  * Deletes a articulo entity.
+    //  *
+    //  * @Route("/{id}", name="articulo_delete")
+    //  * @Method("DELETE")
+    //  */
+    // public function deleteAction(Request $request, Articulo $articulo)
+    // {
+    //     $form = $this->createDeleteForm($articulo);
+    //     $form->handleRequest($request);
+    //
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $em = $this->getDoctrine()->getManager();
+    //         $em->remove($articulo);
+    //         $em->flush();
+    //     }
+    //
+    //     return $this->redirectToRoute('articulo_index');
+    // }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($articulo);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('articulo_index');
-    }
-
-    /**
-     * Creates a form to delete a articulo entity.
-     *
-     * @param Articulo $articulo The articulo entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Articulo $articulo)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('articulo_delete', array('id' => $articulo->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+    // /**
+    //  * Creates a form to delete a articulo entity.
+    //  *
+    //  * @param Articulo $articulo The articulo entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createDeleteForm(Articulo $articulo)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('articulo_delete', array('id' => $articulo->getId())))
+    //         ->setMethod('DELETE')
+    //         ->getForm()
+    //     ;
+    // }
 
 
 
