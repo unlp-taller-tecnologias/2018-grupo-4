@@ -6,35 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TipoType extends AbstractType
+class UserType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-        ->add('codigo')
-        ->add('nomenclador')
-        ->add('cuenta')
-        ->add('concepto')
-        ->add('grupo')
-        ->add('subgrupo')
-        ->add('descripcion')
-        ->add('vidaUtil');
-        if ($options['edit']) {
-          $builder->add('habilitado');
-        }
-    }
-
-    /**
+        $builder->add('name')->add('lastname');
+    }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Tipo',
-            'edit' => false
+            'data_class' => 'AppBundle\Entity\User'
         ));
     }
 
@@ -43,7 +29,7 @@ class TipoType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_tipo';
+        return 'appbundle_user';
     }
 
 

@@ -2,12 +2,16 @@
 
 {% block content %}
     <div class="container">
-    <br>
-    <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i>Listado de Artículos</a>
-    <br>
-    <h1>Editar Artículo</h1>
-    {{ form_start(edit_form) }}
-    {{ form_widget(edit_form) }}
-    <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
-    {{ form_end(edit_form) }}
+      <br>
+      <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
+      <br>
+      <h1>Editar Artículo: {{articulo.denominacion}}</h1>
+      {{ form_start(edit_form) }}
+      {{ form_widget(edit_form.oficina, { 'attr': {'class': 'form-control', 'hidden': 'true' }}) }}
+      {{ form_widget(edit_form) }}
+      {% if is_granted("ROLE_ADMIN") %}
+        <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+      {% endif %}
+      {{ form_end(edit_form) }}
+    </div>
 {% endblock %}

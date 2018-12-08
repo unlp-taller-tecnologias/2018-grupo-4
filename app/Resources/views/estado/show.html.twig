@@ -3,9 +3,9 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('estado_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+  <a href="{{ path('estado_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados</a>
   <br>
-    <h1>Estado</h1>
+    <h1>Estado: {{ estado.nombre }}</h1>
 
     <table class="table table">
         <tbody>
@@ -28,7 +28,7 @@
         </tbody>
     </table>
     <br>
-    <a class="btn btn-dark" href="{{ path('estado_edit', { 'id': estado.id }) }}">Editar</a>
+    <a class="btn btn-dark" style="margin: 15px;" href="{{ path('estado_edit', { 'id': estado.id }) }}">Editar</a>
     <br>
 </div>
 {% endblock %}

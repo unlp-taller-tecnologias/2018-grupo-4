@@ -10,7 +10,34 @@
     </div>
     {% endif %}
     <br>
+    {% block filters %}
+
+    <div class="jumbotron" style="padding-top: 2%; padding-bottom: 1%;">
+      <h4>Buscar oficinas por:</h4>
+       <div class="form-row" >
+         <div class="form-group col-md-6">
+           <label>Nombre</label>
+           <input type="text" id="nombre" class="form-control" placeholder="Nombre" name="nombre">
+         </div>
+        <div class="form-group col-md-6">
+          <label>Nro. de carpeta</label>
+          <input type="text" id="nroCarpeta" class="form-control" placeholder="Nro. de carpeta" name="carpeta">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Responsable</label>
+          <input type="text" id="responsable" class="form-control" placeholder="Responsable" name="carpeta">
+        </div>
+
+
+        <div class="form-group col-md-12">
+          <button id="button" class="btn btn-dark">Buscar</button>
+          <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
     <div class="table-responsive">
+    <h4>Listado de oficinas</h4>
       <table  id="tablaOficinas"
               class="table table-hover table-striped"
               data-toggle="table"
@@ -25,7 +52,7 @@
         <thead>
           <tr>
             <th scope="row" data-field="nombre" data-sortable="true">Nombre</th>
-            <th scope="row" data-field="numeroCarpeta" data-sortable="true">Nro.Carpta</th>
+            <th scope="row" data-field="numeroCarpeta" data-sortable="true">Nro. de carpeta</th>
             <th scope="row" data-field="responsableOficina" data-sortable="true">Responsable</th>
             {% if is_granted("ROLE_ADMIN") %}
             <th data-field="id" data-formatter="operateFormatter">Acciones</th>
@@ -48,5 +75,53 @@
     ].join('');
   }
   var $table = $('#tablaOficinas');
+</script>
+{% endblock %}
+
+{% block serchArticulos  %}
+<script>
+var $table = $('#tablaOficinas');
+
+$("button").click(function(){
+  var nombre = $('#nombre').val();
+  var nroCarpeta = $('#nroCarpeta').val();
+  var responsable = $('#responsable').val();
+  $.ajax({
+    method: "POST",
+    url: "oficina_listFilter",
+    data: {
+            "nombre":nombre,
+            "nroCarpeta":nroCarpeta,
+            "responsable":responsable
+          } ,
+    success: function(data) {
+      //alert(data);
+      $table.bootstrapTable('load',data);
+      }
+    });
+  });
+
+  $("#buttonBorrar").click(function(){
+    $('#nombre').val('');
+    $('#nroCarpeta').val('');
+    $('#responsable').val('');
+    var nombre = $('#nombre').val();
+    var nroCarpeta = $('#nroCarpeta').val();
+    var responsable = $('#responsable').val();
+    $.ajax({
+      method: "POST",
+      url: "oficina_listFilter",
+      data: {
+              "nombre":nombre,
+              "nroCarpeta":nroCarpeta,
+              "responsable":responsable
+            } ,
+      success: function(data) {
+        //alert(data);
+        $table.bootstrapTable('load',data);
+        }
+      });
+    });
+
 </script>
 {% endblock %}

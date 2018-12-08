@@ -1,11 +1,11 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-<div class="container">
+<div style="margin-left: 2%; margin-right: 2%;">
   <br>
     <h1>Transferencia</h1>
 
-    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
     <br>
   <div class="container-fluid border" style="padding: 30px">
   <div class="row">
@@ -20,8 +20,8 @@
                  data-toggle="table"
                  data-toolbar="#toolbar"
                  data-height="460"
-                 data-pagination="true"
                  data-search="true"
+                 data-pagination="true"
                  data-click-to-select="true"
                  data-url="{{ path('oficina_show_listado', { 'oficina': oficina }) }}">
                  <thead>
@@ -62,24 +62,39 @@
                  </tr>
                </thead>
         </table>
+      </div>
+    </div>
   </div>
 </div>
+<div class="container">
 
+<div style="margin-top: 2%;">
 {{ form_start(form) }}
     {{ form_widget(form) }}
 
-    <input type="hidden" id="articulosIds" name="articulosIds" value="">
+    <div id="condiciones" >
+      <h3 id="condiciones-title">Seleccione condición</h3>
 
-    <input type="submit" class="btn btn-dark" value="Siguiente" />
-    <a href="{{ path('transferencia_cancel') }}" class="btn btn-dark" name="button">Guardar</a>
-    <a href="#" class="btn btn-dark" name="button">Cancelar</a>
+    </div>
+</div>
+
+
+    <input type="hidden" id="articulosIds" name="articulosIds" value="">
+    <input class="btn btn-dark" type="submit"  value="Transferir" style="margin-top: 10px;">
+    <input class="btn btn-dark" type="submit"  value="Guardar" style="margin-top: 10px;">
+    <input class="btn btn-dark" type="submit"   value="Cancelar" style="margin-top: 10px;">
 
 {{ form_end(form) }}
 
 {% endblock %}
 
 {% block transferenciaJs %}
-
+<style>
+  /*TODO: SACARLO DE ACA Y PONERLO EN LOS ESTILOS DE LA PAGINA */
+  .pagination-info {
+    display:none!important
+  }
+</style>
 <script>
     var $table = $('#table'),
         $tableTest = $('#table1'),
@@ -100,50 +115,62 @@
             return true;
         });
         console.log($form);
-    $(function () {
-        $button.click(function () {
-          var $dataT = $table.bootstrapTable('getAllSelections');//devuelve un json
-          var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
-          var $esta = false;
-            for(var data in $dataT) {
-              $esta = false;
-              for(var itemTranfe in $dataTranfe){
-                if ((data, $dataT[data]).numInventario == (itemTranfe,$dataTranfe[itemTranfe]).numInventario) {
-                  $esta = true;
-                  break;
-                }
-              }
-              if ($esta == false) {
-                $tableTest.bootstrapTable('insertRow', {
-                    index: 0,
-                    row: {
-                        numInventario: (data, $dataT[data]).numInventario,
-                        numExpediente: (data, $dataT[data]).numExpediente,
-                        denominacion: (data, $dataT[data]).denominacion,
-                        tipo: (data, $dataT[data]).tipo,
-                        estado: (data, $dataT[data]).estado
-                    }
-                });
-              }
-            }
+        $('#condiciones-title').hide();
+
+
+
+
+    function moveTransferencias ($tableIn, $tableOut, createInput) {
+      const $dataT = $tableIn.bootstrapTable('getAllSelections');
+      const ids = $.map($tableIn.bootstrapTable('getAllSelections'), function (row) {
+        return row.numInventario;
+      });
+
+      $dataT.forEach(data => {
+        $tableOut.bootstrapTable('insertRow', {
+            index: 0,
+            row: data
         });
-    });
+        let id = `condicion_${data.numInventario}`;
+
+        if (createInput) {
+          $('#condiciones').append(`
+            <div class="form-group ${id}_container">
+              <label for="condiciones['${data.numInventario}']" >${data.denominacion}</label>
+              <select id="${data.numInventario}" name="condiciones['${data.numInventario}']" class="form-control">
+                <option>Pepe</option>
+              </select>
+            </div>
+            `
+          );
+        } else {
+          $(`.${id}_container`).remove();
+        }
+      });
+
+      $tableIn.bootstrapTable('remove', {
+        field: 'numInventario',
+        values: ids
+      });
+
+      if (createInput && $tableOut.bootstrapTable('getData').length > 0) {
+        $('#condiciones-title').show();
+      } else if (!createInput && $tableIn.bootstrapTable('getData').length == 0) {
+        $('#condiciones-title').hide();
+      }
+
+      $tableIn.bootstrapTable('uncheckAll');
+      $tableOut.bootstrapTable('uncheckAll');
+    }
+
     $(function () {
-      $buttonTest.click(function () {
-        var $dataTranfe = $tableTest.bootstrapTable('getAllSelections');//devuelve un json
-          var $arrayRemove = [];
-          for(var itemTranfe in $dataTranfe) {
-            //console.log((itemTranfe, $dataTranfe[itemTranfe]));
-            $table.bootstrapTable('uncheckBy', {field:'numInventario', values:[(itemTranfe, $dataTranfe[itemTranfe]).numInventario]});
-          }
-        var ids = $.map($tableTest.bootstrapTable('getAllSelections'), function (row) {
-              return row.numInventario;
-          });
-        $tableTest.bootstrapTable('remove', {
-              field: 'numInventario',
-              values: ids
-          });
-        });
+      $button.click(() => {
+        moveTransferencias($table, $tableTest, true);
+      });
+
+      $buttonTest.click(() => {
+        moveTransferencias($tableTest, $table, false);
+      });
     });
 
 </script>

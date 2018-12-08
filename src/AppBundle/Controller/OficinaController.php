@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Oficina;
+use AppBundle\Entity\Articulo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -78,6 +79,61 @@ class OficinaController extends Controller
       $total = $totalQuery
         ->getQuery()
         ->getSingleScalarResult();
+
+      $rawResponse = array(
+        'total' => $total,
+        'rows' => array()
+      );
+
+      foreach($oficinas as $oficina) {
+        $rawResponse['rows'][] = array(
+          'id' => $oficina->getId(),
+          'nombre' => $oficina->getNombre(),
+          'numeroCarpeta' => $oficina->getNumeroCarpeta(),
+          'responsableOficina' => $oficina->getResponsableOficina()
+        );
+      };
+
+      return new JsonResponse($rawResponse);
+    }
+
+    /**
+     * Lists all oficinas entities.
+     *
+     * @Route("/oficina_listFilter", name="oficina_listFilter")
+     * @Method({"GET", "POST"})
+     */
+    public function listadoActionFilter(Request $request){
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $nombre = $request->request->get('nombre');
+      $nroCarpeta = $request->request->get('nroCarpeta');
+      $responsable = $request->request->get('responsable');
+
+      $nombre = ($nombre == "")? NULL:"%".$nombre."%";
+      $nroCarpeta = ($nroCarpeta == "")? NULL:$nroCarpeta;
+      $responsable = ($responsable == "")? NULL:"%".$responsable."%";
+
+
+      $em = $this->getDoctrine()->getEntityManager();
+      $dql = "select a from AppBundle:Oficina a where (((a.nombre like :nombre and :nombre is not null) or (:nombre is null))
+              and ((a.numeroCarpeta = :numeroCarpeta and :numeroCarpeta is not null) or (:numeroCarpeta is null))
+              and ((a.responsableOficina like :responsableOficina and :responsableOficina is not null) or (:responsableOficina is null)))
+              or (:nombre is null and :numeroCarpeta is null and :responsableOficina is null) order by a.nombre asc";
+      $query = $em->createQuery($dql);
+
+      $query->setParameter('nombre', $nombre);
+      $query->setParameter('numeroCarpeta', $nroCarpeta);
+      $query->setParameter('responsableOficina', $responsable);
+
+      $oficinas = $query->getResult();
+
+      $total = count($oficinas);
+
 
       $rawResponse = array(
         'total' => $total,
@@ -202,7 +258,7 @@ class OficinaController extends Controller
     /**
      * Deletes a oficina entity.
      *
-     * @Route("/{id}", name="oficina_delete")
+     * @Route("/{id}/delete", name="oficina_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Oficina $oficina)
@@ -233,5 +289,69 @@ class OficinaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+
+    /**
+     * Lists all articulo entities.
+     *
+     * @Route("/{oficina}/articulo_listFilter_oficinas", name="articulo_listFilter_oficinas", defaults={"oficina"=null})
+     * @Method({"GET", "POST"})
+     */
+    public function listadoFilterOficinaAction(Request $request,Oficina $oficina){
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $nroInventario = $request->request->get('nroInventario');
+      $numExpediente = $request->request->get('expediente');
+      $denominacion = $request->request->get('denominacion');
+      $estado = $request->request->get('estado');
+      $tipo = $request->request->get('tipo');
+      $oficinaId = $request->query->get('idOficina');
+
+      $nroInventario = ($nroInventario == "")? NULL:$nroInventario;
+      $numExpediente = ($numExpediente == "")? NULL:$numExpediente;
+      $denominacion = ($denominacion == "")? NULL:$denominacion."%";
+      $estado = ($estado == "")? NULL:$estado;
+      $tipo = ($tipo == "")? NULL:$tipo;
+
+      $em = $this->getDoctrine()->getEntityManager();
+      $dql = "select a from AppBundle:Articulo a where (((a.numInventario = :nroInventario and :nroInventario is not null) or (:nroInventario is null))
+              and ((a.numExpediente = :numExpediente and :numExpediente is not null) or (:numExpediente is null))
+              and ((a.denominacion like :denominacion and :denominacion is not null) or (:denominacion is null))
+              and ((a.estado = :estado and :estado is not null) or (:estado is null))
+              and ((a.tipo = :tipo and :tipo is not null) or (:tipo is null)))
+              or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :tipo is null)";
+      $query = $em->createQuery($dql);
+      $query->setParameter('nroInventario', $nroInventario);
+      $query->setParameter('numExpediente', $numExpediente);
+      $query->setParameter('denominacion', $denominacion);
+      $query->setParameter('estado', $estado);
+      $query->setParameter('tipo', $tipo);
+      $articulos = $query->getResult();
+
+      $rawResponse = array(
+        'total' => 0,
+        'rows' => array()
+      );
+
+      foreach($articulos as $articulo) {
+        $of = $articulo->getOficina();
+        if ($of->getId() ==  $oficina->getId()) {
+          $rawResponse['rows'][] = array(
+            'id' => $articulo->getId(),
+            'numInventario' =>$articulo->getNumInventario(),
+            'numExpendiente' => $articulo->getNumExpediente(),
+            'denominacion' => $articulo->getDenominacion(),
+            'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+            'estado' => $articulo->getEstado()->getNombre()
+          );
+        }
+      };
+      $rawResponse['total'] = count($rawResponse['rows']);
+      return new JsonResponse($rawResponse);
     }
 }

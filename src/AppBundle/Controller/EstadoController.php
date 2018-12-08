@@ -32,7 +32,6 @@ class EstadoController extends Controller
             'estados' => $estados,
         ));
     }
-
     /**
      * Lists all articulo entities.
      *
@@ -111,7 +110,7 @@ class EstadoController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $habilitado = $em->getRepository('AppBundle:Estado')->findOneByHabilitado('1');
-            $estado->setHabilitado($estado);
+            $estado->setHabilitado($habilitado);
             $em->persist($estado);
             $em->flush();
 
@@ -149,7 +148,7 @@ class EstadoController extends Controller
     public function editAction(Request $request, Estado $estado)
     {
         $deleteForm = $this->createDeleteForm($estado);
-        $editForm = $this->createForm('AppBundle\Form\EstadoType', $estado);
+        $editForm = $this->createForm('AppBundle\Form\EstadoType', $estado, array("edit" => true));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {

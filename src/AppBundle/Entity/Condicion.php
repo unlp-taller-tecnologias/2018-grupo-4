@@ -3,12 +3,17 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Condicion
  *
  * @ORM\Table(name="condicion")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CondicionRepository")
+ * @UniqueEntity(
+ *   fields={"nombre"},
+ *   message="El nombre de la condición ya existe."
+ * )
  */
 class Condicion
 {

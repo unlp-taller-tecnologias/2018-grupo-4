@@ -1,11 +1,16 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-    <h1>Transferencia terminada!</h1>
-    Destino:{{transferencias.oficinaDestino}}
-    <br>
-  
-
-
-
+<div class="container">
+    <h1>Transferencia</h1>
+    <div class="jumbotron" style="padding: 30px;">
+      <h4>La transferencia ha sido realizada con éxito hacia la oficina {{transferencias.oficinaDestino}}</h4>
+      <div class="row justify-content-center">
+        <ul>
+          <a class="btn btn-dark" href="#" style="margin-top: 10px;">Ir a {{transferencias.oficinaDestino}}</a>
+          <a class="btn btn-dark" href="{{ path('oficina_index') }}" style="margin-top: 10px;">Volver a listado de oficinas</a>
+        </ul>
+    </div>
+    </div>
+  </div>
 {% endblock %}

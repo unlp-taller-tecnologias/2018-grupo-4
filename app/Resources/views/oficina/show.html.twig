@@ -3,14 +3,17 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
   <br>
-    <h1>Oficina</h1>
+    <h1>Oficina: {{oficina.nombre}}</h1>
     {% if is_granted("ROLE_ADMIN") %}
+    <div style="margin-bottom: 15px;">
+      <a href="#">Actualmente, existe una operación en curso. Continuar</a><br>
+    </div>
     <div class="">
+      <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}">Agregar nuevo artículo</a>
       <a class="btn btn-dark" href="{{ path('transferencia_new', {'id': oficina.id}) }}">Iniciar Transferencia</a>
-      <a class="btn btn-dark" href="{{ path('baja_new') }}">Iniciar Baja</a>
-      <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}">Agregar nuevo articulo</a>
+      <a class="btn btn-dark" href="{{ path('baja_new', {'id': oficina.id}) }}">Iniciar Baja</a>
     </div>
     {% endif %}
   <br>
@@ -30,8 +33,46 @@
         </tr>
       </tbody>
     </table>
+    <a style="margin: 15px;" class="btn btn-dark" href="{{ path('oficina_edit', { 'id': oficina.id }) }}">Editar</a><br>
     <br>
-      <h4>Artículos de la oficina</h4>
+
+    {% block filters %}
+
+    <div class="jumbotron" style="padding-top: 2%; padding-bottom: 1%;">
+      <h4>Buscar artículos por:</h4>
+       <div class="form-row" >
+         <div class="form-group col-md-6">
+           <label>Nro. de expediente</label>
+           <input type="text" id="expediente" class="form-control" placeholder="Nro. de expediente" name="expediente">
+         </div>
+        <div class="form-group col-md-6">
+          <label>Nro. de inventario</label>
+          <input type="text" id="nroInventario" class="form-control" placeholder="Nro. de inventario" name="inventario">
+        </div>
+        <div class="form-group col-md-6">
+          <label>Denominación</label>
+          <input type="text" id="denominacion" class="form-control" placeholder="Denominación" name="denominacion">
+        </div>
+        <div class="form-group col-md-3">
+          <label>Estado</label>
+          <select id="estado" class="form-control" name="estado">
+            <option value=""> Seleecione </option>
+          </select>
+        </div>
+        <div class="form-group col-md-3">
+          <label>Tipo</label>
+          <select id="tipo" class="form-control" name="tipo">
+            <option value=""> Seleecione </option>
+          </select>
+        </div>
+        <div class="form-group col-md-12">
+          <button id="button" class="btn btn-dark">Buscar</button>
+          <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
+        </div>
+      </div>
+    </div>
+    {% endblock %}
+      <h4>Artículos de {{oficina.nombre}}</h4>
       <div class="table-responsive">
         <table  id="tablaArticulos"
                 class="table table-hover table-striped"
@@ -40,15 +81,15 @@
                 data-side-pagination="server"
                 data-pagination="true"
                 data-page-list="[2, 5, 10, 20, 50, 100, 200]"
-                data-search="true"
+                data-search="false"
                 data-show-columns="true"
                 data-show-export="true"
                 data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
                 >
           <thead>
             <tr>
-              <th scope="row" data-field="numInventario" data-sortable="true">Nro.Inventario</th>
-              <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+              <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
+              <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
               <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
               <th scope="row" data-field="estado" data-sortable="true">Estado</th>
@@ -64,6 +105,42 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
+
+var xhttpEstados = new XMLHttpRequest();
+xhttpEstados.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var listado = JSON.parse(this.responseText);
+    var estados = listado.rows;
+    var opciones = "";
+    for(es in estados){
+      if (estados[es].habilitado == 'Si') {
+      opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
+      }
+    }
+    $("#estado").append(opciones);
+  }
+};
+xhttpEstados.open("GET", "{{ path('estado_list') }}", true);
+xhttpEstados.send();
+
+var xhttpTipos = new XMLHttpRequest();
+xhttpTipos.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var listado = JSON.parse(this.responseText);
+    var tipos = listado.rows;
+    var opciones = "";
+    for(ti in tipos){
+      if (tipos[ti].habilitado == 'Si') {
+          opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nomenclador +"</option>";
+      }
+    }
+    $("#tipo").append(opciones);
+  }
+};
+xhttpTipos.open("GET", "{{ path('tipo_list') }}", true);
+xhttpTipos.send();
+
+
   function operateFormatter(value, row, index) {
     show = "{{ path('articulo_show', {id: -1})}}";
     show = show.replace('-1', value);
@@ -83,5 +160,65 @@
   $.extend($.fn.bootstrapTable.defaults.icons, {
       export: 'fas fa-file-export'
   });
+</script>
+{% endblock %}
+
+{% block serchArticulos  %}
+<script>
+var $table = $('#tablaArticulos');
+
+$("button").click(function(){
+  var nroInventario = $('#nroInventario').val();
+  var expediente = $('#expediente').val();
+  var denominacion = $('#denominacion').val();
+  var estado = $('#estado').val();
+  var tipo = $('#tipo').val();
+  $.ajax({
+    method: "POST",
+    url: "{{oficina.id}}/articulo_listFilter_oficinas",
+    data: {
+            "nroInventario":nroInventario,
+            "expediente":expediente,
+            "denominacion":denominacion,
+            "estado":estado,
+            "tipo":tipo,
+            "idOficina":{{oficina.id}}
+          } ,
+    success: function(data) {
+      //alert(data);
+      $table.bootstrapTable('load',data);
+      }
+    });
+  });
+
+  $("#buttonBorrar").click(function(){
+    $('#nroInventario').val('');
+    $('#expediente').val('');
+    $('#denominacion').val('');
+    $('#estado').val('');
+    $('#tipo').val('');
+    var nroInventario = $('#nroInventario').val();
+    var expediente = $('#expediente').val();
+    var denominacion = $('#denominacion').val();
+    var estado = $('#estado').val();
+    var tipo = $('#tipo').val();
+    $.ajax({
+      method: "POST",
+      url: "{{oficina.id}}/articulo_listFilter_oficinas",
+      data: {
+              "nroInventario":nroInventario,
+              "expediente":expediente,
+              "denominacion":denominacion,
+              "estado":estado,
+              "tipo":tipo,
+              "idOficina":{{oficina.id}}
+            } ,
+      success: function(data) {
+        //alert(data);
+        $table.bootstrapTable('load',data);
+        }
+      });
+    });
+
 </script>
 {% endblock %}
