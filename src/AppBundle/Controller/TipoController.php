@@ -51,7 +51,8 @@ class TipoController extends Controller
             $em->persist($tipo);
             $em->flush();
 
-            return $this->redirectToRoute('tipo_show', array('id' => $tipo->getId()));
+            // return $this->redirectToRoute('tipo_show', array('id' => $tipo->getId()));
+            return $this->redirectToRoute('tipo_index');
         }
 
         return $this->render('tipo/new.html.twig', array(
@@ -80,8 +81,8 @@ class TipoController extends Controller
 
       if (!is_null($search) && strlen($search) > 0) {
         $tiposQuery
-          ->where('tipo.nomenclador like :nomenclador')
-          ->setParameter('nomenclador', '%'.$search.'%');
+          ->where('tipo.nomenclador like :concepto')
+          ->setParameter('concepto', '%'.$search.'%');
       }
 
       if (!is_null($sort) && !is_null($order)) {
@@ -99,8 +100,8 @@ class TipoController extends Controller
         ->select('count(tipo.id)');
       if (!is_null($search) && strlen($search) > 0) {
         $totalQuery
-          ->where('tipo.nomenclador like :nomenclador')
-          ->setParameter('nomenclador', '%'.$search.'%');
+          ->where('tipo.nomenclador like :concepto')
+          ->setParameter('concepto', '%'.$search.'%');
       }
       $total = $totalQuery
         ->getQuery()
@@ -115,7 +116,7 @@ class TipoController extends Controller
         $rawResponse['rows'][] = array(
           'id' => $tipo->getId(),
           'codigo' => $tipo->getCodigo(),
-          'nomenclador' => $tipo->getNomenclador(),
+          'concepto' => $tipo->getConcepto(),
           'habilitado' => ($tipo->getHabilitado() == 1)?'Si':'No'
         );
       };
@@ -154,7 +155,8 @@ class TipoController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('tipo_edit', array('id' => $tipo->getId()));
+            // return $this->redirectToRoute('tipo_edit', array('id' => $tipo->getId()));
+            return $this->redirectToRoute('tipo_index');
         }
 
         return $this->render('tipo/edit.html.twig', array(

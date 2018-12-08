@@ -169,8 +169,7 @@ class OficinaController extends Controller
             $em->persist($oficina);
             $em->flush();
 
-            // return $this->redirectToRoute('oficina_show', array('id' => $oficina->getId()));
-            return $this->redirectToRoute('oficina_index');
+            return $this->redirectToRoute('oficina_show', array('id' => $oficina->getId()));
         }
 
         return $this->render('oficina/new.html.twig', array(
@@ -246,8 +245,7 @@ class OficinaController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            // return $this->redirectToRoute('oficina_edit', array('id' => $oficina->getId()));
-            return $this->redirectToRoute('oficina_index');
+            return $this->redirectToRoute('oficina_edit', array('id' => $oficina->getId()));
         }
 
         return $this->render('oficina/edit.html.twig', array(

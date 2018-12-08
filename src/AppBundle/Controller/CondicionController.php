@@ -19,16 +19,17 @@ class CondicionController extends Controller
      * Lists all condicion entities.
      *
      * @Route("/", name="condicion_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $condicions = $em->getRepository('AppBundle:Condicion')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('condicion/index.html.twig', array(
             'condicions' => $condicions,
+            'editado' => $editado
         ));
     }
 
@@ -114,7 +115,7 @@ class CondicionController extends Controller
             $em->persist($condicion);
             $em->flush();
 
-            return $this->redirectToRoute('condicion_index');
+            return $this->redirectToRoute('condicion_index', array('editado' => 'editado' ));
         }
 
         return $this->render('condicion/new.html.twig', array(
@@ -154,7 +155,8 @@ class CondicionController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('condicion_edit', array('id' => $condicion->getId()));
+            // return $this->redirectToRoute('condicion_edit', array('id' => $condicion->getId()));
+            return $this->redirectToRoute('condicion_index',array('editado' => 'editado' ));
         }
 
         return $this->render('condicion/edit.html.twig', array(

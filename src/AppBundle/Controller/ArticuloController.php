@@ -167,14 +167,15 @@ class ArticuloController extends Controller
       $backPath = 'articulos_index';
       $backTitle = 'articulos';
 
-      //$em = $this->getDoctrine()->getManager();
       $oficinaId = $request->query->get('id', null);
-      if (!is_null($oficinaId)) {
+      if (!is_null($oficinaId))
+      {
         $backPath = 'oficina_index';
         $backTitle = 'oficinas';
         $oficinaId = trim($oficinaId);
         $oficina = $em->getRepository('AppBundle:Oficina')->find($oficinaId);
-        if (!$oficina) {
+        if (!$oficina)
+        {
           $errors[] = 'La oficina ingresada no existe.';
         }
       }
@@ -183,6 +184,7 @@ class ArticuloController extends Controller
 
         $cantidad = $request->request->get('cantidad');
         $ultimoNum = $request->request->get('numInvent');
+        //$matrial = $request->request->get('material');
 
         if ($cantidad == '1')
         {
@@ -194,11 +196,8 @@ class ArticuloController extends Controller
           }
           $em->persist($articulo);
           $em->flush();
-
-          return $this->redirectToRoute('oficina_show', array('id' => (($articulo->getOficina())->getId())));
-          // return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
+          return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
         } else {
-
           for ($i=1; $i <= $cantidad; $i++) {
             $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
             $articulo->setEstado($estado);
@@ -210,9 +209,44 @@ class ArticuloController extends Controller
             $em->flush();
             //$articulo->setNumInventario($ultimoNum);
             $ultimoNum = $ultimoNum + 1;
-            $desc = $articulo->getDenominacion();
+            $denomin = $articulo->getDenominacion();
+            $material = $articulo->getMaterial();
+            $marca = $articulo->getMarca();
+            $numFabrica = $articulo->getNumFabrica();
+            $largo = $articulo->getLargo();
+            $ancho = $articulo->getAncho();
+            $alto = $articulo->getAlto();
+            $numEst = $articulo->getNumsEstantes();
+            $numCaj = $articulo->getNumsCajones();
+            $detalle = $articulo->getDetalleOrigen();
+            $tipoM = $articulo->getMoneda();
+            $importe = $articulo->getImporte();
+            $fecha = $articulo->getFechaEntrada();
+            $cod = $articulo->getCodigoCuentaSubcuenta();
+            $exped = $articulo->getNumExpediente();
+            $obs = $articulo->getObservaciones();
+            $cond = $articulo->getCondicion();
+            $tipo = $articulo->getTipo();
+
             $articulo = new Articulo($ultimoNum);
-            $articulo->setDenominacion($desc);
+            $articulo->setDenominacion($denomin);
+            $articulo->setMaterial($material);
+            $articulo->setMarca($marca);
+            $articulo->setNumFabrica($numFabrica);
+            $articulo->setLargo($largo);
+            $articulo->setAncho($ancho);
+            $articulo->setAlto($alto);
+            $articulo->setNumsEstantes($numEst);
+            $articulo->setNumsCajones($numCaj);
+            $articulo->setDetalleOrigen($detalle);
+            $articulo->setMoneda($tipoM);
+            $articulo->setImporte($importe);
+            $articulo->setFechaEntrada($fecha);
+            $articulo->setCodigoCuentaSubcuenta($cod);
+            $articulo->setNumExpediente($exped);
+            $articulo->setObservaciones($obs);
+            $articulo->setCondicion($cond);
+            $articulo->setTipo($tipo);
           }
         }
       }
@@ -250,11 +284,11 @@ class ArticuloController extends Controller
      */
     public function showAction(Articulo $articulo)
     {
-        // $deleteForm = $this->createDeleteForm($articulo);
+        $deleteForm = $this->createDeleteForm($articulo);
 
         return $this->render('articulo/show.html.twig', array(
             'articulo' => $articulo,
-            // 'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -266,7 +300,7 @@ class ArticuloController extends Controller
      */
     public function editAction(Request $request, Articulo $articulo)
     {
-        // $deleteForm = $this->createDeleteForm($articulo);
+        $deleteForm = $this->createDeleteForm($articulo);
         $editForm = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
         $editForm->handleRequest($request);
 
@@ -274,51 +308,50 @@ class ArticuloController extends Controller
 
           $this->getDoctrine()->getManager()->flush();
 
-          // return $this->redirectToRoute('articulo_edit', array('id' => $articulo->getId()));
-          return $this->redirectToRoute('oficina_show', array('id' => (($articulo->getOficina())->getId())));
+          return $this->redirectToRoute('articulo_edit', array('id' => $articulo->getId()));
         }
 
         return $this->render('articulo/edit.html.twig', array(
             'articulo' => $articulo,
             'edit_form' => $editForm->createView(),
-            // 'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    // /**
-    //  * Deletes a articulo entity.
-    //  *
-    //  * @Route("/{id}", name="articulo_delete")
-    //  * @Method("DELETE")
-    //  */
-    // public function deleteAction(Request $request, Articulo $articulo)
-    // {
-    //     $form = $this->createDeleteForm($articulo);
-    //     $form->handleRequest($request);
-    //
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $em = $this->getDoctrine()->getManager();
-    //         $em->remove($articulo);
-    //         $em->flush();
-    //     }
-    //
-    //     return $this->redirectToRoute('articulo_index');
-    // }
+    /**
+     * Deletes a articulo entity.
+     *
+     * @Route("/{id}", name="articulo_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Request $request, Articulo $articulo)
+    {
+        $form = $this->createDeleteForm($articulo);
+        $form->handleRequest($request);
 
-    // /**
-    //  * Creates a form to delete a articulo entity.
-    //  *
-    //  * @param Articulo $articulo The articulo entity
-    //  *
-    //  * @return \Symfony\Component\Form\Form The form
-    //  */
-    // private function createDeleteForm(Articulo $articulo)
-    // {
-    //     return $this->createFormBuilder()
-    //         ->setAction($this->generateUrl('articulo_delete', array('id' => $articulo->getId())))
-    //         ->setMethod('DELETE')
-    //         ->getForm()
-    //     ;
-    // }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($articulo);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('articulo_index');
+    }
+
+    /**
+     * Creates a form to delete a articulo entity.
+     *
+     * @param Articulo $articulo The articulo entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm(Articulo $articulo)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('articulo_delete', array('id' => $articulo->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
+    }
 
 }

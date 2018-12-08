@@ -8,6 +8,24 @@
     <h2>Editar Tipo de Artículo: {{ tipo.nomenclador }}</h2>
     {{ form_start(edit_form) }}
     {{ form_widget(edit_form) }}
-    <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
-    {{ form_end(edit_form) }}
+    <button type="button" data-toggle="modal" data-target="#editModal" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Editar oficina</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <i class="fas fa-info-circle"></i> Se guardaron los cambios.
+          </div>
+          <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Cerrar</button>
+            {{ form_end(edit_form) }}
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}

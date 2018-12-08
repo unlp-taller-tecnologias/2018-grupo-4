@@ -10,13 +10,31 @@
     {{ form_widget(edit_form) }}
 
     {% if is_granted("ROLE_ADMIN") %}
-      <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+      <button type="button" data-toggle="modal" data-target="#editModal" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
       {% if is_granted("ROLE_SUPER_ADMIN") %}
       <button type="button" data-toggle="modal" data-target="#deleteModal" class="btn btn-danger"><i class="far fa-trash-alt"></i> Eliminar</button>
       {% endif %}
     {% endif %}
 
-    {{ form_end(edit_form) }}
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Editar oficina</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <i class="fas fa-info-circle"></i> Se guardaron los cambios.
+          </div>
+          <div class="modal-footer">
+              <button type="submit" class="btn btn-dark">Cerrar</button>
+            {{ form_end(edit_form) }}
+          </div>
+        </div>
+      </div>
+    </div>
 
     {% if is_granted("ROLE_SUPER_ADMIN") and oficina.articulos | length == 0 %}
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -60,7 +78,6 @@
       </div>
     </div>
     {% endif %}
-
 
   </div>
 {% endblock %}

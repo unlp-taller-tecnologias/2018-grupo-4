@@ -5,15 +5,35 @@
     <br>
     <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
     <br>
-    <h1>Nueva Oficina</h1>
+    <h2>Nueva Oficina</h2>
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_errors(form) }}
 
     {% if is_granted("ROLE_ADMIN") %}
-    <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+    <button type="button" data-toggle="modal" data-target="#newModal" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
     {% endif %}
-    {{ form_end(form) }}
-
     </div>
+
+    {% if is_granted("ROLE_ADMIN") %}
+    <div class="modal fade" id="newModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Nueva oficina</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <i class="fas fa-info-circle"></i> Se creó una nueva oficina.
+          </div>
+          <div class="modal-footer">
+            <button type="submit" value="Create" class="btn btn-dark">Cerrar</button>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
 {% endblock %}
