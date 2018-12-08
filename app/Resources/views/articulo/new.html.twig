@@ -28,11 +28,37 @@
     <input id="num" type="number" name="numInvent" value="1" hidden><br>
     <label>El número que ingrese en cantidad, se crearán artículos idénticos con numero de inventario consecutivo.</label><br><br>
     {% if is_granted("ROLE_ADMIN") %}
-    <button id="button" type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+    <!-- <button id="button" type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button> -->
+    <button type="button" id="btnGuardar" data-toggle="modal" data-target="#addModal" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+
     {% endif %}
-    {{ form_end(form) }}
+
     {% endif %}
+
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Agregar artículo/s</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div id="modal-body" class="modal-body">
+            <p id="textoMensaje"></p>
+          </div>
+          <div class="modal-footer">
+
+              <button type="submit" value="Delete" class="btn btn-dark">Aceptar</button>
+              <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
+
 {% endblock %}
 
 
@@ -41,11 +67,23 @@
 $form = $('form');
 $num = $('#num');
 $numActual = $('#appbundle_articulo_numInventario');
-$form.submit(function(){
-  alert("Se van a insertar "+ $('#cantidad').val() + " artículos." );
-  $num.val($numActual.val());
+$denominacion = $('#appbundle_articulo_denominacion');
+$('#btnGuardar').click(function(){
+  var leyenda = "";
+  var denominacion = $('#appbundle_articulo_denominacion').val();
+  var nroAct = $('#appbundle_articulo_numInventario').val();
+  for (var i = 0; i < $('#cantidad').val(); i++) {
+    leyenda += "<p> (*) Número de inventario: "+ nroAct +" - Denominación: "+ denominacion +"<p>";
+    nroAct++;
+  }
+  $('#textoMensaje').text("Se agregarán  "+ $('#cantidad').val() + " artículo/s "+ $('#appbundle_articulo_denominacion').val() + " a partir del número de inventario "
+  + $('#appbundle_articulo_numInventario').val());
+  $('#modal-body').append(leyenda);
 });
 
+$form.submit(function(){
+  $num.val($numActual.val());
+});
 {% for id in CondDeshabilitadas %}
   $("#appbundle_articulo_condicion").find('[value="{{id}}"]').remove();
 {% endfor %}

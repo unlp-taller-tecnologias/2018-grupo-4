@@ -167,14 +167,15 @@ class ArticuloController extends Controller
       $backPath = 'articulos_index';
       $backTitle = 'articulos';
 
-      //$em = $this->getDoctrine()->getManager();
       $oficinaId = $request->query->get('id', null);
-      if (!is_null($oficinaId)) {
+      if (!is_null($oficinaId))
+      {
         $backPath = 'oficina_index';
         $backTitle = 'oficinas';
         $oficinaId = trim($oficinaId);
         $oficina = $em->getRepository('AppBundle:Oficina')->find($oficinaId);
-        if (!$oficina) {
+        if (!$oficina)
+        {
           $errors[] = 'La oficina ingresada no existe.';
         }
       }
@@ -183,6 +184,7 @@ class ArticuloController extends Controller
 
         $cantidad = $request->request->get('cantidad');
         $ultimoNum = $request->request->get('numInvent');
+        //$matrial = $request->request->get('material');
 
         if ($cantidad == '1')
         {
@@ -196,7 +198,6 @@ class ArticuloController extends Controller
           $em->flush();
           return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
         } else {
-
           for ($i=1; $i <= $cantidad; $i++) {
             $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
             $articulo->setEstado($estado);
@@ -208,9 +209,44 @@ class ArticuloController extends Controller
             $em->flush();
             //$articulo->setNumInventario($ultimoNum);
             $ultimoNum = $ultimoNum + 1;
-            $desc = $articulo->getDenominacion();
+            $denomin = $articulo->getDenominacion();
+            $material = $articulo->getMaterial();
+            $marca = $articulo->getMarca();
+            $numFabrica = $articulo->getNumFabrica();
+            $largo = $articulo->getLargo();
+            $ancho = $articulo->getAncho();
+            $alto = $articulo->getAlto();
+            $numEst = $articulo->getNumsEstantes();
+            $numCaj = $articulo->getNumsCajones();
+            $detalle = $articulo->getDetalleOrigen();
+            $tipoM = $articulo->getMoneda();
+            $importe = $articulo->getImporte();
+            $fecha = $articulo->getFechaEntrada();
+            $cod = $articulo->getCodigoCuentaSubcuenta();
+            $exped = $articulo->getNumExpediente();
+            $obs = $articulo->getObservaciones();
+            $cond = $articulo->getCondicion();
+            $tipo = $articulo->getTipo();
+
             $articulo = new Articulo($ultimoNum);
-            $articulo->setDenominacion($desc);
+            $articulo->setDenominacion($denomin);
+            $articulo->setMaterial($material);
+            $articulo->setMarca($marca);
+            $articulo->setNumFabrica($numFabrica);
+            $articulo->setLargo($largo);
+            $articulo->setAncho($ancho);
+            $articulo->setAlto($alto);
+            $articulo->setNumsEstantes($numEst);
+            $articulo->setNumsCajones($numCaj);
+            $articulo->setDetalleOrigen($detalle);
+            $articulo->setMoneda($tipoM);
+            $articulo->setImporte($importe);
+            $articulo->setFechaEntrada($fecha);
+            $articulo->setCodigoCuentaSubcuenta($cod);
+            $articulo->setNumExpediente($exped);
+            $articulo->setObservaciones($obs);
+            $articulo->setCondicion($cond);
+            $articulo->setTipo($tipo);
           }
         }
       }
@@ -227,17 +263,17 @@ class ArticuloController extends Controller
     $count = count($arrayValuesTipo);
     for ($i=0; $i < $count; $i++) {
       array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
-      return $this->render('articulo/new.html.twig', array(
-          'articulo' => $articulo,
-          'form' => $form->createView(),
-          'errors' => $errors,
-          'backPath' => $backPath,
-          'backTitle' => $backTitle,
-          'CondDeshabilitadas' => $arrayDesCond,
-          'TiposDeshabilitadas' => $arrayDesTipo
-      ));
     }
-
+    
+    return $this->render('articulo/new.html.twig', array(
+        'articulo' => $articulo,
+        'form' => $form->createView(),
+        'errors' => $errors,
+        'backPath' => $backPath,
+        'backTitle' => $backTitle,
+        'CondDeshabilitadas' => $arrayDesCond,
+        'TiposDeshabilitadas' => $arrayDesTipo
+    ));
   }
 
     /**
