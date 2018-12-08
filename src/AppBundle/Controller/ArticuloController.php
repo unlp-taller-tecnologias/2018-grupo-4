@@ -263,17 +263,17 @@ class ArticuloController extends Controller
     $count = count($arrayValuesTipo);
     for ($i=0; $i < $count; $i++) {
       array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
-      return $this->render('articulo/new.html.twig', array(
-          'articulo' => $articulo,
-          'form' => $form->createView(),
-          'errors' => $errors,
-          'backPath' => $backPath,
-          'backTitle' => $backTitle,
-          'CondDeshabilitadas' => $arrayDesCond,
-          'TiposDeshabilitadas' => $arrayDesTipo
-      ));
     }
-
+    
+    return $this->render('articulo/new.html.twig', array(
+        'articulo' => $articulo,
+        'form' => $form->createView(),
+        'errors' => $errors,
+        'backPath' => $backPath,
+        'backTitle' => $backTitle,
+        'CondDeshabilitadas' => $arrayDesCond,
+        'TiposDeshabilitadas' => $arrayDesTipo
+    ));
   }
 
     /**
