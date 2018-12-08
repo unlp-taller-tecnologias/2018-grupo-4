@@ -66,5 +66,5 @@ security:
       - { path: ^/*, role: IS_AUTHENTICATED_FULLY }
       - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-        # - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        # - { path: ^/panel/, role: IS_AUTHENTICATED_FULLY }
+      # - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      # - { path: ^/panel/, role: IS_AUTHENTICATED_FULLY }
