@@ -3,13 +3,13 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i> Listado de Tipos de Artículos</a>
+  <a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i> Listado de Tipos</a>
   <br>
-    <h1>Tipo de Artículo: {{ tipo.nomenclador }}</h1>
+    <h1>Tipo: {{ tipo.nomenclador }}</h1>
     <table class="table table">
         <tbody>
             <tr>
-                <th scope="row">Código</th>
+                <th scope="row">Codigo</th>
                 <td scope="row">{{ tipo.codigo }}</td>
             </tr>
             <tr>
@@ -33,19 +33,17 @@
                 <td scope="row">{{ tipo.subgrupo }}</td>
             </tr>
             <tr>
-                <th scope="row">Descripción</th>
+                <th scope="row">Descripcion</th>
                 <td scope="row">{{ tipo.descripcion }}</td>
             </tr>
             <tr>
-                <th scope="row">Vida útil</th>
+                <th scope="row">Vidautil</th>
                 <td scope="row">{{ tipo.vidaUtil }}</td>
-            </tr>
-            <tr>
-                <th scope="row">Habilitado</th>
-                <td scope="row">{% if tipo.habilitado %}Si{% else %}No{% endif %}</td>
             </tr>
         </tbody>
     </table>
-
+    <br>
+    <a class="btn btn-dark" style="margin: 15px;" href="{{ path('tipo_edit', { 'id': tipo.id }) }}">Editar</a>
+    <br>
 </div>
 {% endblock %}

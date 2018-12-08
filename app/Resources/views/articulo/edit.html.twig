@@ -5,8 +5,7 @@
       <br>
       <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
       <br>
-      <h2>Editar Artículo: {{articulo.denominacion}}</h2>
-      <hr>
+      <h1>Editar Artículo: {{articulo.denominacion}}</h1>
       {{ form_start(edit_form) }}
       {{ form_widget(edit_form.oficina, { 'attr': {'class': 'form-control', 'hidden': 'true' }}) }}
       {{ form_widget(edit_form) }}

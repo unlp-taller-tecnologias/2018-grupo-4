@@ -133,8 +133,4 @@ class Condicion
     public function __toString() {
         return $this->nombre;
     }
-
-    public function __construct() {
-        $this->habilitado = true;
-    }
 }

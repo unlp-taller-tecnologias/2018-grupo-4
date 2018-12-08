@@ -166,7 +166,7 @@ class ArticuloController extends Controller
       $errors = array();
       $backPath = 'articulos_index';
       $backTitle = 'articulos';
-
+      return;
       $oficinaId = $request->query->get('id', null);
       if (!is_null($oficinaId))
       {

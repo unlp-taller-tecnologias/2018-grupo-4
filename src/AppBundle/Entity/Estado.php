@@ -14,10 +14,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *   fields={"nombre"},
  *   message="El nombre de estado ya existe."
  * )
- * @UniqueEntity(
- *   fields={"color"},
- *   message="El color seleccionado ya existe."
- * )
  */
 class Estado
 {
@@ -167,9 +163,5 @@ class Estado
 
     public function __toString() {
         return $this->nombre;
-    }
-
-    public function __construct() {
-        $this->habilitado = true;
     }
 }

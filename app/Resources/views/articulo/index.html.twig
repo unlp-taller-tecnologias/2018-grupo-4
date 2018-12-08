@@ -4,10 +4,10 @@
   <div class="container">
     <br>
     <h1>Artículos</h1>
-    <hr>
+    <br>
     {% block filters %}
 
-    <div class="jumbotron">
+    <div class="jumbotron" style="padding-top: 2%; padding-bottom: 1%;">
       <h4>Buscar artículos por:</h4>
        <div class="form-row" >
          <div class="form-group col-md-6">
@@ -41,9 +41,7 @@
       </div>
     </div>
     {% endblock %}
-    <hr>
     <h3>Listado de todos los artículos</h3>
-    <hr>
     <div class="table-responsive">
       <div id="toolbar">
         <button id="button1" hidden class="btn btn-default">filterBy</button>
@@ -53,7 +51,7 @@
               data-show-export="true"
               class="table table-hover table-striped"
               data-toggle="table"
-              data-height="700"
+              data-height="400"
               data-side-pagination="server"
               data-pagination="true"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
@@ -68,8 +66,7 @@
             <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
             <th scope="row" data-field="estado" data-sortable="true">Estado</th>
             {% if is_granted("ROLE_ADMIN") %}
-            <th data-field="id" data-formatter="operateFormatterShow">Ver</th>
-            <th data-field="id" data-formatter="operateFormatterEdit">Editar</th>
+            <th data-field="id" data-formatter="operateFormatter">Acciones</th>
             {% endif %}
           </tr>
         </thead>
@@ -117,22 +114,13 @@ xhttpTipos.onreadystatechange = function() {
 xhttpTipos.open("GET", "{{ path('tipo_list') }}", true);
 xhttpTipos.send();
 
-  function operateFormatterShow(value, row, index) {
+  function operateFormatter(value, row, index) {
     show = "{{ path('articulo_show', {id: -1})}}";
     show = show.replace('-1', value);
     return [
       `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
     ].join('');
   }
-
-  function operateFormatterEdit(value, row, index) {
-    edit = "{{ path('articulo_edit', {id: -1})}}";
-    edit = edit.replace('-1', value);
-    return [
-      `<a class="edit ml10" href="${edit}" title="Editar"><i class="fas fa-edit"></i></a>`,
-    ].join('');
-  }
-
   var $table = $('#tablaArticulos');
   $.extend($.fn.bootstrapTable.defaults, {
       showExport: false,

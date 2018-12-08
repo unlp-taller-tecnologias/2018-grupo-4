@@ -2,10 +2,9 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i> Listado de Tipos de Artículos</a>
+  <a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i> Listado de Tipos</a>
   <br>
-    <h2>Nuevo Tipo de Artículo</h2>
-    <hr>
+    <h1>Nuevo Tipo</h1>
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_errors(form) }}

@@ -3,10 +3,9 @@
 {% block content %}
   <div class="container">
     <br>
-    <a href="{{ path('estado_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados de Artículos</a>
+    <a href="{{ path('estado_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados</a>
     <br>
-    <h2>Editar estado de Artículo: {{ estado.nombre }}</h2>
-    <hr>
+    <h1>Editar Estado: {{ estado.nombre }}</h1>
     {{ form_start(edit_form) }}
     {{ form_widget(edit_form) }}
     <button type="button" data-toggle="modal" data-target="#editModal" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>

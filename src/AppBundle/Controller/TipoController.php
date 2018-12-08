@@ -132,11 +132,11 @@ class TipoController extends Controller
      */
     public function showAction(Tipo $tipo)
     {
-        // $deleteForm = $this->createDeleteForm($tipo);
+        $deleteForm = $this->createDeleteForm($tipo);
 
         return $this->render('tipo/show.html.twig', array(
             'tipo' => $tipo,
-            // 'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -148,8 +148,8 @@ class TipoController extends Controller
      */
     public function editAction(Request $request, Tipo $tipo)
     {
-        // $deleteForm = $this->createDeleteForm($tipo);
-        $editForm = $this->createForm('AppBundle\Form\TipoType', $tipo, array("edit" => false));
+        $deleteForm = $this->createDeleteForm($tipo);
+        $editForm = $this->createForm('AppBundle\Form\TipoType', $tipo, array("edit" => true));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -162,43 +162,43 @@ class TipoController extends Controller
         return $this->render('tipo/edit.html.twig', array(
             'tipo' => $tipo,
             'edit_form' => $editForm->createView(),
-            // 'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    // /**
-    //  * Deletes a tipo entity.
-    //  *
-    //  * @Route("/{id}", name="tipo_delete")
-    //  * @Method("DELETE")
-    //  */
-    // public function deleteAction(Request $request, Tipo $tipo)
-    // {
-    //     $form = $this->createDeleteForm($tipo);
-    //     $form->handleRequest($request);
-    //
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $em = $this->getDoctrine()->getManager();
-    //         $em->remove($tipo);
-    //         $em->flush();
-    //     }
-    //
-    //     return $this->redirectToRoute('tipo_index');
-    // }
-    //
-    // /**
-    //  * Creates a form to delete a tipo entity.
-    //  *
-    //  * @param Tipo $tipo The tipo entity
-    //  *
-    //  * @return \Symfony\Component\Form\Form The form
-    //  */
-    // private function createDeleteForm(Tipo $tipo)
-    // {
-    //     return $this->createFormBuilder()
-    //         ->setAction($this->generateUrl('tipo_delete', array('id' => $tipo->getId())))
-    //         ->setMethod('DELETE')
-    //         ->getForm()
-    //     ;
-    // }
+    /**
+     * Deletes a tipo entity.
+     *
+     * @Route("/{id}", name="tipo_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Request $request, Tipo $tipo)
+    {
+        $form = $this->createDeleteForm($tipo);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($tipo);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('tipo_index');
+    }
+
+    /**
+     * Creates a form to delete a tipo entity.
+     *
+     * @param Tipo $tipo The tipo entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm(Tipo $tipo)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('tipo_delete', array('id' => $tipo->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
+    }
 }
