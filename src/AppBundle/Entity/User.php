@@ -47,6 +47,17 @@ class User extends BaseUser
       * )
       */
       protected $lastname;
+      protected $username;
+      protected $username_canonical;
+      protected $email;
+      protected $email_canonical;
+      protected $enabled;
+      protected $salt;
+      protected $password;
+      protected $last_login;
+      protected $confirmation_token;
+      protected $password_requested_at;
+      protected $roles;
 
       public function __construct()
       {
@@ -69,4 +80,29 @@ class User extends BaseUser
       public function setName($n){
         $this->name=$n;
       }
-}
+
+      public function getUsername(){
+        return $this->username;
+      }
+
+      public function setUsername($n){
+        $this->username=$n;
+      }
+
+      public function getEmail(){
+        return $this->email;
+      }
+
+      public function setEmail($n){
+        $this->email=$n;
+      }
+
+      public function getPassword(){
+        return $this->password;
+      }
+
+      public function setPassword($n){
+        $this->password=$n;
+      }
+
+  }
