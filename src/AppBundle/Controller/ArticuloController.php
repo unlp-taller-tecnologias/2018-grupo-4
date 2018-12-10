@@ -7,6 +7,7 @@ use AppBundle\Entity\Oficina;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +55,7 @@ class ArticuloController extends Controller
     /**
      * Finds and displays a articulo entity.
      *
-     * @Route("/{id}", name="articulo_show")
+     * @Route("/ver/{id}", name="articulo_show")
      * @Method("GET")
      */
     public function showAction(Request $request, Articulo $articulo)
@@ -71,8 +72,8 @@ class ArticuloController extends Controller
     /**
      * Lists all articulo entities.
      *
-     * @Route("/listado", name="articulo_list", defaults={"oficina"=null})
-     * @Method({"GET", "POST"})
+     * @Route("/listado", name="articulo_list")
+     * @Method({"GET"})
      */
     public function listadoAction(Request $request){
       $offset = $request->query->get('offset', 0);
@@ -191,7 +192,7 @@ class ArticuloController extends Controller
       $em = $this->getDoctrine()->getManager();
       $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
       $oficinaId = $oficina->getId();
-           
+
       if (!is_null($oficinaId))
       {
         $backPath = 'oficina_index';
