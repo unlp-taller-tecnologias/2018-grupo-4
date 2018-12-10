@@ -185,7 +185,7 @@ class ArticuloController extends Controller
       $backPath = 'articulos_index';
       $backTitle = 'articulos';
 
-      $oficinaId = $request->query->get('id', null);
+      $oficinaId = $request->query->get('id', null);      
       if (!is_null($oficinaId))
       {
         $backPath = 'oficina_index';
