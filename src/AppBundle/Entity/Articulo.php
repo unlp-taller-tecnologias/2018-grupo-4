@@ -3,12 +3,18 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Articulo
  *
  * @ORM\Table(name="articulo")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ArticuloRepository")
+ * @UniqueEntity(
+ *   fields={"numInventario"},
+ *   message="El número de inventario ya existe."
+ * )
  */
 class Articulo
 {
@@ -21,10 +27,12 @@ class Articulo
      */
     private $id;
 
+    private $condiciones;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="num_inventario", type="string", length=100, unique=true)
+     * @ORM\Column(name="num_inventario", type="integer", length=100, unique=true)
      */
     private $numInventario;
 
@@ -34,6 +42,13 @@ class Articulo
      * @ORM\Column(name="denominacion", type="string", length=100)
      */
     private $denominacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="moneda", type="string", length=100)
+     */
+    private $moneda;
 
     /**
      * @var string
@@ -59,14 +74,6 @@ class Articulo
      * @ORM\JoinColumn(name="condicion_id", referencedColumnName="id")
      */
     private $condicion;
-
-    /**
-     * @var Moneda
-     *
-     * @ORM\ManyToOne(targetEntity="Moneda")
-     * @ORM\JoinColumn(name="moneda_id", referencedColumnName="id")
-     */
-    private $moneda;
 
     /**
      * @var Tipo
@@ -805,5 +812,9 @@ class Articulo
         return $this;
     }
 
+    public function __construct($id) {
+        $this->fechaEntrada = new \DateTime();
+        $this->numInventario = $id;
+    }
 
 }

@@ -3,10 +3,13 @@
 {% block content %}
   <div class="container">
     <br>
-    <h1>Artículos</h1>
+    <hr>
+    <h2>Artículos</h2>
+    <hr>
     <br>
     {% block filters %}
-    <div class="jumbotron">
+
+    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
       <h4>Buscar artículos por:</h4>
        <div class="form-row" >
          <div class="form-group col-md-6">
@@ -52,7 +55,7 @@
               data-toolbar="#toolbar"
               class="table table-hover table-striped"
               data-toggle="table"
-              data-height="400"
+              data-height="700"
               data-side-pagination="server"
               data-pagination="true"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
@@ -66,8 +69,9 @@
             <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
             <th scope="row" data-field="estado" data-sortable="true">Estado</th>
             <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+            <th data-field="id" data-formatter="operateFormatterShow">Ver</th>
             {% if is_granted("ROLE_ADMIN") %}
-            <th data-field="id" data-formatter="operateFormatter">Acciones</th>
+            <th data-field="id" data-formatter="operateFormatterEdit">Editar</th>
             {% endif %}
           </tr>
         </thead>
@@ -79,13 +83,30 @@
   <hr>
 </div>
 
-
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Artículo</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <i class="fas fa-info-circle"></i> Se guardaron los cambios.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
 
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
 <script>
+
   //pdf export
   jQuery(function ($) {
     $("#exportButtonPdf").click(function () {
@@ -227,6 +248,25 @@
 
 
 
+  {% if editado == 'editado' %}
+    $('#editModal').modal('show');
+  {%endif%}
+
+
+  function operateFormatterShow(value, row, index) {
+    show = "{{ path('articulo_show', {id: -1})}}";
+    show = show.replace('-1', value);
+    return [
+      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
+    ].join('');
+  }
+  function operateFormatterEdit(value, row, index) {
+    edit = "{{ path('articulo_edit', {id: -1})}}";
+    edit = edit.replace('-1', value);
+    return [
+      `<a class="edit ml10" href="${edit}" title="Ver"><i class="fas fa-edit"></i></a>`,
+    ].join('');
+  }
 var xhttpEstados = new XMLHttpRequest();
 xhttpEstados.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
@@ -234,7 +274,9 @@ xhttpEstados.onreadystatechange = function() {
     var estados = listado.rows;
     var opciones = "";
     for(es in estados){
-      opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
+      if (estados[es].habilitado == 'Si') {
+        opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
+      }
     }
     $("#estado").append(opciones);
   }
@@ -249,7 +291,9 @@ xhttpTipos.onreadystatechange = function() {
     var tipos = listado.rows;
     var opciones = "";
     for(ti in tipos){
-      opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nomenclador +"</option>";
+      if (tipos[ti].habilitado == 'Si') {
+        opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].concepto +"</option>";
+      }
     }
     $("#tipo").append(opciones);
   }

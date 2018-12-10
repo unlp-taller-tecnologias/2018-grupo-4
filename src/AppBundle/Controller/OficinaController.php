@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Oficina;
+use AppBundle\Entity\Articulo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -22,14 +23,15 @@ class OficinaController extends Controller
      * @Route("/", name="oficina_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $oficinas = $em->getRepository('AppBundle:Oficina')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('oficina/index.html.twig', array(
             'oficinas' => $oficinas,
+            'editado' => $editado,
         ));
     }
 
@@ -168,7 +170,7 @@ class OficinaController extends Controller
             $em->persist($oficina);
             $em->flush();
 
-            return $this->redirectToRoute('oficina_show', array('id' => $oficina->getId()));
+            return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
         }
 
         return $this->render('oficina/new.html.twig', array(
@@ -182,9 +184,10 @@ class OficinaController extends Controller
      * @Route("/{id}", name="oficina_show")
      * @Method("GET")
      */
-    public function showAction(Oficina $oficina)
+    public function showAction(Request $request, Oficina $oficina)
     {
         $deleteForm = $this->createDeleteForm($oficina);
+
 
         $em = $this->getDoctrine()->getManager();
         $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
@@ -197,10 +200,14 @@ class OficinaController extends Controller
         }else{
           $operacionesPendientes = true;
         }
+
+        $editado = $request->query->get('editado');
+
         return $this->render('oficina/show.html.twig', array(
             'operaciones' => $operacionesPendientes,
             'oficina' => $oficina,
             'delete_form' => $deleteForm->createView(),
+            'editado' => $editado,
         ));
     }
 
@@ -233,7 +240,8 @@ class OficinaController extends Controller
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-          'estado' => $articulo->getEstado()->getNombre()
+          'estado' => $articulo->getEstado()->getNombre(),
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
         );
       };
 
@@ -249,13 +257,13 @@ class OficinaController extends Controller
     public function editAction(Request $request, Oficina $oficina)
     {
         $deleteForm = $this->createDeleteForm($oficina);
-        $editForm = $this->createForm('AppBundle\Form\OficinaType', $oficina);
+        $editForm = $this->createForm('AppBundle\Form\OficinaType', $oficina, array("edit" => false));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('oficina_edit', array('id' => $oficina->getId()));
+            return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
         }
 
         return $this->render('oficina/edit.html.twig', array(
@@ -282,7 +290,7 @@ class OficinaController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('oficina_index');
+        return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
     }
 
     /**
@@ -299,5 +307,69 @@ class OficinaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+
+    /**
+     * Lists all articulo entities.
+     *
+     * @Route("/{oficina}/articulo_listFilter_oficinas", name="articulo_listFilter_oficinas", defaults={"oficina"=null})
+     * @Method({"GET", "POST"})
+     */
+    public function listadoFilterOficinaAction(Request $request,Oficina $oficina){
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', null);
+      $order = $request->query->get('order', null);
+
+      $nroInventario = $request->request->get('nroInventario');
+      $numExpediente = $request->request->get('expediente');
+      $denominacion = $request->request->get('denominacion');
+      $estado = $request->request->get('estado');
+      $tipo = $request->request->get('tipo');
+      $oficinaId = $request->query->get('idOficina');
+
+      $nroInventario = ($nroInventario == "")? NULL:$nroInventario;
+      $numExpediente = ($numExpediente == "")? NULL:$numExpediente;
+      $denominacion = ($denominacion == "")? NULL:$denominacion."%";
+      $estado = ($estado == "")? NULL:$estado;
+      $tipo = ($tipo == "")? NULL:$tipo;
+
+      $em = $this->getDoctrine()->getEntityManager();
+      $dql = "select a from AppBundle:Articulo a where (((a.numInventario = :nroInventario and :nroInventario is not null) or (:nroInventario is null))
+              and ((a.numExpediente = :numExpediente and :numExpediente is not null) or (:numExpediente is null))
+              and ((a.denominacion like :denominacion and :denominacion is not null) or (:denominacion is null))
+              and ((a.estado = :estado and :estado is not null) or (:estado is null))
+              and ((a.tipo = :tipo and :tipo is not null) or (:tipo is null)))
+              or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :tipo is null)";
+      $query = $em->createQuery($dql);
+      $query->setParameter('nroInventario', $nroInventario);
+      $query->setParameter('numExpediente', $numExpediente);
+      $query->setParameter('denominacion', $denominacion);
+      $query->setParameter('estado', $estado);
+      $query->setParameter('tipo', $tipo);
+      $articulos = $query->getResult();
+
+      $rawResponse = array(
+        'total' => 0,
+        'rows' => array()
+      );
+
+      foreach($articulos as $articulo) {
+        $of = $articulo->getOficina();
+        if ($of->getId() ==  $oficina->getId()) {
+          $rawResponse['rows'][] = array(
+            'id' => $articulo->getId(),
+            'numInventario' =>$articulo->getNumInventario(),
+            'numExpendiente' => $articulo->getNumExpediente(),
+            'denominacion' => $articulo->getDenominacion(),
+            'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+            'estado' => $articulo->getEstado()->getNombre()
+          );
+        }
+      };
+      $rawResponse['total'] = count($rawResponse['rows']);
+      return new JsonResponse($rawResponse);
     }
 }

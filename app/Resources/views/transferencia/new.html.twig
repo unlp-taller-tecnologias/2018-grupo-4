@@ -1,13 +1,13 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-<div class="container">
+<div style="margin-left: 2%; margin-right: 2%;">
   <br>
     <h1>Transferencia</h1>
 
-    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i>Listado de Oficinas</a>
+    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
     <br>
-  <div class="container-fluid border" style="padding: 30px">
+  <div class="container border" style="padding: 30px">
   <div class="row">
     <div class="col-md-6 order-md-1">
       <h4>Artículos de la oficina</h4>
@@ -62,9 +62,13 @@
                  </tr>
                </thead>
         </table>
+      </div>
+    </div>
   </div>
 </div>
+<div class="container">
 
+<div style="margin-top: 2%;">
 {{ form_start(form) }}
     {{ form_widget(form) }}
 
@@ -72,6 +76,7 @@
       <h3 id="condiciones-title">Seleccione condición</h3>
 
     </div>
+</div>
 
     <input type="hidden" id="articulosIds" name="articulosIds" value="">
     <input type="hidden" id="condicionesIds" name="condicionesIds" value="">

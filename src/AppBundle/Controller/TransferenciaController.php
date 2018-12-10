@@ -194,16 +194,12 @@ class TransferenciaController extends Controller
       $articulos = array();
       $j = 5;
       $i = 0;
-      if ($oficinaDestino == NULL) {
-        echo 'null';
-      }else{
-        echo 'no null';
-      }
+
       //die();
       foreach ($articulosIds as $id){
         $articuloActual =  $articuloRepository->findOneById($id);
         $articulos[$i] = $articuloActual;
-      //  $articuloActual->setOficina($oficinaDestino);
+        $articuloActual->setOficina($oficinaDestino);
 
         $condicionSeleccionada = $condicionesArreglo[$j];
         $condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);

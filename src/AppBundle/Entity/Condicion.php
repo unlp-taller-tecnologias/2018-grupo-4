@@ -43,7 +43,7 @@ class Condicion
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string",  nullable=true, length=255)
+     * @ORM\Column(name="descripcion", type="string", length=255)
      */
     private $descripcion;
 
@@ -132,5 +132,8 @@ class Condicion
 
     public function __toString() {
         return $this->nombre;
+    }
+    public function __construct() {
+        $this->habilitado = true;;
     }
 }

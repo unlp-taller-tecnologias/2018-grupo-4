@@ -24,7 +24,7 @@ class ArticuloController extends Controller
      * @Route("/", name="articulo_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
       // var_dump($this->getUser()->getUsername());
       //
@@ -44,9 +44,27 @@ class ArticuloController extends Controller
         $em->flush();
 
         $articulos = $em->getRepository('AppBundle:Articulo')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('articulo/index.html.twig', array(
             'articulos' => $articulos,
+            'editado' => $editado,
+        ));
+    }
+
+    /**
+     * Finds and displays a articulo entity.
+     *
+     * @Route("/{id}", name="articulo_show")
+     * @Method("GET")
+     */
+    public function showAction(Request $request, Articulo $articulo)
+    {
+        // $deleteForm = $this->createDeleteForm($articulo);
+        $editado = $request->query->get('editado');
+        return $this->render('articulo/show.html.twig', array(
+            'articulo' => $articulo,
+            // 'delete_form' => $deleteForm->createView(),
+            'editado' => $editado,
         ));
     }
 
@@ -145,7 +163,7 @@ class ArticuloController extends Controller
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
-          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNmbre() : null
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
         );
       };
 
@@ -155,11 +173,16 @@ class ArticuloController extends Controller
     /**
      * Creates a new articulo entity.
      *
-     * @Route("/new", name="articulo_new")
+     * @Route("{id}/new", name="articulo_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request){
-      $articulo = new Articulo();
+    public function newAction(Request $request, Oficina $oficina)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
+      $numInv = ($artNumInv->getNumInventario())+1;
+      $condiciones = $em->getRepository('AppBundle:Condicion')->findByHabilitado(1);
+      $articulo = new Articulo($numInv);
       $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
       $form->handleRequest($request);
       $errors = array();
@@ -167,19 +190,31 @@ class ArticuloController extends Controller
       $backTitle = 'articulos';
       $em = $this->getDoctrine()->getManager();
       $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
-      $oficinaId = $request->query->get('id', null);
-      if (!is_null($oficinaId)) {
+      $oficinaId = $oficina->getId();
+
+
+      if (!is_null($oficinaId))
+      {
         $backPath = 'oficina_index';
         $backTitle = 'oficinas';
         $oficinaId = trim($oficinaId);
         $oficina = $em->getRepository('AppBundle:Oficina')->find($oficinaId);
-        if (!$oficina) {
+        if (!$oficina)
+        {
           $errors[] = 'La oficina ingresada no existe.';
         }
       }
 
       if ($form->isSubmitted() && $form->isValid() && count($errors) == 0) {
+
+        $cantidad = $request->request->get('cantidad');
+        $ultimoNum = $request->request->get('numInvent');
+        //$matrial = $request->request->get('material');
+
+        if ($cantidad == '1')
+        {
           $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
+          $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
           $estadoAdicional = $request->request->get("estadoAdicional");
           $estadoAdicionalReal = $em->getRepository('AppBundle:estadoAdicional')->findOneByNombre($estadoAdicional);
           $articulo->setEstadoAdicional($estadoAdicionalReal);
@@ -191,33 +226,92 @@ class ArticuloController extends Controller
           $em->persist($articulo);
           $em->flush();
           return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
+        } else {
+          for ($i=1; $i <= $cantidad; $i++) {
+            $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
+            $articulo->setEstado($estado);
+            $articulo->setUser($this->getUser());
+            if ($oficina) {
+              $articulo->setOficina($oficina);
+            }
+            $em->persist($articulo);
+            $em->flush();
+            //$articulo->setNumInventario($ultimoNum);
+            $ultimoNum = $ultimoNum + 1;
+            $denomin = $articulo->getDenominacion();
+            $material = $articulo->getMaterial();
+            $marca = $articulo->getMarca();
+            $numFabrica = $articulo->getNumFabrica();
+            $largo = $articulo->getLargo();
+            $ancho = $articulo->getAncho();
+            $alto = $articulo->getAlto();
+            $numEst = $articulo->getNumsEstantes();
+            $numCaj = $articulo->getNumsCajones();
+            $detalle = $articulo->getDetalleOrigen();
+            $tipoM = $articulo->getMoneda();
+            $importe = $articulo->getImporte();
+            $fecha = $articulo->getFechaEntrada();
+            $cod = $articulo->getCodigoCuentaSubcuenta();
+            $exped = $articulo->getNumExpediente();
+            $obs = $articulo->getObservaciones();
+            $cond = $articulo->getCondicion();
+            $tipo = $articulo->getTipo();
+
+            $articulo = new Articulo($ultimoNum);
+            $articulo->setDenominacion($denomin);
+            $articulo->setMaterial($material);
+            $articulo->setMarca($marca);
+            $articulo->setNumFabrica($numFabrica);
+            $articulo->setLargo($largo);
+            $articulo->setAncho($ancho);
+            $articulo->setAlto($alto);
+            $articulo->setNumsEstantes($numEst);
+            $articulo->setNumsCajones($numCaj);
+            $articulo->setDetalleOrigen($detalle);
+            $articulo->setMoneda($tipoM);
+            $articulo->setImporte($importe);
+            $articulo->setFechaEntrada($fecha);
+            $articulo->setCodigoCuentaSubcuenta($cod);
+            $articulo->setNumExpediente($exped);
+            $articulo->setObservaciones($obs);
+            $articulo->setCondicion($cond);
+            $articulo->setTipo($tipo);
+          }
+        }
       }
 
-      return $this->render('articulo/new.html.twig', array(
-          'articulo' => $articulo,
-          'estados' => $estados,
-          'form' => $form->createView(),
-          'errors' => $errors,
-          'backPath' => $backPath,
-          'backTitle' => $backTitle
-      ));
+
+
+
+
+    $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
+    $arrayDesCond = [];
+    $count = count($arrayValuesCond);
+    for ($i=0; $i < $count; $i++) {
+      array_push($arrayDesCond,$arrayValuesCond[$i]->getId());
+    }
+    $arrayValuesTipo = $em->getRepository('AppBundle:Tipo')->findBy(array('habilitado' => '0'));
+    $arrayDesTipo = [];
+    $count = count($arrayValuesTipo);
+    for ($i=0; $i < $count; $i++) {
+      array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
     }
 
-    /**
-     * Finds and displays a articulo entity.
-     *
-     * @Route("/{id}", name="articulo_show")
-     * @Method("GET")
-     */
-    public function showAction(Articulo $articulo)
-    {
-        $deleteForm = $this->createDeleteForm($articulo);
 
-        return $this->render('articulo/show.html.twig', array(
-            'articulo' => $articulo,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
+
+    return $this->render('articulo/new.html.twig', array(
+        'articulo' => $articulo,
+        'estados' => $estados,
+        'form' => $form->createView(),
+        'errors' => $errors,
+        'backPath' => $backPath,
+        'backTitle' => $backTitle,
+        'CondDeshabilitadas' => $arrayDesCond,
+        'TiposDeshabilitadas' => $arrayDesTipo
+    ));
+
+
+  }
 
     /**
      * Displays a form to edit an existing articulo entity.
@@ -227,62 +321,58 @@ class ArticuloController extends Controller
      */
     public function editAction(Request $request, Articulo $articulo)
     {
-        $deleteForm = $this->createDeleteForm($articulo);
+        // $deleteForm = $this->createDeleteForm($articulo);
         $editForm = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('articulo_edit', array('id' => $articulo->getId()));
+          $this->getDoctrine()->getManager()->flush();
+          $oficinaIdToRedirect = ($articulo->getOficina())->getId();
+          return $this->redirectToRoute('oficina_show', array('id' => $oficinaIdToRedirect, 'editado'=>'editado'));
         }
 
         return $this->render('articulo/edit.html.twig', array(
             'articulo' => $articulo,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    /**
-     * Deletes a articulo entity.
-     *
-     * @Route("/{id}", name="articulo_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, Articulo $articulo)
-    {
-        $form = $this->createDeleteForm($articulo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($articulo);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('articulo_index');
-    }
-
-    /**
-     * Creates a form to delete a articulo entity.
-     *
-     * @param Articulo $articulo The articulo entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Articulo $articulo)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('articulo_delete', array('id' => $articulo->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
-
-
-
-
-
+    // /**
+    //  * Deletes a articulo entity.
+    //  *
+    //  * @Route("/{id}/delete", name="articulo_delete")
+    //  * @Method("DELETE")
+    //  */
+    // public function deleteAction(Request $request, Articulo $articulo)
+    // {
+    //     $form = $this->createDeleteForm($articulo);
+    //     $form->handleRequest($request);
+    //
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $em = $this->getDoctrine()->getManager();
+    //         $em->remove($articulo);
+    //         $em->flush();
+    //     }
+    //
+    //     return $this->redirectToRoute('articulo_index');
+    // }
+    //
+    // /**
+    //  * Creates a form to delete a articulo entity.
+    //  *
+    //  * @param Articulo $articulo The articulo entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createDeleteForm(Articulo $articulo)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('articulo_delete', array('id' => $articulo->getId())))
+    //         ->setMethod('DELETE')
+    //         ->getForm()
+    //     ;
+    // }
 
 }

@@ -6,10 +6,15 @@ namespace AppBundle\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
+ * @UniqueEntity(
+ *   fields={"username"},
+ *   message="El nombre de usuario ya existe."
+ * )
  */
 class User extends BaseUser
 {
@@ -47,12 +52,17 @@ class User extends BaseUser
       * )
       */
       protected $lastname;
-
-      public function __construct()
-      {
-          parent::__construct();
-          // your own logic
-      }
+      protected $username;
+      protected $username_canonical;
+      protected $email;
+      protected $email_canonical;
+      protected $enabled;
+      protected $salt;
+      protected $password;
+      protected $last_login;
+      protected $confirmation_token;
+      protected $password_requested_at;
+      protected $roles;
 
       public function getLastname(){
         return $this->lastname;
@@ -66,7 +76,45 @@ class User extends BaseUser
         return $this->name;
       }
 
+      public function getEnabled(){
+        return $this->enabled;
+      }
+      public function setEnabled($n){
+        $this->enabled=$n;
+      }
+
       public function setName($n){
         $this->name=$n;
       }
-}
+
+      public function getUsername(){
+        return $this->username;
+      }
+
+      public function setUsername($n){
+        $this->username=$n;
+        $this->email = $n;
+        $this->enabled = true;
+      }
+
+      public function getEmail(){
+        return $this->email;
+      }
+
+      public function setEmail($n){
+        $this->email=$n;
+      }
+
+      public function getPassword(){
+        return $this->password;
+      }
+
+      public function setPassword($n){
+        $this->password=$n;
+      }
+
+      public function __construct() {
+          $this->enabled = true;
+      }
+
+  }

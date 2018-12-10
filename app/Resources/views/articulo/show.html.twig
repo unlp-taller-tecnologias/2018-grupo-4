@@ -5,7 +5,9 @@
   <br>
   <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
   <br>
-    <h1>Artículo: {{articulo.denominacion}}</h1>
+  <hr>
+    <h2>Artículo: {{articulo.denominacion}}</h2>
+<hr>
     <a href="#">Ver historial de oficinas de {{articulo.denominacion}}</a><br>
     <table style="margin: 15px;" class="table table">
         <tbody>
@@ -24,6 +26,18 @@
             <tr>
                 <th scope="row">Estado</th>
                 <td scope="row">{{ articulo.estado }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Condicion</th>
+                <td scope="row">{{ articulo.condicion }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Tipo</th>
+                <td scope="row">{{ articulo.tipo }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Fecha Entrada</th>
+                <td scope="row">{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('d-m-y') }}{% endif %}</td>
             </tr>
             <tr>
                 <th scope="row">Material</th>
@@ -66,14 +80,6 @@
                 <td scope="row">{{ articulo.importe }}</td>
             </tr>
             <tr>
-                <th scope="row">Fecha Entrada</th>
-                <td scope="row">{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-            <tr>
-                <th scope="row">Condicion</th>
-                <td scope="row">{{ articulo.condicion }}</td>
-            </tr>
-            <tr>
                 <th scope="row">Código Cuenta/Subcuenta</th>
                 <td scope="row">{{ articulo.codigoCuentaSubcuenta }}</td>
             </tr>
@@ -87,10 +93,6 @@
             </tr>
         </tbody>
     </table>
-    <br>
-    {% if is_granted("ROLE_ADMIN") %}
-    <a class="btn btn-dark" style="margin: 15px;" href="{{ path('articulo_edit', { 'id': articulo.id }) }}">Editar</a>
-    {% endif %}
     <br>
 </div>
 {% endblock %}
