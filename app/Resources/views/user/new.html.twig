@@ -1,16 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
+{% block content %}
 {% block body %}
-    <h1>User creation</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
+<div class="container">
+  <br>
+  <a href="{{ path('condicion_index') }}"><i class="fas fa-angle-left"></i> Listado de Usuarios</a>
+  <br>
+  <h1>Nuevo Usuario</h1>
+  {{ form_start(form) }}
+  {{ form_widget(form) }}
+  
+  {{ form_errors(form) }}
 
-    <ul>
-        <li>
-            <a href="{{ path('user_index') }}">Back to the list</a>
-        </li>
-    </ul>
+  <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+
+  {{ form_end(form) }}
+
+  </div>
+{% endblock %}
 {% endblock %}

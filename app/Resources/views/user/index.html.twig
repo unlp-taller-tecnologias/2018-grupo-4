@@ -1,41 +1,47 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
 
-{% block body %}
-    <h1>Users list</h1>
-
-    <table>
-        <thead>
+{% block content %}
+    <div class="container">
+      <br>
+      <h1>Listado de usuarios</h1>
+      <div class="">
+        <a class="btn btn-dark" href="{{ path('user_new') }}">(+) Agregar nuevo usuario</a>
+      </div>
+      <br>
+      <div class="table-responsive">
+        <table  id="tablaUser"
+                class="table table-hover table-striped"
+                data-toggle="table"
+                data-height="400"
+                data-side-pagination="server"
+                data-pagination="true"
+                data-page-list="[2, 5, 10, 20, 50, 100, 200]"
+                data-url="listadoUsers"
+                >
+          <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Lastname</th>
-                <th>Actions</th>
+              <th scope="row" data-field="username" data-sortable="true">Nombre de usuario</th>
+              <th scope="row" data-field="name" data-sortable="true">Nombre</th>
+              <th scope="row" data-field="lastname" data-sortable="true">Apellido</th>
+              <!-- <th scope="row" data-field="email" data-sortable="true">E-mail</th> -->
+              <th data-field="id" data-formatter="operateFormatter">Acciones</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('user_show', { 'id': user.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+          </thead>
+        </table>
+    </div>
+  </div>
+{% endblock %}
 
-    <ul>
-        <li>
-            <a href="{{ path('user_new') }}">Create a new user</a>
-        </li>
-    </ul>
+{% block javascripts %}
+{{ parent() }}
+<script>
+function operateFormatter(value, row, index) {
+  show = "{{ path('user_ver', {id: -1})}}";
+  show = show.replace('-1', value);
+  return [
+    `<a href="${show}">Ver</a>`,
+  ].join('');
+  }
+  var $table = $('#tablaUser');
+</script>
 {% endblock %}

@@ -49,6 +49,7 @@ security:
       - { path: ^/articulo/articulo_listFilter, role: ROLE_USER }
       - { path: ^/oficina/oficina_listFilter, role: ROLE_USER }
 
+      - { path: ^/user/listadoUsers, role: ROLE_USER }
 
       - { path: ^/articulo/, role: ROLE_ADMIN }
 

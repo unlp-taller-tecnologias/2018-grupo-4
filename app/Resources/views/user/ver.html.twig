@@ -1,0 +1,38 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+{% block body %}
+<div class="container">
+  <br>
+  <a href="{{ path('user_index') }}"><i class="fas fa-angle-left"></i> Listado de usuarios</a>
+  <br>
+    <h1>Usuario: {{ user.username }}</h1>
+    <table class="table table">
+        <tbody>
+            <tr>
+                <th scope="row">Nombre de usuario</th>
+                <td scope="row">{{ user.username }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Nombre</th>
+                <td scope="row">{{  user.name }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Apellido</th>
+                <td scope="row">{{ user.lastname }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Rol</th>
+              {% for role in user.roles %}
+                <td scope="row">{{role}}</td>
+              {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <a class="btn btn-dark" href="{{ path('user_edit', { 'id': user.id }) }}" style="margin: 15px; color:white;">Editar</a>
+    <br>
+</div>
+
+{% endblock %}
+{% endblock %}
