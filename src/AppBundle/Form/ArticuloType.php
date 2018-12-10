@@ -18,20 +18,20 @@ class ArticuloType extends AbstractType
     {
         $builder
           ->add('numInventario', null, array(
-              'label' => 'Número de inventario*',
+              'label' => 'Número de inventario(*)',
               'required' => true,
               'attr' => array(
               'placeholder' => 'Ingrese el número de inventario'
               )
           ))
           ->add('denominacion', null, array(
-            'label' => 'Denominación*',
+            'label' => 'Denominación(*)',
             'required' => true,
             'attr' => array('placeholder' => 'Ingrese denominación'
              )
           ))
           ->add('oficina', null, array(
-            'label' => 'Oficina*',
+            'label' => 'Oficina(*)',
             'attr' => array('placeholder' => 'Seleccione una oficina'
             )
           ))
@@ -99,7 +99,7 @@ class ArticuloType extends AbstractType
             )
           ))
           ->add('codigoCuentaSubcuenta', null, array(
-            'label' => 'Codigo de Cuenta/Subcuenta',
+            'label' => 'Código de Cuenta/Subcuenta',
             'attr' => array('placeholder' => 'Ingrese el código de cuenta/subcuenta'
             )
           ))

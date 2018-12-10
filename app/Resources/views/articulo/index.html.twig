@@ -3,11 +3,13 @@
 {% block content %}
   <div class="container">
     <br>
-    <h1>Artículos</h1>
+    <hr>
+    <h2>Artículos</h2>
+    <hr>
     <br>
     {% block filters %}
 
-    <div class="jumbotron" style="padding-top: 2%; padding-bottom: 1%;">
+    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
       <h4>Buscar artículos por:</h4>
        <div class="form-row" >
          <div class="form-group col-md-6">
@@ -41,7 +43,9 @@
       </div>
     </div>
     {% endblock %}
-    <h3>Listado de todos los artículos</h3>
+    <hr>
+    <h4>Listado de todos los artículos</h4>
+    <hr>
     <div class="table-responsive">
       <div id="toolbar">
         <button id="button1" hidden class="btn btn-default">filterBy</button>
@@ -140,7 +144,7 @@ xhttpTipos.onreadystatechange = function() {
     var opciones = "";
     for(ti in tipos){
       if (tipos[ti].habilitado == 'Si') {
-        opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nomenclador +"</option>";
+        opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].concepto +"</option>";
       }
     }
     $("#tipo").append(opciones);

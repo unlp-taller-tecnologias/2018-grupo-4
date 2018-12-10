@@ -3,16 +3,18 @@
 {% block content %}
   <div class="container">
     <br>
-    <h1>Oficinas</h1>
+    <hr>
+    <h2>Oficinas</h2>
+    <hr>
     {% if is_granted("ROLE_ADMIN") %}
     <div class="">
-      <a class="btn btn-dark" href="{{ path('oficina_new') }}">Agregar oficina</a>
+      <a class="btn btn-dark" href="{{ path('oficina_new') }}">(+) Agregar oficina</a>
     </div>
     {% endif %}
     <br>
     {% block filters %}
 
-    <div class="jumbotron" style="padding-top: 2%; padding-bottom: 1%;">
+    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
       <h4>Buscar oficinas por:</h4>
        <div class="form-row" >
          <div class="form-group col-md-6">
@@ -37,7 +39,9 @@
     </div>
     {% endblock %}
     <div class="table-responsive">
+    <hr>
     <h4>Listado de oficinas</h4>
+    <hr>
       <table  id="tablaOficinas"
               class="table table-hover table-striped"
               data-toggle="table"

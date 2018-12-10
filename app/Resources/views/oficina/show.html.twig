@@ -5,13 +5,15 @@
   <br>
   <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
   <br>
-    <h1>Oficina: {{oficina.nombre}}</h1>
+    <hr>
+    <h2>Oficina: {{oficina.nombre}}</h2>
+    <hr>
     {% if is_granted("ROLE_ADMIN") %}
     <div style="margin-bottom: 15px;">
       <a href="#">Actualmente, existe una operación en curso. Continuar</a><br>
     </div>
     <div class="">
-      <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}">Agregar nuevo artículo</a>
+      <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}">(+) Agregar nuevo artículo</a>
       <a class="btn btn-dark" href="{{ path('transferencia_new', {'id': oficina.id}) }}">Iniciar Transferencia</a>
       <a class="btn btn-dark" href="{{ path('baja_new', {'id': oficina.id}) }}">Iniciar Baja</a>
     </div>
@@ -36,7 +38,7 @@
 
     {% block filters %}
 
-    <div class="jumbotron" style="padding-top: 2%; padding-bottom: 1%;">
+    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
       <h4>Buscar artículos por:</h4>
        <div class="form-row" >
          <div class="form-group col-md-6">
@@ -70,10 +72,11 @@
       </div>
     </div>
     {% endblock %}
+      <hr>
       <h4>Artículos de la oficina: {{oficina.nombre}}</h4>
-
-      <div class="table-responsive">
-        <table  id="tablaArticulos"
+      <hr>
+      <div style="padding-top: 30px;" class="table-responsive">
+        <table id="tablaArticulos"
                 class="table table-hover table-striped"
                 data-toggle="table"
                 data-height="700"
@@ -143,7 +146,7 @@ xhttpTipos.onreadystatechange = function() {
     var opciones = "";
     for(ti in tipos){
       if (tipos[ti].habilitado == 'Si') {
-          opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nomenclador +"</option>";
+          opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].concepto +"</option>";
       }
     }
     $("#tipo").append(opciones);
