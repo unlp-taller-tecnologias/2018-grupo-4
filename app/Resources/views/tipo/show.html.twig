@@ -3,14 +3,18 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i> Listado de Tipos</a>
+  <a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i> Listado de Tipos de Artículos</a>
   <br>
-    <h1>Tipo: {{ tipo.nomenclador }}</h1>
+    <h2>Tipo de Artículo: {{ tipo.nomenclador }}</h2>
     <table class="table table">
         <tbody>
             <tr>
-                <th scope="row">Codigo</th>
+                <th scope="row">Código</th>
                 <td scope="row">{{ tipo.codigo }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Concepto</th>
+                <td scope="row">{{ tipo.concepto }}</td>
             </tr>
             <tr>
                 <th scope="row">Nomenclador</th>
@@ -21,10 +25,6 @@
                 <td scope="row">{{ tipo.cuenta }}</td>
             </tr>
             <tr>
-                <th scope="row">Concepto</th>
-                <td scope="row">{{ tipo.concepto }}</td>
-            </tr>
-            <tr>
                 <th scope="row">Grupo</th>
                 <td scope="row">{{ tipo.grupo }}</td>
             </tr>
@@ -33,17 +33,19 @@
                 <td scope="row">{{ tipo.subgrupo }}</td>
             </tr>
             <tr>
-                <th scope="row">Descripcion</th>
+                <th scope="row">Descripción</th>
                 <td scope="row">{{ tipo.descripcion }}</td>
             </tr>
             <tr>
-                <th scope="row">Vidautil</th>
+                <th scope="row">Vida útil</th>
                 <td scope="row">{{ tipo.vidaUtil }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Habilitado</th>
+                <td scope="row">{% if tipo.habilitado %}Si{% else %}No{% endif %}</td>
             </tr>
         </tbody>
     </table>
-    <br>
-    <a class="btn btn-dark" style="margin: 15px;" href="{{ path('tipo_edit', { 'id': tipo.id }) }}">Editar</a>
-    <br>
+
 </div>
 {% endblock %}

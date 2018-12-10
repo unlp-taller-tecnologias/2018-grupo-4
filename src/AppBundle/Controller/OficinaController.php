@@ -23,14 +23,15 @@ class OficinaController extends Controller
      * @Route("/", name="oficina_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $oficinas = $em->getRepository('AppBundle:Oficina')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('oficina/index.html.twig', array(
             'oficinas' => $oficinas,
+            'editado' => $editado,
         ));
     }
 
@@ -169,7 +170,7 @@ class OficinaController extends Controller
             $em->persist($oficina);
             $em->flush();
 
-            return $this->redirectToRoute('oficina_show', array('id' => $oficina->getId()));
+            return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
         }
 
         return $this->render('oficina/new.html.twig', array(
@@ -239,13 +240,13 @@ class OficinaController extends Controller
     public function editAction(Request $request, Oficina $oficina)
     {
         $deleteForm = $this->createDeleteForm($oficina);
-        $editForm = $this->createForm('AppBundle\Form\OficinaType', $oficina);
+        $editForm = $this->createForm('AppBundle\Form\OficinaType', $oficina, array("edit" => false));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('oficina_edit', array('id' => $oficina->getId()));
+            return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
         }
 
         return $this->render('oficina/edit.html.twig', array(
@@ -272,7 +273,7 @@ class OficinaController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('oficina_index');
+        return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
     }
 
     /**

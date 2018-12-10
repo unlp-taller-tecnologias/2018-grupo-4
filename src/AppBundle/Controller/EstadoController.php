@@ -22,14 +22,15 @@ class EstadoController extends Controller
      * @Route("/", name="estado_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $estados = $em->getRepository('AppBundle:Estado')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('estado/index.html.twig', array(
             'estados' => $estados,
+            'editado' => $editado,
         ));
     }
     /**
@@ -114,7 +115,7 @@ class EstadoController extends Controller
             $em->persist($estado);
             $em->flush();
 
-            return $this->redirectToRoute('estado_show', array('id' => $estado->getId()));
+            return $this->redirectToRoute('estado_index', array('editado' => 'editado'));
         }
 
         return $this->render('estado/new.html.twig', array(
@@ -148,13 +149,13 @@ class EstadoController extends Controller
     public function editAction(Request $request, Estado $estado)
     {
         $deleteForm = $this->createDeleteForm($estado);
-        $editForm = $this->createForm('AppBundle\Form\EstadoType', $estado, array("edit" => true));
+        $editForm = $this->createForm('AppBundle\Form\EstadoType', $estado, array("edit" => false));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('estado_edit', array('id' => $estado->getId()));
+            return $this->redirectToRoute('estado_index', array('editado' => 'editado'));
         }
 
         return $this->render('estado/edit.html.twig', array(
@@ -163,6 +164,31 @@ class EstadoController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
+    /**
+     * Displays a form to edit an existing estado entity.
+     *
+     * @Route("/{id}/visibility", name="estado_visibility")
+     * @Method({"GET", "POST"})
+     */
+    public function visibilityAction(Request $request, Estado $estado)
+    {
+        $editForm = $this->createForm('AppBundle\Form\EstadoType', $estado, array("visibility" => false));
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('estado_index', array('editado' => 'editado'));
+        }
+
+        return $this->render('estado/edit.html.twig', array(
+            'estado' => $estado,
+            'edit_form' => $editForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
 
     /**
      * Deletes a estado entity.
