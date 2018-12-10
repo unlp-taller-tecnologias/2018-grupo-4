@@ -6,8 +6,9 @@
   <br>
   <a href="{{ path('user_index') }}"><i class="fas fa-angle-left"></i> Listado de Usuarios</a>
   <br>
-  <h1>Editar Usuario: {{ user.username }}</h1>
-
+  <hr>
+  <h2>Editar Usuario: {{ user.username }}</h2>
+  <hr>
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
         <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>

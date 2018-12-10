@@ -5,14 +5,22 @@
   <br>
   <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
   <br>
-    <h1>Oficina: {{oficina.nombre}}</h1>
+    <hr>
+    <h2>Oficina: {{oficina.nombre}}</h2>
+    <hr>
     {% if is_granted("ROLE_ADMIN") %}
+
+    {% if operaciones %}
     <div style="margin-bottom: 15px;">
-      <a href="#">Actualmente, existe una operación en curso. Continuar</a><br>
+      <a id="continuar" href="{{ path('transferencia_continue', {'id_oficina': oficina.id}) }}">Actualmente, existe una operación en curso. Continuar</a><br>
     </div>
+    {% endif %}
+
     <div class="">
       <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}"><i class="fas fa-plus"></i> Agregar nuevo artículo</a>
-      <a class="btn btn-dark" href="{{ path('transferencia_new', {'id': oficina.id}) }}">Iniciar Transferencia</a>
+      {% if not operaciones %}
+        <a class="btn btn-dark" href="{{ path('transferencia_new', {'id_oficina': oficina.id}) }}">Iniciar Transferencia</a>
+      {% endif %}
       <a class="btn btn-dark" href="{{ path('baja_new', {'id': oficina.id}) }}">Iniciar Baja</a>
     </div>
     {% endif %}
@@ -36,7 +44,7 @@
 
     {% block filters %}
 
-    <div class="jumbotron" style="padding-top: 2%; padding-bottom: 1%;">
+    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
       <h4>Buscar artículos por:</h4>
        <div class="form-row" >
          <div class="form-group col-md-6">
@@ -70,10 +78,13 @@
       </div>
     </div>
     {% endblock %}
+      <hr>
       <h4>Artículos de la oficina: {{oficina.nombre}}</h4>
-
-      <div class="table-responsive">
-        <table  id="tablaArticulos"
+      <hr>
+      <div style="padding-top: 30px;" class="table-responsive">
+        <button id="exportButtonPdf" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</button>
+        <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
+        <table id="tablaArticulos"
                 class="table table-hover table-striped"
                 data-toggle="table"
                 data-height="700"
@@ -85,11 +96,12 @@
                 >
           <thead>
             <tr>
-              <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-              <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+              <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
+              <th scope="row" data-field="numExpediente" data-sortable="true">NroExpediente</th>
               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
               <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
               <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+              <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
               <th data-field="id" data-formatter="operateFormatterShow">Ver</th>
               {% if is_granted("ROLE_ADMIN") %}
               <th data-field="id" data-formatter="operateFormatterEdit">Editar</th>
@@ -121,6 +133,164 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
+
+  // $("#guardar").click(function(){
+  //
+  //   //console.log('guardar');
+  //   $.ajax({
+  //     method: "POST",
+  //     url: "",
+  //     data: {
+  //             "oficina": "{{oficina}}"
+  //           } ,
+  //     success: function(data) {
+  //
+  //       console.log(data);
+  //       alert('La transferencia ha sido guardada con exito');
+  //       $tableTest.bootstrapTable('load',data);
+  //     },
+  //     error: function(){
+  //
+  //     }
+  //     });
+  //   });
+
+
+  //pdf export
+  jQuery(function ($) {
+    $("#exportButtonPdf").click(function () {
+        var dataSource = shield.DataSource.create({
+
+            data: "#tablaArticulos",
+            schema: {
+                type: "table",
+                fields: {
+                    NroInventario: { type: Number },
+                    NroExpediente: { type: Number },
+                    Denominación: { type: String },
+                    Tipo: { type: String },
+                    Estado: { type: String }
+                }
+            }
+        });
+        dataSource.read().then(function (data) {
+            var pdf = new shield.exp.PDFDocument({
+                author: "PrepBootstrap",
+                created: new Date()
+            });
+            pdf.addPage("a4", "portrait");
+            pdf.table(
+                50,
+                50,
+                data,
+                [
+                    { field: "NroInventario", title: "Numero de Inventario", width: 120 },
+                    { field: "Nro.Expendiente", title: "Numero de Expediente", width: 125 },
+                    { field: "Denominación", title: "Denominación", width: 100 },
+                    { field: "Tipo", title: "Tipo", width: 50 },
+                    { field: "Estado", title: "Estado", width: 50 }
+                ],
+                {
+                    margins: {
+                        top: 50,
+                        left: 50
+                    }
+                }
+            );
+            pdf.saveAs({
+                fileName: "PrepBootstrapPDF"
+            });
+        });
+    });
+
+//fin pdf
+
+//excel export
+
+    $("#exportButtonExcel").click(function () {
+        var dataSourceExcel = shield.DataSource.create({
+            data: "#tablaArticulos",
+            schema: {
+                type: "table",
+                fields: {
+                  NroInventario: { type: Number },
+                  NroExpediente: { type: Number },
+                  Denominación: { type: String },
+                  Tipo: { type: String },
+                  Estado: { type: String }
+                }
+            }
+        });
+        dataSourceExcel.read().then(function (data) {
+            new shield.exp.OOXMLWorkbook({
+                author: "PrepBootstrap",
+                worksheets: [
+                    {
+                        name: "PrepBootstrap Table",
+                        rows: [
+                            {
+                                cells: [
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        width: 120,
+                                        value: "Numero de Inventario"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Numero de Expediente"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Denominacion"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Tipo"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Estado"
+                                    }
+                                ]
+                            }
+                        ].concat($.map(data, function(item) {
+                            console.log(item);
+                            return {
+                                cells: [
+                                    { type: Number, value: item.NroInventario },
+                                    { type: Number, value: item.NroExpediente },
+                                    { type: String, value: item.Denominación },
+                                    { type: String, value: item.Tipo },
+                                    { type: String, value: item.Estado }
+                                ]
+                            };
+                        }))
+                    }
+                ]
+            }).saveAs({
+                fileName: "PrepBootstrapExcel"
+            });
+        });
+    });
+});
+
+
+
   {% if editado == 'editado' %}
     $('#editModal').modal('show');
   {%endif%}
@@ -164,7 +334,7 @@ xhttpTipos.onreadystatechange = function() {
     var opciones = "";
     for(ti in tipos){
       if (tipos[ti].habilitado == 'Si') {
-          opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nomenclador +"</option>";
+          opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].concepto +"</option>";
       }
     }
     $("#tipo").append(opciones);
@@ -172,6 +342,7 @@ xhttpTipos.onreadystatechange = function() {
 };
 xhttpTipos.open("GET", "{{ path('tipo_list') }}", true);
 xhttpTipos.send();
+
 
 
   function operateFormatter(value, row, index) {

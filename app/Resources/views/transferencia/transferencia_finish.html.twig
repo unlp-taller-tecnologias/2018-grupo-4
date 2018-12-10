@@ -1,16 +1,40 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-<div class="container">
-    <h1>Transferencia</h1>
-    <div class="jumbotron" style="padding: 30px;">
-      <h4>La transferencia ha sido realizada con éxito hacia la oficina {{transferencias.oficinaDestino}}</h4>
-      <div class="row justify-content-center">
-        <ul>
-          <a class="btn btn-dark" href="#" style="margin-top: 10px;">Ir a {{transferencias.oficinaDestino}}</a>
-          <a class="btn btn-dark" href="{{ path('oficina_index') }}" style="margin-top: 10px;">Volver a listado de oficinas</a>
-        </ul>
-    </div>
-    </div>
-  </div>
+
+    <div class="container">
+        <h1>Transferencia</h1>
+        <div class="jumbotron" style="padding: 30px;">
+          <h4>La transferencia ha sido realizada con éxito hacia la oficina {{transferencias.oficinaDestino}}</h4>
+          <div id="dataTransfer" class="row justify-content-center">
+            <ul>
+              <a class="btn btn-dark" href="#" style="margin-top: 10px;">Ir a {{transferencias.oficinaDestino}}</a>
+              <a class="btn btn-dark" href="{{ path('oficina_index') }}" style="margin-top: 10px;">Volver a listado de oficinas</a>
+            </ul>
+        </div>
+        </div>
+          <a class="btn btn-dark" href="pdf_export" >Exportar</a>
+      </div>
+  <canvas id="myCanvas" width="300" height="300">
+  </canvas>
+{% endblock %}
+
+{% block transferenciaJs %}
+
+<script>
+  //pdf
+
+
+              // function genPDF() {
+              //   var c = document.getElementById("myCanvas");
+              //   var ctx = c.getContext("2d");
+              //   ctx.font = "30px Arial";
+              //   ctx.fillText("Hello World",10,50);
+              //
+              //   var doc = new  jsPDF();
+              //   var img = ctx.toDataURL();
+              //   doc.addImage(img, 'JPEG', 15, 40, 160, 100);
+              //   doc.save('text.pdf');
+              // }
+</script>
 {% endblock %}

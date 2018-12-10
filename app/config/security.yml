@@ -54,6 +54,8 @@ security:
       - { path: ^/articulo/, role: ROLE_ADMIN }
 
       - { path: ^/transferencia/, role: ROLE_ADMIN }
+      - { path: ^/transferencia/new/, role: ROLE_ADMIN }
+      - { path: ^/transferencia/new/test, role: ROLE_USER }
       - { path: ^/baja/, role: ROLE_ADMIN }
       - { path: ^/historial/, role: ROLE_ADMIN }
 

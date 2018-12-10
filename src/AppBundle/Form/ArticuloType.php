@@ -31,6 +31,11 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Ingrese denominación'
              )
           ))
+
+          // ->add('estadoAdicional', null, array(
+          //      'label'=> 'estado Adicional'
+          // ))
+
           ->add('oficina', null, array(
             'label' => 'Oficina(*)',
             'attr' => array('placeholder' => 'Seleccione una oficina'
@@ -41,10 +46,17 @@ class ArticuloType extends AbstractType
             'widget' => 'single_text',
             'required' => true
           ))
+
+
+          ->add('tipo', null, array(
+               'label'=> 'Tipo'
+          ))
+
           ->add('condicion', null, array(
                'label'=> 'Condición'
           ))
-          ->add('tipo')
+      
+
 
           ->add('material', null, array(
             'label' => 'Material',
@@ -105,7 +117,7 @@ class ArticuloType extends AbstractType
             )
           ))
           ->add('codigoCuentaSubcuenta', null, array(
-            'label' => 'Codigo de Cuenta/Subcuenta',
+            'label' => 'Código de Cuenta/Subcuenta',
             'attr' => array('placeholder' => 'Ingrese el código de cuenta/subcuenta'
             )
           ))

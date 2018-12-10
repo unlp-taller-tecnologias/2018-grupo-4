@@ -91,13 +91,15 @@ class ArticuloController extends Controller
       );
 
       foreach($articulos as $articulo) {
+
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
           'numInventario' => $articulo->getNumInventario(),
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-          'estado' => $articulo->getEstado()->getNombre()
+          'estado' => $articulo->getEstado()->getNombre(),
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
         );
       };
 
@@ -152,6 +154,7 @@ class ArticuloController extends Controller
         'rows' => array()
       );
 
+
       foreach($articulos as $articulo) {
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
@@ -159,7 +162,8 @@ class ArticuloController extends Controller
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-          'estado' => $articulo->getEstado()->getNombre()
+          'estado' => $articulo->getEstado()->getNombre(),
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
         );
       };
 
@@ -169,10 +173,10 @@ class ArticuloController extends Controller
     /**
      * Creates a new articulo entity.
      *
-     * @Route("/new", name="articulo_new")
+     * @Route("{id}/new", name="articulo_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, Oficina $oficina)
     {
       $em = $this->getDoctrine()->getManager();
       $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
@@ -184,8 +188,10 @@ class ArticuloController extends Controller
       $errors = array();
       $backPath = 'articulos_index';
       $backTitle = 'articulos';
-
-      $oficinaId = $request->query->get('id', null);      
+      $em = $this->getDoctrine()->getManager();
+      $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
+      $oficinaId = $oficina->getId();
+           
       if (!is_null($oficinaId))
       {
         $backPath = 'oficina_index';
@@ -207,6 +213,10 @@ class ArticuloController extends Controller
         if ($cantidad == '1')
         {
           $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
+          $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
+          $estadoAdicional = $request->request->get("estadoAdicional");
+          $estadoAdicionalReal = $em->getRepository('AppBundle:estadoAdicional')->findOneByNombre($estadoAdicional);
+          $articulo->setEstadoAdicional($estadoAdicionalReal);
           $articulo->setEstado($estado);
           $articulo->setUser($this->getUser());
           if ($oficina) {
@@ -270,6 +280,9 @@ class ArticuloController extends Controller
       }
 
 
+
+
+
     $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
     $arrayDesCond = [];
     $count = count($arrayValuesCond);
@@ -283,8 +296,11 @@ class ArticuloController extends Controller
       array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
     }
 
+
+
     return $this->render('articulo/new.html.twig', array(
         'articulo' => $articulo,
+        'estados' => $estados,
         'form' => $form->createView(),
         'errors' => $errors,
         'backPath' => $backPath,
@@ -292,6 +308,8 @@ class ArticuloController extends Controller
         'CondDeshabilitadas' => $arrayDesCond,
         'TiposDeshabilitadas' => $arrayDesTipo
     ));
+
+
   }
 
     /**
@@ -323,7 +341,7 @@ class ArticuloController extends Controller
     // /**
     //  * Deletes a articulo entity.
     //  *
-    //  * @Route("/{id}", name="articulo_delete")
+    //  * @Route("/{id}/delete", name="articulo_delete")
     //  * @Method("DELETE")
     //  */
     // public function deleteAction(Request $request, Articulo $articulo)

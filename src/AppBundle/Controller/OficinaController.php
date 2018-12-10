@@ -181,15 +181,30 @@ class OficinaController extends Controller
 
     /**
      * Finds and displays a oficina entity.
-     *
      * @Route("/{id}", name="oficina_show")
      * @Method("GET")
      */
     public function showAction(Request $request, Oficina $oficina)
     {
         $deleteForm = $this->createDeleteForm($oficina);
+
+
+        $em = $this->getDoctrine()->getManager();
+        $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
+        $existenOperacionesPendientes = $transferenciaRepository->findBy(
+          array('finalizada' => 2,
+          'oficinaOrigen' => $oficina)
+        );
+        if ($existenOperacionesPendientes == null) {
+          $operacionesPendientes = false;
+        }else{
+          $operacionesPendientes = true;
+        }
+
         $editado = $request->query->get('editado');
+
         return $this->render('oficina/show.html.twig', array(
+            'operaciones' => $operacionesPendientes,
             'oficina' => $oficina,
             'delete_form' => $deleteForm->createView(),
             'editado' => $editado,
@@ -225,7 +240,8 @@ class OficinaController extends Controller
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-          'estado' => $articulo->getEstado()->getNombre()
+          'estado' => $articulo->getEstado()->getNombre(),
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
         );
       };
 

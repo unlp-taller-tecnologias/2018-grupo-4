@@ -1,15 +1,14 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-<div class="container">
-<br>
-<a href="{{ path('tipo_index') }}"><i class="fas fa-angle-left"></i> Listado de Tipos de Artículos</a>
-<br>
-<hr>
-    <h2>Editar Tipo de Artículo: {{ tipo.nomenclador }}</h2>
-<hr>
+  <div class="container">
+    <br>
+    <a href="{{ path('estadoAdicional_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados</a>
+    <br>
+    <h1>Editar Estado: {{ estado.nombre }}</h1>
     {{ form_start(edit_form) }}
     {{ form_widget(edit_form) }}
     <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
     {{ form_end(edit_form) }}
+  </div>
 {% endblock %}

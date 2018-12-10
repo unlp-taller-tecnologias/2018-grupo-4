@@ -31,9 +31,9 @@ class TransferenciaType extends AbstractType
                 ))
 
                 ->add('oficina_destino', null, array(
-                  'label' => 'Oficina destino*'
+                  'label' => 'Oficina destino*',
+                  'required' => true
                 ))
-
                 ->add('observaciones', TextareaType::class, array(
                   'attr' => array('class' => 'tinymce'),
                   'required' => false

@@ -61,6 +61,15 @@ class Articulo
     /**
      * @var string
      *
+     * @ORM\ManyToOne(targetEntity="estadoAdicional")
+     * @ORM\JoinColumn(name="estadoAdicional_id", referencedColumnName="id")
+     */
+    private $estadoAdicional;
+
+
+    /**
+     * @var string
+     *
      * @ORM\ManyToOne(targetEntity="Condicion")
      * @ORM\JoinColumn(name="condicion_id", referencedColumnName="id")
      */
@@ -196,6 +205,11 @@ class Articulo
         return $this->id;
     }
 
+
+
+
+
+
     /**
      * Set numInventario
      *
@@ -266,6 +280,31 @@ class Articulo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+
+    /**
+     * Set estadoAdicional
+     *
+     * @param string $estadoAdicional
+     *
+     * @return Articulo
+     */
+    public function setEstadoAdicional($estadoAdicional)
+    {
+        $this->estadoAdicional = $estadoAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoAdicional
+     *
+     * @return string
+     */
+    public function getEstadoAdicional()
+    {
+        return $this->estadoAdicional;
     }
 
     /**
