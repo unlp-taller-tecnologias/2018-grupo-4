@@ -5,12 +5,12 @@
 
 <div class="container">
   <br>
-  <a href="{{ path('condicion_index') }}"><i class="fas fa-angle-left"></i> Listado de Usuarios</a>
+  <a href="{{ path('user_index') }}"><i class="fas fa-angle-left"></i> Listado de Usuarios</a>
   <br>
   <h1>Nuevo Usuario</h1>
   {{ form_start(form) }}
   {{ form_widget(form) }}
-  
+
   {{ form_errors(form) }}
 
   <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
