@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use \DateTime;
 
 class ArticuloType extends AbstractType
@@ -90,9 +91,14 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Ingrese el detalle del origen del artículo'
             )
           ))
-          ->add('moneda', null, array(
-            'label' => 'Moneda'
-          ))
+          ->add('moneda', ChoiceType::class, array(
+                'choices' => array(
+                    'Peso (ARS)' => 'peso',
+                    'Dólar (USD)'  => 'dolar'
+                ) ) )
+          // ->add('moneda', null, array(
+          //   'label' => 'Moneda'
+          // ))
           ->add('importe', null, array(
             'label' => 'Importe',
             'attr' => array('placeholder' => 'Ingrese el importe del artículo'

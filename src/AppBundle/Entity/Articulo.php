@@ -46,6 +46,13 @@ class Articulo
     /**
      * @var string
      *
+     * @ORM\Column(name="moneda", type="string", length=100)
+     */
+    private $moneda;
+
+    /**
+     * @var string
+     *
      * @ORM\ManyToOne(targetEntity="Estado")
      * @ORM\JoinColumn(name="estado_id", referencedColumnName="id")
      */
@@ -58,14 +65,6 @@ class Articulo
      * @ORM\JoinColumn(name="condicion_id", referencedColumnName="id")
      */
     private $condicion;
-
-    /**
-     * @var Moneda
-     *
-     * @ORM\ManyToOne(targetEntity="Moneda")
-     * @ORM\JoinColumn(name="moneda_id", referencedColumnName="id")
-     */
-    private $moneda;
 
     /**
      * @var Tipo

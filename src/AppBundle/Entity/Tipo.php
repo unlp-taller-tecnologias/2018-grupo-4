@@ -314,7 +314,7 @@ class Tipo
     }
 
     public function __toString() {
-        return $this->nomenclador;
+        return $this->concepto;
     }
 
     public function __construct() {
