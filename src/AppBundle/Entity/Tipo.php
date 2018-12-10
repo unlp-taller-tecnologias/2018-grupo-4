@@ -316,4 +316,8 @@ class Tipo
     public function __toString() {
         return $this->nomenclador;
     }
+
+    public function __construct() {
+        $this->habilitado = true;
+    }
 }

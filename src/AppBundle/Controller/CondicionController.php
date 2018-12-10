@@ -21,14 +21,15 @@ class CondicionController extends Controller
      * @Route("/", name="condicion_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $condicions = $em->getRepository('AppBundle:Condicion')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('condicion/index.html.twig', array(
             'condicions' => $condicions,
+            'editado' => $editado,
         ));
     }
 
@@ -114,7 +115,7 @@ class CondicionController extends Controller
             $em->persist($condicion);
             $em->flush();
 
-            return $this->redirectToRoute('condicion_show', array('id' => $condicion->getId()));
+            return $this->redirectToRoute('condicion_index', array('editado' => 'editado'));
         }
 
         return $this->render('condicion/new.html.twig', array(
@@ -148,19 +149,44 @@ class CondicionController extends Controller
     public function editAction(Request $request, Condicion $condicion)
     {
         $deleteForm = $this->createDeleteForm($condicion);
-        $editForm = $this->createForm('AppBundle\Form\CondicionType', $condicion, array("edit" => true));
+        $editForm = $this->createForm('AppBundle\Form\CondicionType', $condicion, array("edit" => false));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('condicion_edit', array('id' => $condicion->getId()));
+            return $this->redirectToRoute('condicion_index', array('editado' => 'editado'));
         }
 
         return $this->render('condicion/edit.html.twig', array(
             'condicion' => $condicion,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    /**
+     * Displays a form to edit an existing condicion entity.
+     *
+     * @Route("/{id}/visibility", name="condicion_visibility")
+     * @Method({"GET", "POST"})
+     */
+    public function visibilityAction(Request $request, Condicion $condicion)
+    {
+
+        $editForm = $this->createForm('AppBundle\Form\CondicionType', $condicion, array("visibility" => false));
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('condicion_index', array('editado' => 'editado'));
+        }
+
+        return $this->render('condicion/edit.html.twig', array(
+            'condicion' => $condicion,
+            'edit_form' => $editForm->createView(),
+
         ));
     }
 

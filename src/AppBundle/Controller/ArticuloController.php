@@ -24,7 +24,7 @@ class ArticuloController extends Controller
      * @Route("/", name="articulo_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
       // var_dump($this->getUser()->getUsername());
       //
@@ -44,9 +44,10 @@ class ArticuloController extends Controller
         $em->flush();
 
         $articulos = $em->getRepository('AppBundle:Articulo')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('articulo/index.html.twig', array(
             'articulos' => $articulos,
+            'editado' => $editado,
         ));
     }
 
@@ -264,7 +265,7 @@ class ArticuloController extends Controller
     for ($i=0; $i < $count; $i++) {
       array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
     }
-    
+
     return $this->render('articulo/new.html.twig', array(
         'articulo' => $articulo,
         'form' => $form->createView(),

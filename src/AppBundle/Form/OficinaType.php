@@ -17,7 +17,7 @@ class OficinaType extends AbstractType
     {
         $builder
         ->add('nombre', null, array(
-            'label' => 'Nombre de la oficina*',
+            'label' => 'Nombre(*)',
             'attr' => array(
             'placeholder' => 'Ingrese un nombre para la oficina'
             )
@@ -30,7 +30,7 @@ class OficinaType extends AbstractType
         ))
 
         ->add('numeroCarpeta',IntegerType::class, array(
-            'label' => 'Número de carpeta*',
+            'label' => 'Número de carpeta(*)',
             'attr' => array(
             'min' => 1,
             'placeholder' => 'Ingrese un número de carpeta para la oficina'
@@ -44,7 +44,8 @@ class OficinaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Oficina'
+            'data_class' => 'AppBundle\Entity\Oficina',
+            'edit' => true,
         ));
     }
 
