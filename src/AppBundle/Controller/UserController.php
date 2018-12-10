@@ -23,14 +23,16 @@ class UserController extends Controller
      * @Route("/", name="user_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
+
         $em = $this->getDoctrine()->getManager();
 
         $users = $em->getRepository('AppBundle:User')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('user/index.html.twig', array(
             'users' => $users,
+            'editado' => $editado,
         ));
     }
 
@@ -43,7 +45,10 @@ class UserController extends Controller
     public function newAction(Request $request)
     {
         $user = new User();
-        $form = $this->createForm('AppBundle\Form\UserType', $user);
+        $editRole = $this->isGranted('ROLE_SUPER_ADMIN');
+        $form = $this->createForm('AppBundle\Form\UserType', $user, array(
+          'edit_role' => $editRole
+        ));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -51,7 +56,7 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('user_show', array('id' => $user->getId()));
+            return $this->redirectToRoute('user_index', array('editado' => 'editado'));
         }
 
         return $this->render('user/new.html.twig', array(
@@ -85,13 +90,18 @@ class UserController extends Controller
     public function editAction(Request $request, User $user)
     {
         // $deleteForm = $this->createDeleteForm($user);
-        $editForm = $this->createForm('AppBundle\Form\UserType', $user);
+        $editRole = $this->isGranted('ROLE_SUPER_ADMIN');
+        $editForm = $this->createForm('AppBundle\Form\UserType', $user, array(
+          'edit_role' => $editRole, "edit" => false
+        ));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $userManager = $this->container->get('fos_user.user_manager');
+            $userManager->updatePassword($user);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('user_index', array('editado' => 'editado'));
         }
 
         return $this->render('user/edit.html.twig', array(
@@ -101,10 +111,40 @@ class UserController extends Controller
         ));
     }
 
+    /**
+     * Displays a form to edit an existing user entity.
+     *
+     * @Route("/{id}/visibility", name="user_visibility")
+     * @Method({"GET", "POST"})
+     */
+    public function visibilityAction(Request $request, User $user)
+    {
+
+        $editRole = $this->isGranted('ROLE_SUPER_ADMIN');
+        $editForm = $this->createForm('AppBundle\Form\UserType', $user, array(
+          'edit_role' => $editRole, 'visibility' => false
+        ));
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $userManager = $this->container->get('fos_user.user_manager');
+            $userManager->updatePassword($user);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('user_index', array('editado' => 'editado'));
+        }
+
+        return $this->render('user/edit.html.twig', array(
+            'user' => $user,
+            'edit_form' => $editForm->createView(),
+        ));
+    }
+
+
     // /**
     //  * Deletes a user entity.
     //  *
-    //  * @Route("/{id}", name="user_delete")
+    //  * @Route("/{id}/delete", name="user_delete")
     //  * @Method("DELETE")
     //  */
     // public function deleteAction(Request $request, User $user)
@@ -121,21 +161,21 @@ class UserController extends Controller
     //     return $this->redirectToRoute('user_index');
     // }
 
-    /**
-     * Creates a form to delete a user entity.
-     *
-     * @param User $user The user entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(User $user)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('user_delete', array('id' => $user->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+    // /**
+    //  * Creates a form to delete a user entity.
+    //  *
+    //  * @param User $user The user entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createDeleteForm(User $user)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('user_delete', array('id' => $user->getId())))
+    //         ->setMethod('DELETE')
+    //         ->getForm()
+    //     ;
+    // }
 
 
 
@@ -186,7 +226,7 @@ class UserController extends Controller
           'username' => $user->getUsername(),
           'name' => $user->getName(),
           'lastname' => $user->getLastname(),
-          //'email' => $user-getEmail(),
+          'enabled' => ($user->getEnabled() == 1)?'Si':'No',
         );
       };
 

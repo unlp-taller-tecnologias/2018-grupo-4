@@ -21,16 +21,16 @@
                 <th scope="row">Apellido</th>
                 <td scope="row">{{ user.lastname }}</td>
             </tr>
+            {% if is_granted("ROLE_SUPER_ADMIN") %}
             <tr>
               <th scope="row">Rol</th>
               {% for role in user.roles %}
                 <td scope="row">{{role}}</td>
               {% endfor %}
+            {% endif %}
             </tr>
         </tbody>
     </table>
-    <br>
-    <a class="btn btn-dark" href="{{ path('user_edit', { 'id': user.id }) }}" style="margin: 15px; color:white;">Editar</a>
     <br>
 </div>
 

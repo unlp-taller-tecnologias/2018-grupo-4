@@ -185,13 +185,14 @@ class OficinaController extends Controller
      * @Route("/{id}", name="oficina_show")
      * @Method("GET")
      */
-    public function showAction(Oficina $oficina)
+    public function showAction(Request $request, Oficina $oficina)
     {
         $deleteForm = $this->createDeleteForm($oficina);
-
+        $editado = $request->query->get('editado');
         return $this->render('oficina/show.html.twig', array(
             'oficina' => $oficina,
             'delete_form' => $deleteForm->createView(),
+            'editado' => $editado,
         ));
     }
 

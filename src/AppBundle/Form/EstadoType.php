@@ -18,6 +18,7 @@ class EstadoType extends AbstractType
           $builder
             ->add('nombre', null, array(
                 'label' => 'Nombre(*)',
+                'required' => false,
                 'attr' => array(
                 'placeholder' => 'Ingrese un nombre para el estado'
                 )

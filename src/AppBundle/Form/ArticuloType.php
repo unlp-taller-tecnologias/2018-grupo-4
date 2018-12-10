@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use \DateTime;
 
 class ArticuloType extends AbstractType
@@ -18,20 +19,20 @@ class ArticuloType extends AbstractType
     {
         $builder
           ->add('numInventario', null, array(
-              'label' => 'Número de inventario*',
+              'label' => 'Número de inventario(*)',
               'required' => true,
               'attr' => array(
               'placeholder' => 'Ingrese el número de inventario'
               )
           ))
           ->add('denominacion', null, array(
-            'label' => 'Denominación*',
+            'label' => 'Denominación(*)',
             'required' => true,
             'attr' => array('placeholder' => 'Ingrese denominación'
              )
           ))
           ->add('oficina', null, array(
-            'label' => 'Oficina*',
+            'label' => 'Oficina(*)',
             'attr' => array('placeholder' => 'Seleccione una oficina'
             )
           ))
@@ -90,9 +91,14 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Ingrese el detalle del origen del artículo'
             )
           ))
-          ->add('moneda', null, array(
-            'label' => 'Moneda'
-          ))
+          ->add('moneda', ChoiceType::class, array(
+                'choices' => array(
+                    'Peso (ARS)' => 'peso',
+                    'Dólar (USD)'  => 'dolar'
+                ) ) )
+          // ->add('moneda', null, array(
+          //   'label' => 'Moneda'
+          // ))
           ->add('importe', null, array(
             'label' => 'Importe',
             'attr' => array('placeholder' => 'Ingrese el importe del artículo'
