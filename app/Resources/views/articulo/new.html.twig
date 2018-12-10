@@ -22,6 +22,17 @@
     {{ form_start(form) }}
     {{ form_widget(form.oficina, { 'attr': {'class': 'form-control', 'hidden': 'true' }}) }}
     {{ form_widget(form) }}
+
+    <label class="" >Estado Adicional: </label>
+
+      {% for e in estados%}
+        <select class="form-control" id="estadoAdicional" name="estadoAdicional">
+
+          <option value="{{e.nombre}}">{{e.nombre}}</option>
+
+
+        </select>
+      {%endfor%}
     {{ form_errors(form) }}
     {% if is_granted("ROLE_ADMIN") %}
     <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>

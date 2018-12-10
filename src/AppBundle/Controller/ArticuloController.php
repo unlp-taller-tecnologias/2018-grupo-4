@@ -73,13 +73,15 @@ class ArticuloController extends Controller
       );
 
       foreach($articulos as $articulo) {
+
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
           'numInventario' => $articulo->getNumInventario(),
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-          'estado' => $articulo->getEstado()->getNombre()
+          'estado' => $articulo->getEstado()->getNombre(),
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
         );
       };
 
@@ -134,6 +136,7 @@ class ArticuloController extends Controller
         'rows' => array()
       );
 
+
       foreach($articulos as $articulo) {
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
@@ -141,7 +144,8 @@ class ArticuloController extends Controller
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-          'estado' => $articulo->getEstado()->getNombre()
+          'estado' => $articulo->getEstado()->getNombre(),
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNmbre() : null
         );
       };
 
@@ -161,8 +165,8 @@ class ArticuloController extends Controller
       $errors = array();
       $backPath = 'articulos_index';
       $backTitle = 'articulos';
-
       $em = $this->getDoctrine()->getManager();
+      $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
       $oficinaId = $request->query->get('id', null);
       if (!is_null($oficinaId)) {
         $backPath = 'oficina_index';
@@ -176,6 +180,9 @@ class ArticuloController extends Controller
 
       if ($form->isSubmitted() && $form->isValid() && count($errors) == 0) {
           $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
+          $estadoAdicional = $request->request->get("estadoAdicional");
+          $estadoAdicionalReal = $em->getRepository('AppBundle:estadoAdicional')->findOneByNombre($estadoAdicional);
+          $articulo->setEstadoAdicional($estadoAdicionalReal);
           $articulo->setEstado($estado);
           $articulo->setUser($this->getUser());
           if ($oficina) {
@@ -188,6 +195,7 @@ class ArticuloController extends Controller
 
       return $this->render('articulo/new.html.twig', array(
           'articulo' => $articulo,
+          'estados' => $estados,
           'form' => $form->createView(),
           'errors' => $errors,
           'backPath' => $backPath,

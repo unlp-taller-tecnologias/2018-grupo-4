@@ -73,13 +73,25 @@
 
     </div>
 
-
     <input type="hidden" id="articulosIds" name="articulosIds" value="">
-    <input class="btn btn-dark" type="submit"  value="Transferir" style="margin-top: 10px;">
-    <input class="btn btn-dark" type="submit"  value="Guardar" style="margin-top: 10px;">
-    <input class="btn btn-dark" type="submit"   value="Cancelar" style="margin-top: 10px;">
+    <input type="hidden" id="condicionesIds" name="condicionesIds" value="">
+    <input type="hidden" id="articsIds" name="articsIds" value="">
+    <input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Transferir" style="margin-top: 10px;">
+
 
 {{ form_end(form) }}
+  <button name="guardar" id="guardar" class="btn btn-dark">Guardar</button>
+  <button name="cancelar" id="cancelar" class="btn btn-dark">Cancelar</button>
+
+  {% if historiales %}
+    {% for i in historiales %}
+    <input type="hidden" name="" class="idsArticulosActuales" value="{{i.articulo.id}}">
+    {% endfor %}
+  {% endif %}
+
+  {% if continuada %}
+    <button type="button" id="hacer" name="button">Cargar articulos</button>
+  {% endif %}
 
 {% endblock %}
 
@@ -91,6 +103,67 @@
   }
 </style>
 <script>
+
+
+
+
+
+
+
+
+//cargar articulos
+  $("#hacer").click(function(){
+    if ("{{continuada}}") {
+      //alert('se');
+      var idsArticulosArray = [];
+      var idsIds = $('.idsArticulosActuales').each(function() {
+        idsArticulosArray.push($(this).val());
+      });
+
+      //console.log(idsArticulosArray);
+
+      var c = idsArticulosArray.join(",");
+      $.ajax({
+        method: "POST",
+        url: "{{oficina}}/traerArticulos",
+        data: {
+          'articulos': c,
+        } ,
+        success: function(data) {
+         console.log(data);
+          //alert('gato');
+          $tableTest.bootstrapTable('load',data);
+          const $dataT = $tableTest.bootstrapTable('getAllSelections');
+          console.log(data);
+          //aca habria que tirar un select condition para cada articulo que viene en data
+          // for (i = 0; i < data; i++) {
+          //
+          //   let id = `condicion_${i.numInventario}`;
+          //     $('#condiciones').append(`
+          //       <div class="form-group ${id}_container">
+          //         <label class="idsArticulo" for="condiciones['${i.numInventario}']" >${i.denominacion}</label>
+          //         <input type="hidden" class="hiddenIds" name="" value="${i.id}">
+          //         <select class="form-control" name="${i.id}'" id="${i.id}" required>
+          //             {% for condicion in condiciones %}
+          //                 <option class="asd" value="{{condicion}}" >{{condicion}}</option>
+          //             {% endfor %}
+          //         </select>
+          //       </div>
+          //       `)
+          //   }
+        },
+        error: function(){
+          alert('error');
+        }
+        });
+
+
+    }else{
+
+    }
+    //Guardar transfer
+});
+    $articulosId = $('#articulosIds');
     var $table = $('#table'),
         $tableTest = $('#table1'),
         $button = $('#button');
@@ -98,42 +171,54 @@
         $form = $('form');
         $transferenciasId = $('#articulosIds');
         $form.submit(function(){
-          //alert('anduvo');
+          $condicionesIds = $('#condicionesIds');
+          $articsIds = $('#articsIds');
+          var idsCondicionesArray = [];
+          var idsArticulosArray = [];
+          var b = "";
+          var c = "";
+          var idsCondiciones = $('.form-control').each(function() {
+            idsCondicionesArray.push($(this).val());
+          });
+          var idsIds = $('.hiddenIds').each(function() {
+            idsArticulosArray.push($(this).val());
+          });
+          console.log(idsArticulosArray);
+          b = idsCondicionesArray.join(",");
+          $condicionesIds.val(b);
+          c = idsArticulosArray.join(",");
+          $articsIds.val(c);
           var a = "";
           var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
           var ids = $.map($tableTest.bootstrapTable('getData'), function (row) {
                 return row.numInventario;
             });
             a = ids.join(",");
-                     //  alert(a);
             $transferenciasId.val(a);
             return true;
         });
-        console.log($form);
         $('#condiciones-title').hide();
-
-
-
 
     function moveTransferencias ($tableIn, $tableOut, createInput) {
       const $dataT = $tableIn.bootstrapTable('getAllSelections');
       const ids = $.map($tableIn.bootstrapTable('getAllSelections'), function (row) {
         return row.numInventario;
       });
-
       $dataT.forEach(data => {
         $tableOut.bootstrapTable('insertRow', {
             index: 0,
             row: data
         });
         let id = `condicion_${data.numInventario}`;
-
         if (createInput) {
           $('#condiciones').append(`
             <div class="form-group ${id}_container">
-              <label for="condiciones['${data.numInventario}']" >${data.denominacion}</label>
-              <select id="${data.numInventario}" name="condiciones['${data.numInventario}']" class="form-control">
-                <option>Pepe</option>
+              <label class="idsArticulo" for="condiciones['${data.numInventario}']" >${data.denominacion}</label>
+              <input type="hidden" class="hiddenIds" name="" value="${data.id}">
+              <select class="form-control" name="${data.id}'" id="${data.id}" required>
+                  {% for condicion in condiciones %}
+                      <option class="asd" value="{{condicion}}" >{{condicion}}</option>
+                  {% endfor %}
               </select>
             </div>
             `
@@ -168,6 +253,126 @@
       });
     });
 
+    function validarArticulos(){
+      console.log('llegamo');
+      $tabla = $('#table1');
+      if ($tabla.bootstrapTable('getData') == ""){
+        alert('Debe ingresar al menos un articulo a la transferencia');
+        return false;
+      }else{
+        return true;
+      }
+
+    }
+
+
+
 </script>
 
+{% endblock %}
+
+{% block serchArticulos  %}
+<script>
+
+    $("#guardar").click(function(){
+      $condicionesIds = $('#condicionesIds');
+      $articsIds = $('#articsIds');
+      var idsCondicionesArray = [];
+      var idsArticulosArray = [];
+      var b = "";
+      var c = "";
+      var idsCondiciones = $('.form-control').each(function() {
+        idsCondicionesArray.push($(this).val());
+      });
+      var idsIds = $('.hiddenIds').each(function() {
+        idsArticulosArray.push($(this).val());
+      });
+      console.log(idsArticulosArray);
+      b = idsCondicionesArray.join(",");
+      $condicionesIds.val(b);
+      c = idsArticulosArray.join(",");
+      $articsIds.val(c);
+      console.log(c);
+      console.log(b);
+      var fecha  = $('#appbundle_transferencia_fecha').val();
+      var oficinaDestino = $('#appbundle_transferencia_oficina_destino').val();
+      var observaciones = $('#appbundle_transferencia_observaciones').val();
+      if (c == ""){
+        c = null;
+      }
+
+      //console.log('guardar');
+      $.ajax({
+        method: "POST",
+        url: "{{oficina}}/test",
+        data: {
+                "fecha": fecha,
+                "oficinaDestino": oficinaDestino,
+                "observaciones": observaciones,
+                "idsCondiciones": b,
+                "idsArticulos": c
+              } ,
+        success: function(data) {
+
+          console.log(data);
+          alert('La transferencia ha sido guardada con exito');
+          $tableTest.bootstrapTable('load',data);
+
+        },
+        error: function(){
+
+        }
+        });
+      });
+
+</script>
+
+<script>
+  $("#cancelar").click(function(){
+    $condicionesIds = $('#condicionesIds');
+    $articsIds = $('#articsIds');
+    var idsCondicionesArray = [];
+    var idsArticulosArray = [];
+    var b = "";
+    var c = "";
+    var idsCondiciones = $('.form-control').each(function() {
+      idsCondicionesArray.push($(this).val());
+    });
+    var idsIds = $('.hiddenIds').each(function() {
+      idsArticulosArray.push($(this).val());
+    });
+    console.log(idsArticulosArray);
+    b = idsCondicionesArray.join(",");
+    $condicionesIds.val(b);
+    c = idsArticulosArray.join(",");
+    $articsIds.val(c);
+    console.log(c);
+    console.log(b);
+    var fecha  = $('#appbundle_transferencia_fecha').val();
+    var oficinaDestino = $('#appbundle_transferencia_oficina_destino').val();
+    var observaciones = $('#appbundle_transferencia_observaciones').val();
+    //console.log('guardar');
+    $.ajax({
+      method: "POST",
+      url: "{{oficina}}/transferencia_cancel",
+      data: {
+              "fecha": fecha,
+              "oficinaDestino": oficinaDestino,
+              "observaciones": observaciones,
+              "idsCondiciones": b,
+              "idsArticulos": c
+            } ,
+      success: function(data) {
+
+          //console.log(data);
+        alert('La transferencia ha sido cancelada.');
+        //window.location.replace("{{oficina}}/oficina_show");
+        //$table.bootstrapTable('load',data);
+      },
+      error: function(){
+
+      }
+      });
+    });
+</script>
 {% endblock %}

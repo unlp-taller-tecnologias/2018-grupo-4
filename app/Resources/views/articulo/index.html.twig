@@ -6,7 +6,6 @@
     <h1>Artículos</h1>
     <br>
     {% block filters %}
-
     <div class="jumbotron">
       <h4>Buscar artículos por:</h4>
        <div class="form-row" >
@@ -42,43 +41,191 @@
     </div>
     {% endblock %}
     <h3>Listado de todos los artículos</h3>
-    <div class="table-responsive">
+    <div class="table-responsive" >
+      <button id="exportButtonPdf" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</button>
+      <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
+
       <div id="toolbar">
         <button id="button1" hidden class="btn btn-default">filterBy</button>
       </div>
       <table  id="tablaArticulos"
               data-toolbar="#toolbar"
-              data-show-export="true"
               class="table table-hover table-striped"
               data-toggle="table"
               data-height="400"
               data-side-pagination="server"
               data-pagination="true"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
-              data-show-columns="true"
               data-url="{{ path('articulo_list') }}"
               >
         <thead>
           <tr>
-            <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-            <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+            <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
+            <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
             <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
             <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
             <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+            <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
             {% if is_granted("ROLE_ADMIN") %}
             <th data-field="id" data-formatter="operateFormatter">Acciones</th>
             {% endif %}
           </tr>
         </thead>
+        <body>
+
+        </body>
       </table>
   </div>
   <hr>
 </div>
+
+
+
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
 <script>
+  //pdf export
+  jQuery(function ($) {
+    $("#exportButtonPdf").click(function () {
+        var dataSource = shield.DataSource.create({
+
+            data: "#tablaArticulos",
+            schema: {
+                type: "table",
+                fields: {
+                    NroInventario: { type: Number },
+                    NroExpediente: { type: Number },
+                    Denominación: { type: String },
+                    Tipo: { type: String },
+                    Estado: { type: String }
+                }
+            }
+        });
+        dataSource.read().then(function (data) {
+            var pdf = new shield.exp.PDFDocument({
+                author: "PrepBootstrap",
+                created: new Date()
+            });
+            pdf.addPage("a4", "portrait");
+            pdf.table(
+                50,
+                50,
+                data,
+                [
+                    { field: "NroInventario", title: "Numero de Inventario", width: 120 },
+                    { field: "Nro.Expendiente", title: "Numero de Expediente", width: 125 },
+                    { field: "Denominación", title: "Denominación", width: 100 },
+                    { field: "Tipo", title: "Tipo", width: 50 },
+                    { field: "Estado", title: "Estado", width: 50 }
+                ],
+                {
+                    margins: {
+                        top: 50,
+                        left: 50
+                    }
+                }
+            );
+            pdf.saveAs({
+                fileName: "PrepBootstrapPDF"
+            });
+        });
+    });
+
+//fin pdf
+
+//excel export
+
+    $("#exportButtonExcel").click(function () {
+        var dataSourceExcel = shield.DataSource.create({
+            data: "#tablaArticulos",
+            schema: {
+                type: "table",
+                fields: {
+                  NroInventario: { type: Number },
+                  NroExpediente: { type: Number },
+                  Denominación: { type: String },
+                  Tipo: { type: String },
+                  Estado: { type: String }
+                }
+            }
+        });
+        dataSourceExcel.read().then(function (data) {
+            new shield.exp.OOXMLWorkbook({
+                author: "PrepBootstrap",
+                worksheets: [
+                    {
+                        name: "PrepBootstrap Table",
+                        rows: [
+                            {
+                                cells: [
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        width: 120,
+                                        value: "Numero de Inventario"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Numero de Expediente"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Denominacion"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Tipo"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Estado"
+                                    }
+                                ]
+                            }
+                        ].concat($.map(data, function(item) {
+                            console.log(item);
+                            return {
+                                cells: [
+                                    { type: Number, value: item.NroInventario },
+                                    { type: Number, value: item.NroExpediente },
+                                    { type: String, value: item.Denominación },
+                                    { type: String, value: item.Tipo },
+                                    { type: String, value: item.Estado }
+                                ]
+                            };
+                        }))
+                    }
+                ]
+            }).saveAs({
+                fileName: "PrepBootstrapExcel"
+            });
+        });
+    });
+});
+
+//fin excel
+
+
+
+
+
+
 
 var xhttpEstados = new XMLHttpRequest();
 xhttpEstados.onreadystatechange = function() {
@@ -134,12 +281,18 @@ xhttpTipos.send();
 
 {% block serchArticulos  %}
 <script>
+
+
+
+
+
 var $table = $('#tablaArticulos');
 
 $("button").click(function(){
   var nroInventario = $('#nroInventario').val();
   var expediente = $('#expediente').val();
   var denominacion = $('#denominacion').val();
+  var estadoAdicional = $('#estadoAdicional').val();
   var estado = $('#estado').val();
   var tipo = $('#tipo').val();
   $.ajax({
@@ -150,10 +303,12 @@ $("button").click(function(){
             "expediente":expediente,
             "denominacion":denominacion,
             "estado":estado,
+            "estadoAdicional": estadoAdicional,
             "tipo":tipo
           } ,
     success: function(data) {
       //alert(data);
+
       $table.bootstrapTable('load',data);
       }
     });
@@ -178,6 +333,7 @@ $("button").click(function(){
               "expediente":expediente,
               "denominacion":denominacion,
               "estado":estado,
+              "estadoAdicional": estadoAdicional,
               "tipo":tipo
             } ,
       success: function(data) {

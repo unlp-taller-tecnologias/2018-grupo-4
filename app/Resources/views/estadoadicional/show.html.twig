@@ -1,0 +1,34 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('estadoAdicional_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados</a>
+  <br>
+    <h1>Estado: {{ estado.nombre }}</h1>
+
+    <table class="table table">
+        <tbody>
+            <tr>
+                <th scope="row">Nombre</th>
+                <td scope="row">{{ estado.nombre }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Color</th>
+                <td style="color:{{ estado.color }}" scope="row">{{ estado.color }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Habilitado</th>
+                <td scope="row">{% if estado.habilitado %}Si{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th scope="row">Descripción</th>
+                <td scope="row">{{ estado.descripcion }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <a class="btn btn-dark" style="margin: 15px;" href="{{ path('estadoAdicional_edit', { 'id': estado.id }) }}">Editar</a>
+    <br>
+</div>
+{% endblock %}

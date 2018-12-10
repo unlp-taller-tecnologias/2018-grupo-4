@@ -27,6 +27,11 @@ class ArticuloType extends AbstractType
             'attr' => array('placeholder' => 'Ingrese denominación'
              )
           ))
+
+          // ->add('estadoAdicional', null, array(
+          //      'label'=> 'estado Adicional'
+          // ))
+
           ->add('oficina', null, array(
             'label' => 'Oficina*',
             'attr' => array('placeholder' => 'Seleccione una oficina'
@@ -36,9 +41,7 @@ class ArticuloType extends AbstractType
             'label' => 'Fecha de entrada',
             'widget' => 'single_text'
           ))
-          ->add('condicion', null, array(
-               'label'=> 'Condición'
-          ))
+
           ->add('tipo', null, array(
                'label'=> 'Tipo'
           ))

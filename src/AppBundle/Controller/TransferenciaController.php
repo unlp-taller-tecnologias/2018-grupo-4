@@ -7,9 +7,11 @@ use AppBundle\Entity\Historial;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use AppBundle\Entity\Oficina;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use AppBundle\Entity\Oficina;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Validator\Constraints\DateTime;
 
 /**
  * Transferencia controller.
@@ -37,34 +39,56 @@ class TransferenciaController extends Controller
 
     /**
      * Creates a new Transferencia entity.
-     * @Route("/new/{id}", name="transferencia_new")
+     * @Route("/new/{id_oficina}", name="transferencia_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request, $id)
+    public function newAction(Request $request, $id_oficina)
     {
+        $em = $this->getDoctrine()->getManager();
+        $oficina = $em->getRepository('AppBundle:Oficina')->findOneById($id_oficina);
+        $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
+        $transferencia = $transferenciaRepository->findOneBy(
+              array('finalizada' => 2,
+              'oficinaOrigen' => $oficina)
+          );
+          if ($transferencia == null ){
+            $transferencia = new Transferencia();
+          }
 
-        $transferencia = new Transferencia();
+
         $form = $this->createForm('AppBundle\Form\TransferenciaType', $transferencia);
         $form->handleRequest($request);
-        $em = $this->getDoctrine()->getManager();
-        $oficina = $em->getRepository('AppBundle:Oficina')->findOneById($id);
-        $transferencia->setOficinaOrigen($oficina);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $articulosIds = $request->request->get('articulosIds');
-            $condiciones = $request->request->get('condiciones');
+        $historiales = false;
 
-            $oficinaOrigenId = $id;
+        $allCondiciones = $em->getRepository('AppBundle:Condicion')->findAll();
+
+        $transferencia->setOficinaOrigen($oficina);
+        $transferencia->setUsuario($this->getUser());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $articulosIds = $request->request->get('articsIds');
+            $condicionesArreglo = $request->request->get('condicionesIds');
+            $condiciones = $request->request->get('condiciones');
+            $oficinaOrigenId = $id_oficina;
             $em->persist($transferencia);
             $em->flush();
+            $oficinaDestino = $transferencia->getOficinaDestino();
+            $fecha = $transferencia->getFecha();
             return $this->redirectToRoute('select_condition', array(
               'id' => $transferencia->getId(),
-              'articulosIds' => $articulosIds,
-              'idOficinaOrigen' => $id
+              'oficinaDestino' => $oficinaDestino,
+              'fecha' => $fecha,
+              'articsIds' => $articulosIds,
+              'condiciones' => $condicionesArreglo,
+              'idOficinaOrigen' => $id_oficina
           ));
         }
         return $this->render('transferencia/new.html.twig', array(
-            'oficina' => $id,
-            'Transferencia' => $transferencia,
+            'continuada' => false,
+            'oficina' => $id_oficina,
+            'historiales' => $historiales,
+            'condiciones' => $allCondiciones,
+            'transferencia' => $transferencia,
+            'transferenciaId' => $transferencia->getId(),
             'form' => $form->createView(),
         ));
     }
@@ -154,75 +178,394 @@ class TransferenciaController extends Controller
      */
 
     public function selectCondition(Request $request, Transferencia $transferencia){
-      $articulosIds = $request->query->get('articulosIds');
-
+      $articulosIds = $request->query->get('articsIds');
+      $condicionesArreglo = $request->query->get('condiciones');
       $oficinaOrigenId = $request->query->get('idOficinaOrigen');
+      $em = $this->getDoctrine()->getManager();
+      $oficinaOrigen = $em->getRepository('AppBundle:Oficina')->findOneById($oficinaOrigenId);
+      $transferencia->setOficinaOrigen($oficinaOrigen);
+      $oficinaDestino = $transferencia->getOficinaDestino();
+      $fecha = $transferencia->getFecha();
+
       $articulosIds = explode(",", $articulosIds);
-      $em = $this->getDoctrine()->getManager();
+      $condicionesArreglo = explode(",", $condicionesArreglo);
       $articuloRepository = $em->getRepository('AppBundle:Articulo');
-      $articulos = array();
-      $transferencia->setOficinaOrigen($oficinaOrigenId);
-      foreach ($articulosIds as $id){
-        $articulos[] =  $articuloRepository->findByNumInventario($id);
-      }
-      $condiciones = $em->getRepository('AppBundle:Condicion')->findAll();
-      return $this->render('transferencia/select_condition.html.twig', array(
-          'oficinaOrigenId' => $oficinaOrigenId,
-          'transferencia' => $transferencia,
-          'articulos' => $articulos,
-          'condiciones' => $condiciones
-      ));
-    }
-
-    /**
-     * Termina la transferencia
-     * @Route("select_condition/finish/{id}", name="transferencia_finished")
-     * @Method({"GET", "POST"})
-     */
-
-    public function finishTransferencia(Request $request, Transferencia $transferencia){
-      $em = $this->getDoctrine()->getManager();
       $condicionRepository = $em->getRepository('AppBundle:Condicion');
-      $transferenciaId = $request->request->get('transferenciaId');
-      $transfer = $em->getRepository('AppBundle:Transferencia')->findOneById($transferenciaId);
-      $oficina_destino = $transfer->getOficinaDestino();
-      $fecha = $transfer->getFecha();
       $articulos = array();
-      $articulosIds = $request->request->get('articulosIds');
-      $articulosIds = explode(",", $articulosIds);
-      $articuloRepository = $em->getRepository('AppBundle:Articulo');
-      $i=0;
+      $j = 5;
+      $i = 0;
+      if ($oficinaDestino == NULL) {
+        echo 'null';
+      }else{
+        echo 'no null';
+      }
+      //die();
       foreach ($articulosIds as $id){
-        $articulos[$i] =  $articuloRepository->findOneById($id);
-        $condicionSeleccionada = $request->request->get($id);
+        $articuloActual =  $articuloRepository->findOneById($id);
+        $articulos[$i] = $articuloActual;
+      //  $articuloActual->setOficina($oficinaDestino);
+
+        $condicionSeleccionada = $condicionesArreglo[$j];
         $condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
-        $articuloActual = $articulos[$i];
-        $articuloActual->setOficina($oficina_destino);
         $historial = new Historial;
         $historial
             ->setCondicion($condicionReal)
             ->setFecha($fecha)
             ->setArticulo($articulos[$i])
-            ->setTransferencia($transfer);
+            ->setTransferencia($transferencia);
+        $transferencia->setFinalizada(1);
         $em->persist($historial);
         $em->flush();
         $i++;
+        $j++;
       }
       return $this->render('transferencia/transferencia_finish.html.twig', array(
         'transferencias' => $transferencia
       ));
+
+    }
+
+
+    /**
+     * Guarda la transferencia
+     * @Route("/new/{id}/test", name="test")
+     * @Method({"GET", "POST"})
+     */
+    public function test(Request $request, $id){
+      $fecha = $request->request->get('fecha');
+      $fechaDate = (new \DateTime($fecha));
+      $oficinaDestino = $request->request->get('oficinaDestino');
+      $observaciones = $request->request->get('observaciones');
+      $idsCondiciones = $request->request->get('idsCondiciones');
+      $idsArticulos = $request->request->get('idsArticulos');
+      if ($idsArticulos != null) {
+        $articulosIds = explode(",", $idsArticulos);
+      }else{
+        $articulosIds = null;
+      }
+      $condicionesArreglo = explode(",", $idsCondiciones);
+      $em = $this->getDoctrine()->getManager();
+      $oficinaRepository = $em->getRepository('AppBundle:Oficina');
+      $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
+      $oficinaReal = $oficinaRepository->findOneById($id);
+      $transferencia = $transferenciaRepository->findOneBy(
+              array('finalizada' => 2,
+              'oficinaOrigen' => $oficinaReal)
+          );
+      if ($transferencia == null ){
+        $transferencia = new Transferencia();
+      }
+
+      $articuloRepository = $em->getRepository('AppBundle:Articulo');
+      //$oficinaRepository = $em->getRepository('AppBundle:Oficina');
+      $condicionRepository = $em->getRepository('AppBundle:Condicion');
+      $oficinaDest = $oficinaRepository->findOneById($oficinaDestino);
+      $oficinaOrig = $oficinaRepository->findOneById($id);
+      $transferencia->setOficinaDestino($oficinaDest);
+      $transferencia->setOficinaOrigen($oficinaOrig);
+      $transferencia->setFinalizada(2);
+      $transferencia->setFecha($fechaDate);
+      $transferencia->setUsuario($this->getUser());
+      $transferencia->setObservaciones($observaciones);
+      $em->persist($transferencia);
+      $articulos = array();
+      $j = 5;
+      $i = 0;
+      if ($articulosIds != null) {
+        foreach ($articulosIds as $idArtic){
+          $articuloActual =  $articuloRepository->findOneById($idArtic);
+          $articulos[$i] = $articuloActual;
+          $articuloActual->setOficina($oficinaOrig);
+          $condicionSeleccionada = $condicionesArreglo[$j];
+          $condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
+          $historial = new Historial;
+          $historial
+              ->setCondicion($condicionReal)
+              ->setFecha($fechaDate)
+              ->setArticulo($articulos[$i])
+              ->setTransferencia($transferencia);
+          $em->persist($historial);
+
+          $i++;
+          $j++;
+        }
+      }
+      $em->flush();
+
+      $arreglo = array(
+        //'success' => false
+        'articulos' => $articulosIds
+      );
+      return new JsonResponse($arreglo);
     }
 
     /**
-     * Cancela la transferencia
-     * @Route("/transferencia_cancel/{id}", name="transferencia_cancel")
+     * Guarda la transferencia
+     * @Route("/transferencia_continue/{id}/test", name="test2")
      * @Method({"GET", "POST"})
      */
 
-    public function transferenciaCancel(Request $request, Transferencia $transferencia){
+     public function testReabierto(Request $request, $id){
+       $fecha = $request->request->get('fecha');
+       $fechaDate = (new \DateTime($fecha));
+       $oficinaDestino = $request->request->get('oficinaDestino');
+       $observaciones = $request->request->get('observaciones');
+       $idsCondiciones = $request->request->get('idsCondiciones');
+       $idsArticulos = $request->request->get('idsArticulos');
+       $articulosIds = explode(",", $idsArticulos);
+       $condicionesArreglo = explode(",", $idsCondiciones);
+       $em = $this->getDoctrine()->getManager();
+       $oficinaRepository = $em->getRepository('AppBundle:Oficina');
+       $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
+       $oficinaReal = $oficinaRepository->findOneById($id);
+       $transferencia = $transferenciaRepository->findOneBy(
+               array('finalizada' => 2,
+               'oficinaOrigen' => $oficinaReal)
+           );
+       $articuloRepository = $em->getRepository('AppBundle:Articulo');
+       $condicionRepository = $em->getRepository('AppBundle:Condicion');
+       $oficinaDest = $oficinaRepository->findOneById($oficinaDestino);
+       $transferencia->setOficinaDestino($oficinaDest);
+       $transferencia->setFecha($fechaDate);
+       $transferencia->setUsuario($this->getUser());
+       $transferencia->setObservaciones($observaciones);
+       $em->persist($transferencia);
+       $articulos = array();
+       $j = 5;
+       $i = 0;
+           foreach ($articulosIds as $idArtic){
+             $articuloActual =  $articuloRepository->findOneById($idArtic);
+             $articulos[$i] = $articuloActual;
+             $condicionSeleccionada = $condicionesArreglo[$j];
+             $condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
+             $historial = new Historial;
+             $historial
+                 ->setCondicion($condicionReal)
+                 ->setFecha($fechaDate)
+                 ->setArticulo($articulos[$i])
+                 ->setTransferencia($transferencia);
+             $em->persist($historial);
+             $em->flush();
+             $i++;
+             $j++;
+           }
+           $arreglo = array(
+             'success' => true
+           );
+           return new JsonResponse($arreglo);
 
+     }
 
+    /**
+     * Guarda la transferencia
+     * @Route("/new/{id}/transferencia_cancel", name="transferencia_cancel")
+     * @Method({"GET", "POST"})
+     */
+    public function transferenciaCancel(Request $request, $id){
+      $fecha = $request->request->get('fecha');
+      $fechaDate = (new \DateTime($fecha));
+      $oficinaDestino = $request->request->get('oficinaDestino');
+      $observaciones = $request->request->get('observaciones');
+      $idsCondiciones = $request->request->get('idsCondiciones');
+      $idsArticulos = $request->request->get('idsArticulos');
+      $articulosIds = explode(",", $idsArticulos);
+      $condicionesArreglo = explode(",", $idsCondiciones);
+      $em = $this->getDoctrine()->getManager();
+      $oficinaRepository = $em->getRepository('AppBundle:Oficina');
+      $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
+      $oficinaReal = $oficinaRepository->findOneById($id);
+      $transferencia = $transferenciaRepository->findOneBy(
+              array('finalizada' => 2,
+              'oficinaOrigen' => $oficinaReal)
+          );
+      if ($transferencia == null ){
+        $transferencia = new Transferencia();
+      }else{
+        $transferencia->setFinalizada(0);
+
+      }
+      $articuloRepository = $em->getRepository('AppBundle:Articulo');
+      //$oficinaRepository = $em->getRepository('AppBundle:Oficina');
+      $condicionRepository = $em->getRepository('AppBundle:Condicion');
+      $oficinaDest = $oficinaRepository->findOneById($oficinaDestino);
+      $oficinaOrig = $oficinaRepository->findOneById($id);
+      $transferencia->setOficinaDestino($oficinaDest);
+      $transferencia->setOficinaOrigen($oficinaOrig);
+      $transferencia->setUsuario($this->getUser());
+
+      $transferencia->setFecha($fechaDate);
+      $transferencia->setObservaciones($observaciones);
+      $em->persist($transferencia);
+      $articulos = array();
+      $j = 5;
+      $i = 0;
+      if ($articulosIds == null) {
+
+        foreach ($articulosIds as $idArtic){
+          $articuloActual =  $articuloRepository->findOneById($idArtic);
+          $articulos[$i] = $articuloActual;
+          $articuloActual->setOficina($oficinaOrig);
+          $condicionSeleccionada = $condicionesArreglo[$j];
+          $condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
+          $historial = new Historial;
+          $historial
+              ->setCondicion($condicionReal)
+              ->setFecha($fechaDate)
+              ->setArticulo($articulos[$i])
+              ->setTransferencia($transferencia);
+          $em->persist($historial);
+
+          $i++;
+          $j++;
+        }
+     }
+      $em->flush();
+      $arreglo = array(
+        'success' => true
+      );
+      return new JsonResponse($arreglo);
 
     }
+
+
+    /**
+     * Guarda la transferencia
+     * @Route("/transferencia_continue/{id}/transferencia_cancel", name="transferencia_cancel2")
+     * @Method({"GET", "POST"})
+     */
+    public function transferenciaReabiertaCancel(Request $request, $id){
+      $fecha = $request->request->get('fecha');
+      $fechaDate = (new \DateTime($fecha));
+      $oficinaDestino = $request->request->get('oficinaDestino');
+      $observaciones = $request->request->get('observaciones');
+      $idsCondiciones = $request->request->get('idsCondiciones');
+      $idsArticulos = $request->request->get('idsArticulos');
+      $articulosIds = explode(",", $idsArticulos);
+      $condicionesArreglo = explode(",", $idsCondiciones);
+      $em = $this->getDoctrine()->getManager();
+      $oficinaRepository = $em->getRepository('AppBundle:Oficina');
+      $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
+      $oficinaReal = $oficinaRepository->findOneById($id);
+      $transferencia = $transferenciaRepository->findOneBy(
+              array('finalizada' => 2,
+              'oficinaOrigen' => $oficinaReal)
+          );
+      $transferencia->setFinalizada(0);
+      $em->persist($transferencia);
+      $em->flush();
+      $arreglo = array(
+        'success' => true
+      );
+      return new JsonResponse($arreglo);
+    }
+
+    /**
+     * Guarda la transferencia
+     * @Route("/transferencia_continue/{id_oficina}", name="transferencia_continue")
+     * @Method({"GET", "POST"})
+     */
+    public function transferenciaContinue(Request $request, $id_oficina){
+      $em = $this->getDoctrine()->getManager();
+      $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
+      $historialRepository = $em->getRepository('AppBundle:Historial');
+      $oficina = $em->getRepository('AppBundle:Oficina')->findOneById($id_oficina);
+      $transferencia = $transferenciaRepository->findOneBy(
+        array('finalizada' => 2,
+        'oficinaOrigen' => $oficina)
+      );
+      $form = $this->createForm('AppBundle\Form\TransferenciaType', $transferencia);
+      $form->handleRequest($request);
+      $allCondiciones = $em->getRepository('AppBundle:Condicion')->findAll();
+      $transferencia->setOficinaOrigen($oficina);
+      $historiales = $historialRepository->findByTransferencia($transferencia);
+
+
+      if ($form->isSubmitted() && $form->isValid()) {
+          $articulosIds = $request->request->get('articsIds');
+          //  echo "<pre>";
+          //  var_dump($articulosIds);
+          //  echo "</pre>";
+          //  echo 'adada';
+          // die();
+          $condicionesArreglo = $request->request->get('condicionesIds');
+          $condiciones = $request->request->get('condiciones');
+          $oficinaOrigenId = $id_oficina;
+
+          $em->persist($transferencia);
+          $em->flush();
+          $oficinaDestino = $transferencia->getOficinaDestino();
+          $fecha = $transferencia->getFecha();
+          return $this->redirectToRoute('select_condition', array(
+            'id' => $transferencia->getId(),
+            'oficinaDestino' => $oficinaDestino,
+            'fecha' => $fecha,
+            'articsIds' => $articulosIds,
+            'condiciones' => $condicionesArreglo,
+            'idOficinaOrigen' => $id_oficina
+        ));
+      }
+      return $this->render('transferencia/new.html.twig', array(
+          'continuada' => true,
+          'oficina' => $id_oficina,
+          'historiales' => $historiales,
+          'condiciones' => $allCondiciones,
+          'transferencia' => $transferencia,
+          'transferenciaId' => $transferencia->getId(),
+          'form' => $form->createView(),
+      ));
+    }
+
+    /**
+     * Termina la transferencia
+     * @Route("/{id}/oficina_show", name="oficina_show2")
+     * @Method({"GET", "POST"})
+     */
+     public function redirectOfice(Request $request, $id){
+       return $this->redirectToRoute('oficina_show', array('id' => $id));
+     }
+
+
+     /**
+      * Termina la transferencia
+      * @Route("/transferencia_continue/{id}/traerArticulos", name="traerArticulos")
+      * @Method({"GET", "POST"})
+      */
+      public function traerArticulos(Request $request, $id){
+        $em = $this->getDoctrine()->getManager();
+        $oficina = $em->getRepository('AppBundle:Oficina')->findOneById($id);
+        $articuloRepository = $em->getRepository('AppBundle:Articulo');
+        $idsArticulos = $request->request->get('articulos');
+        $idsArticulos = explode(",", $idsArticulos);
+        $articulos = array();
+        foreach($idsArticulos as $idArticulo){
+          if (!(in_array($articuloRepository->findOneById($idArticulo), $articulos))) {
+            $articulos[] = $articuloRepository->findOneById($idArticulo);
+          }
+        }
+        foreach($articulos as $articulo) {
+          $rawResponse['rows'][] = array(
+            'id' => $articulo->getId(),
+            'numInventario' => $articulo->getNumInventario(),
+            'numExpendiente' => $articulo->getNumExpediente(),
+            'denominacion' => $articulo->getDenominacion(),
+            'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+            'estado' => $articulo->getEstado()->getNombre()
+          );
+        };
+        return new JsonResponse($rawResponse);
+      //  return new JsonResponse($arreglo);
+      }
+
+      /**
+       * exporta pdf
+       * @Route("/{id}/pdf_export", name="pdf_export")
+       * @Method({"GET", "POST"})
+       */
+       public function pdfExport(Request $request, $id){
+         //return $this->redirectToRoute('oficina_show', array('id' => $id));
+       }
+
+
+
 
 }

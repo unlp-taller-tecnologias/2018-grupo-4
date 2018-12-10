@@ -174,28 +174,28 @@ class Transferencia
      * @ORM\ManyToOne(targetEntity="Oficina")
      * @ORM\JoinColumn(name="oficina_origen_id", referencedColumnName="id")
      */
-    private $oficina_origen;
+    private $oficinaOrigen;
 
     /**
-     * Get oficina_origen
+     * Get oficinaOrigen
      *
      * @return Oficina
      */
     public function getOficinaOrigen()
     {
-        return $this->oficina_origen;
+        return $this->oficinaOrigen;
     }
 
     /**
-     * Set oficina_origen
+     * Set oficinaOrigen
      *
-     * @param string $oficina_origen
+     * @param string $oficinaOrigen
      *
      * @return Oficina
      */
-    public function setOficinaOrigen($oficina_origen)
+    public function setOficinaOrigen($oficinaOrigen)
     {
-        $this->oficina_origen = $oficina_origen;
+        $this->oficinaOrigen = $oficinaOrigen;
 
         return $this;
     }
@@ -234,6 +234,13 @@ class Transferencia
         return $this;
     }
 
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
     private $usuario;
 
     /**
