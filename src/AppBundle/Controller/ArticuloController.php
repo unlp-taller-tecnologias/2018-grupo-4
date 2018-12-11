@@ -191,8 +191,6 @@ class ArticuloController extends Controller
       $em = $this->getDoctrine()->getManager();
       $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
       $oficinaId = $oficina->getId();
-
-
       if (!is_null($oficinaId))
       {
         $backPath = 'oficina_index';

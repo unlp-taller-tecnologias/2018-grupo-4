@@ -186,7 +186,6 @@ class TransferenciaController extends Controller
       $transferencia->setOficinaOrigen($oficinaOrigen);
       $oficinaDestino = $transferencia->getOficinaDestino();
       $fecha = $transferencia->getFecha();
-
       $articulosIds = explode(",", $articulosIds);
       $condicionesArreglo = explode(",", $condicionesArreglo);
       $articuloRepository = $em->getRepository('AppBundle:Articulo');
@@ -194,12 +193,11 @@ class TransferenciaController extends Controller
       $articulos = array();
       $j = 5;
       $i = 0;
-
-      //die();
       foreach ($articulosIds as $id){
         $articuloActual =  $articuloRepository->findOneById($id);
         $articulos[$i] = $articuloActual;
-        $articuloActual->setOficina($oficinaDestino);
+
+        $articuloActual->setOficina($oficinaDestino); //aca falla
 
         $condicionSeleccionada = $condicionesArreglo[$j];
         $condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
@@ -522,7 +520,7 @@ class TransferenciaController extends Controller
 
 
      /**
-      * Termina la transferencia
+      * Trae articulos para los select de condicion
       * @Route("/transferencia_continue/{id}/traerArticulos", name="traerArticulos")
       * @Method({"GET", "POST"})
       */
@@ -538,18 +536,54 @@ class TransferenciaController extends Controller
             $articulos[] = $articuloRepository->findOneById($idArticulo);
           }
         }
+        $data=array();
         foreach($articulos as $articulo) {
-          $rawResponse['rows'][] = array(
+          $data[$articulo->getId()] = array(
             'id' => $articulo->getId(),
             'numInventario' => $articulo->getNumInventario(),
             'numExpendiente' => $articulo->getNumExpediente(),
             'denominacion' => $articulo->getDenominacion(),
             'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
             'estado' => $articulo->getEstado()->getNombre()
+
           );
+
+
+
         };
-        return new JsonResponse($rawResponse);
+        return new JsonResponse($data);
       //  return new JsonResponse($arreglo);
+      }
+
+      /**
+       * Trae articulos para la tab;a
+       * @Route("/transferencia_continue/{id}/traerArticulosTabla", name="traerArticulosTabla")
+       * @Method({"GET", "POST"})
+       */
+      public function traerArticulosTabla(Request $request, $id){
+        $em = $this->getDoctrine()->getManager();
+        $oficina = $em->getRepository('AppBundle:Oficina')->findOneById($id);
+        $articuloRepository = $em->getRepository('AppBundle:Articulo');
+        $idsArticulos = $request->request->get('articulos');
+        $idsArticulos = explode(",", $idsArticulos);
+        $articulos = array();
+        foreach($idsArticulos as $idArticulo){
+          if (!(in_array($articuloRepository->findOneById($idArticulo), $articulos))) {
+            $articulos[] = $articuloRepository->findOneById($idArticulo);
+          }
+        }
+         foreach($articulos as $articulo) {
+          $rawResponse['rows'][] = array(
+             'id' => $articulo->getId(),
+             'numInventario' => $articulo->getNumInventario(),
+             'numExpendiente' => $articulo->getNumExpediente(),
+             'denominacion' => $articulo->getDenominacion(),
+             'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+             'estado' => $articulo->getEstado()->getNombre()
+           );
+         }
+       return new JsonResponse($rawResponse);
+
       }
 
       /**
