@@ -120,13 +120,12 @@
   $("#hacer").click(function(){
     if ("{{continuada}}") {
       //alert('se');
+      //$tableTest = $('#table1');
       var idsArticulosArray = [];
       var idsIds = $('.idsArticulosActuales').each(function() {
         idsArticulosArray.push($(this).val());
       });
-
       //console.log(idsArticulosArray);
-
       var c = idsArticulosArray.join(",");
       $.ajax({
         method: "POST",
@@ -135,39 +134,60 @@
           'articulos': c,
         } ,
         success: function(data) {
-         console.log(data);
-          //alert('gato');
-          $tableTest.bootstrapTable('load',data);
-          const $dataT = $tableTest.bootstrapTable('getAllSelections');
-          console.log(data);
-          //aca habria que tirar un select condition para cada articulo que viene en data
-          // for (i = 0; i < data; i++) {
-          //
-          //   let id = `condicion_${i.numInventario}`;
-          //     $('#condiciones').append(`
-          //       <div class="form-group ${id}_container">
-          //         <label class="idsArticulo" for="condiciones['${i.numInventario}']" >${i.denominacion}</label>
-          //         <input type="hidden" class="hiddenIds" name="" value="${i.id}">
-          //         <select class="form-control" name="${i.id}'" id="${i.id}" required>
-          //             {% for condicion in condiciones %}
-          //                 <option class="asd" value="{{condicion}}" >{{condicion}}</option>
-          //             {% endfor %}
-          //         </select>
-          //       </div>
-          //       `)
-          //   }
+           $articsIds = $('#articsIds');
+           var idsArticulosArray = [];
+           var b = "";
+           var idsIds = $('.hiddenIds').each(function() {
+             idsArticulosArray.push($(this).val());
+          //   console.log(idsArticulosArray);
+           });
+           console.log(idsArticulosArray);
+           $articsIds.val(b);
+           b = idsArticulosArray.join(",");
+           $articsIds.val(b);
+          // console.log(b);
+           $.each( data, function( key, value ) {
+            //console.log( key + ": " + value.denominacion );
+            console.log(value.denominacion);
+            $('#condiciones').append(`
+              <div class="form-group ${value.id}_container">
+                <label class="idsArticulo" for="condiciones['${value.numInventario}']" >${value.denominacion}</label>
+                <input type="hidden" class="hiddenIds" name="" value="${value.id}">
+                <select class="form-control" name="${value.id}'" id="${value.id}" required>
+                    {% for condicion in condiciones %}
+                        <option class="asd" value="{{condicion}}" >{{condicion}}</option>
+                    {% endfor %}
+                </select>
+              </div>
+              `
+            );
+          });
+          $("#hacer").detach();
         },
         error: function(){
           alert('error');
         }
         });
+        //ajax para tabla
+        $.ajax({
+          method: "POST",
+          url: "{{oficina}}/traerArticulosTabla",
+          data: {
+            'articulos': c,
+          } ,
+          success: function(data) {
+             $tableTest.bootstrapTable('load',data);
+             const $dataT = $tableTest.bootstrapTable('getAllSelections');
 
 
-    }else{
-
+          },
+          error: function(){
+            alert('errorss');
+          }
+          });
     }
-    //Guardar transfer
 });
+
     $articulosId = $('#articulosIds');
     var $table = $('#table'),
         $tableTest = $('#table1'),
