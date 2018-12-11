@@ -46,8 +46,8 @@
     <hr>
     <h3>Listado de todos los artículos</h3>
     <hr>
-    <button id="exportButtonPdf" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</button>
-    <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
+    <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonPdf" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</button>
+    <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
     <div class="table-responsive" >
       <div id="toolbar">
         <button id="button1" hidden class="btn btn-default">filterBy</button>
@@ -150,7 +150,7 @@
                 }
             );
             pdf.saveAs({
-                fileName: "PrepBootstrapPDF"
+                fileName: "Listado_de_articulos"
             });
         });
     });
@@ -235,7 +235,7 @@
                     }
                 ]
             }).saveAs({
-                fileName: "PrepBootstrapExcel"
+                fileName: "Listado_de_articulos"
             });
         });
     });

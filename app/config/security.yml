@@ -43,27 +43,32 @@ security:
       - { path: ^/articulo/$, role: ROLE_USER }
       - { path: ^/articulo/listado, role: ROLE_USER }
 
+
       - { path: ^/oficina/articulo_listFilter_oficinas, role: ROLE_USER }
       - { path: ^/articulo/listadoFilter, role: ROLE_USER }
       - { path: ^/articulo/articulo_listFilter, role: ROLE_USER }
       - { path: ^/oficina/oficina_listFilter, role: ROLE_USER }
-      - { path: ^/user/edit, role: ROLE_USER }
+
 
       - { path: ^/articulo/, role: ROLE_ADMIN }
 
       - { path: ^/transferencia/, role: ROLE_ADMIN }
       - { path: ^/transferencia/new/, role: ROLE_ADMIN }
       - { path: ^/transferencia/new/test, role: ROLE_USER }
+
+
       - { path: ^/baja/, role: ROLE_ADMIN }
       - { path: ^/historial/, role: ROLE_ADMIN }
 
       - { path: ^/condicion/, role: ROLE_SUPER_ADMIN }
       - { path: ^/tipo/, role: ROLE_SUPER_ADMIN }
       - { path: ^/estado/, role: ROLE_SUPER_ADMIN }
+      - { path: ^/user/, role: ROLE_SUPER_ADMIN }
+
 
       - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: ^/*, role: IS_AUTHENTICATED_FULLY }
       - { path: ^/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
 
-      # - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-      # - { path: ^/panel/, role: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/panel/, role: IS_AUTHENTICATED_FULLY }
