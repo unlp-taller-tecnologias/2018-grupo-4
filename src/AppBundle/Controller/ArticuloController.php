@@ -84,6 +84,7 @@ class ArticuloController extends Controller
 
       $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
       $articulos = $repository->getBy($offset, $limit, $sort, $order, $search);
+
       $total = $repository->countBy($search);
 
       $rawResponse = array(

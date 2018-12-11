@@ -11,7 +11,7 @@ namespace AppBundle\Repository;
 class ArticuloRepository extends \Doctrine\ORM\EntityRepository
 {
   protected $offset;
-  protected $limit;
+  public $limit;
   protected $search;
   protected $sort;
   protected $order;
@@ -19,7 +19,7 @@ class ArticuloRepository extends \Doctrine\ORM\EntityRepository
 
   function getBy($offset = null, $limit = null, $sort = null, $order = null, $search = null, $oficina = null) {
     $this->offset = (!is_null($offset)) ? $offset : 0;
-    $this->$limit = (!is_null($limit)) ? $limit : 10;
+    $this->limit = $limit;
     $this->search = $search;
     $this->sort = $sort;
     $this->order = $order;
