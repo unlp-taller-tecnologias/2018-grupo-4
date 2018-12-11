@@ -190,7 +190,13 @@ class ArticuloController extends Controller
       $backPath = 'articulos_index';
       $backTitle = 'articulos';
       $em = $this->getDoctrine()->getManager();
-      $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
+      $estadosRepository = $em->getRepository('AppBundle:estadoAdicional');
+      $estados = $estadosRepository->findBy(
+            array('habilitado' => 1
+            )
+        );
+
+
       $oficinaId = $oficina->getId();
 
       if (!is_null($oficinaId))

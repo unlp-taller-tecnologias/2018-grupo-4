@@ -22,14 +22,15 @@ class estadoAdicionalController extends Controller
      * @Route("/", name="estadoAdicional_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
-
+        $editado = $request->query->get('editado');
         return $this->render('estadoAdicional/index.html.twig', array(
             'estados' => $estados,
+            'editado' => $editado
         ));
     }
     /**
@@ -109,11 +110,11 @@ class estadoAdicionalController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            //$habilitado = $em->getRepository('AppBundle:estadoAdicional')->findOneByHabilitado('1');
-            //$estado->setHabilitado($habilitado);
+            $habilitado = $em->getRepository('AppBundle:estadoAdicional')->findOneByHabilitado('1');
+            $estado->setHabilitado($habilitado);
             $em->persist($estado);
             $em->flush();
-            return $this->redirectToRoute('estadoAdicional_show', array('id' => $estado->getId()));
+            return $this->redirectToRoute('estadoAdicional_show', array('editado' => 'editado'));
         }
 
         return $this->render('estadoadicional/new.html.twig', array(
@@ -130,11 +131,11 @@ class estadoAdicionalController extends Controller
      */
     public function showAction(estadoAdicional $estado)
     {
-        $deleteForm = $this->createDeleteForm($estado);
+        //$deleteForm = $this->createDeleteForm($estado);
 
         return $this->render('estadoadicional/show.html.twig', array(
-            'estado' => $estado,
-            'delete_form' => $deleteForm->createView(),
+            'estado' => $estado
+            //'delete_form' => $deleteForm->createView(),
         ));
     }
 
@@ -146,56 +147,82 @@ class estadoAdicionalController extends Controller
      */
     public function editAction(Request $request, estadoAdicional $estado)
     {
-        $deleteForm = $this->createDeleteForm($estado);
-        $editForm = $this->createForm('AppBundle\Form\estadoAdicionalType', $estado, array("edit" => true));
+      // $deleteForm = $this->createDeleteForm($estado);
+      $editForm = $this->createForm('AppBundle\Form\estadoAdicionalType', $estado, array("edit" => false));
+      $editForm->handleRequest($request);
+
+      if ($editForm->isSubmitted() && $editForm->isValid()) {
+          $this->getDoctrine()->getManager()->flush();
+
+          return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado'));
+      }
+
+      return $this->render('estadoAdicional/edit.html.twig', array(
+          'estado' => $estado,
+          'edit_form' => $editForm->createView(),
+          // 'delete_form' => $deleteForm->createView(),
+      ));
+  }
+
+    // /**
+    //  * Deletes a estadoAdicional entity.
+    //  *
+    //  * @Route("{id}/delete", name="estadoAdicional_delete")
+    //  * @Method("DELETE")
+    //  */
+    // public function deleteAction(Request $request, estadoAdicional $estado)
+    // {
+    //     $form = $this->createDeleteForm($estado);
+    //     $form->handleRequest($request);
+    //
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $em = $this->getDoctrine()->getManager();
+    //         $em->remove($estado);
+    //         $em->flush();
+    //     }
+    //
+    //     return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado'));
+    // }
+
+
+
+    /**
+     * Displays a form to edit an existing estado entity.
+     *
+     * @Route("/{id}/visibility", name="estadoAdicional_visibility")
+     * @Method({"GET", "POST"})
+     */
+    public function visibilityAction(Request $request, estadoAdicional $estado)
+    {
+        $editForm = $this->createForm('AppBundle\Form\estadoAdicionalType', $estado, array("visibility" => false));
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('estadoAdicional_edit', array('id' => $estado->getId()));
+            return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado'));
         }
 
-        return $this->render('estadoadicional/edit.html.twig', array(
+        return $this->render('estadoAdicional/edit.html.twig', array(
             'estado' => $estado,
             'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
         ));
     }
 
-    /**
-     * Deletes a estadoAdicional entity.
-     *
-     * @Route("/{id}", name="estadoAdicional_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, estadoAdicional $estado)
-    {
-        $form = $this->createDeleteForm($estado);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($estado);
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('estadoAdicional_index');
-    }
-
-    /**
-     * Creates a form to delete a estadoAdicional entity.
-     *
-     * @param estadoAdicional $estadoAdicional The estadoAdicional entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(estadoAdicional $estado)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('estadoAdicional_delete', array('id' => $estado->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
+    // /**
+    //  * Creates a form to delete a estadoAdicional entity.
+    //  *
+    //  * @param estadoAdicional $estadoAdicional The estadoAdicional entity
+    //  *
+    //  * @return \Symfony\Component\Form\Form The form
+    //  */
+    // private function createDeleteForm(estadoAdicional $estado)
+    // {
+    //     return $this->createFormBuilder()
+    //         ->setAction($this->generateUrl('estadoAdicional_delete', array('id' => $estado->getId())))
+    //         ->setMethod('DELETE')
+    //         ->getForm()
+    //     ;
+    // }
 }

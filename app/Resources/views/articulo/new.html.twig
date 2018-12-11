@@ -27,11 +27,15 @@
 
     <label class="" >Estado Adicional: </label>
 
-      {% for e in estados%}
+
         <select class="form-control" id="estadoAdicional" name="estadoAdicional">
-          <option value="{{e.nombre}}">{{e.nombre}}</option>
+            {% for e in estados %}
+            
+              <option value="{{e.nombre}}">{{e.nombre}}</option>
+
+            {% endfor %}
         </select>
-      {% endfor %}
+
     {{ form_errors(form) }}
     <label><strong>Cantidad de Artículos a agregar a la oficina(*): </strong></label>
     <input id="cantidad" type="number" name="cantidad" value="1" min ="1" required><br>
