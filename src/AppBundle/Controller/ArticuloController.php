@@ -232,7 +232,7 @@ class ArticuloController extends Controller
           }
           $em->persist($articulo);
           $em->flush();
-          return $this->redirectToRoute('articulo_show', array('id' => $articulo->getId()));
+          return $this->redirectToRoute('oficina_show', array('id' => $oficinaId, 'editado' => 'editado'));
         } else {
           for ($i=1; $i <= $cantidad; $i++) {
             $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
