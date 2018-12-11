@@ -108,12 +108,15 @@
 {{ parent() }}
 <script>
 
-  //pdf export
+  // //pdf export
+  // $table=$('#tablaArticulos');
+  // $a= $table.find('tbody tr').slice(0, 5);
+  // console.log($a);
+
   jQuery(function ($) {
     $("#exportButtonPdf").click(function () {
         var dataSource = shield.DataSource.create({
-
-            data: "#tablaArticulos",
+            data: $('#tablaArticulos').slice(0,6),
             schema: {
                 type: "table",
                 fields: {
@@ -122,6 +125,7 @@
                     Denominación: { type: String },
                     Tipo: { type: String },
                     Estado: { type: String }
+
                 }
             }
         });
@@ -130,6 +134,7 @@
                 author: "PrepBootstrap",
                 created: new Date()
             });
+
             pdf.addPage("a4", "portrait");
             pdf.table(
                 50,
@@ -149,6 +154,7 @@
                     }
                 }
             );
+
             pdf.saveAs({
                 fileName: "Listado_de_articulos"
             });
