@@ -3,9 +3,11 @@
 {% block content %}
   <div class="container">
     <br>
-    <a href="{{ path('estadoAdicional_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados</a>
+    <a href="{{ path('estadoAdicional_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados Adionales</a>
     <br>
-    <h1>Nuevo Estado</h1>
+    <hr>
+    <h2>Nuevo Estado Adicional</h2>
+    <hr>
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_errors(form) }}

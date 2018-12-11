@@ -3,9 +3,11 @@
 {% block content %}
   <div class="container">
     <br>
-    <h1>Estados</h1>
+    <hr>
+    <h2>Estados adicionales</h2>
+    <hr>
     <div class="">
-      <a class="btn btn-dark" href="{{ path('estadoAdicional_new') }}">Agregar nuevo estado</a>
+      <a class="btn btn-dark" href="{{ path('estadoAdicional_new') }}">Agregar nuevo estado adicional</a>
     </div>
     <br>
     <div class="table-responsive">
@@ -16,8 +18,6 @@
               data-side-pagination="server"
               data-pagination="true"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
-              data-search="true"
-              data-show-columns="true"
               data-url="{{ path('estadoAdicional_list') }}"
               >
         <thead>

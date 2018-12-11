@@ -43,17 +43,19 @@
       </div>
     </div>
     {% endblock %}
+    <hr>
     <h3>Listado de todos los artículos</h3>
+    <hr>
+    <button id="exportButtonPdf" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</button>
+    <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
     <div class="table-responsive" >
-      <button id="exportButtonPdf" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</button>
-      <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
-
       <div id="toolbar">
         <button id="button1" hidden class="btn btn-default">filterBy</button>
       </div>
       <table  id="tablaArticulos"
               class="table table-hover table-striped"
               data-toggle="table"
+              data-show-header="true"
               data-height="700"
               data-side-pagination="server"
               data-pagination="true"
@@ -325,11 +327,6 @@ xhttpTipos.send();
 {% block serchArticulos  %}
 <script>
 
-
-
-
-
-var $table = $('#tablaArticulos');
 
 $("button").click(function(){
   var nroInventario = $('#nroInventario').val();
