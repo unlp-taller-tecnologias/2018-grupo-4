@@ -43,13 +43,11 @@ security:
       - { path: ^/articulo/$, role: ROLE_USER }
       - { path: ^/articulo/listado, role: ROLE_USER }
 
-
       - { path: ^/oficina/articulo_listFilter_oficinas, role: ROLE_USER }
       - { path: ^/articulo/listadoFilter, role: ROLE_USER }
       - { path: ^/articulo/articulo_listFilter, role: ROLE_USER }
       - { path: ^/oficina/oficina_listFilter, role: ROLE_USER }
-
-      - { path: ^/user/, role: ROLE_SUPER_ADMIN }
+      - { path: ^/user/edit, role: ROLE_USER }
 
       - { path: ^/articulo/, role: ROLE_ADMIN }
 
