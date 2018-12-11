@@ -110,11 +110,13 @@ class estadoAdicionalController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $habilitado = $em->getRepository('AppBundle:estadoAdicional')->findOneByHabilitado('1');
-            $estado->setHabilitado($habilitado);
+            //$habilitado = $em->getRepository('AppBundle:estadoAdicional')->findOneByHabilitado('1');
+          //  $estado->setHabilitado($habilitado);
             $em->persist($estado);
             $em->flush();
-            return $this->redirectToRoute('estadoAdicional_show', array('editado' => 'editado'));
+            return $this->redirectToRoute('estadoAdicional_show', array('id'=> $estado->getId(),
+            'editado' => 'editado'
+          ));
         }
 
         return $this->render('estadoadicional/new.html.twig', array(
