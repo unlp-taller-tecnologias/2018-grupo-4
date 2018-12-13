@@ -126,27 +126,30 @@ class ArticuloController extends Controller
       $denominacion = $request->request->get('denominacion');
       $estado = $request->request->get('estado');
       $tipo = $request->request->get('tipo');
-
+      $estadoAdicional = $request->request->get('estadoAdicional');
 
       $nroInventario = ($nroInventario == "")? NULL:$nroInventario;
       $numExpediente = ($numExpediente == "")? NULL:$numExpediente;
       $denominacion = ($denominacion == "")? NULL:$denominacion."%";
       $estado = ($estado == "")? NULL:$estado;
       $tipo = ($tipo == "")? NULL:$tipo;
+      $estadoAdicional = ($estadoAdicional == "")? NULL:$estadoAdicional;
 
       $em = $this->getDoctrine()->getEntityManager();
       $dql = "select a from AppBundle:Articulo a where (((a.numInventario = :nroInventario and :nroInventario is not null) or (:nroInventario is null))
               and ((a.numExpediente = :numExpediente and :numExpediente is not null) or (:numExpediente is null))
               and ((a.denominacion like :denominacion and :denominacion is not null) or (:denominacion is null))
               and ((a.estado = :estado and :estado is not null) or (:estado is null))
+              and ((a.estadoAdicional = :estadoAdicional and :estadoAdicional is not null) or (:estadoAdicional is null))
               and ((a.tipo = :tipo and :tipo is not null) or (:tipo is null)))
-              or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :tipo is null)";
+              or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :estadoAdicional is null and :tipo is null)";
       $query = $em->createQuery($dql);
       $query->setParameter('nroInventario', $nroInventario);
       $query->setParameter('numExpediente', $numExpediente);
       $query->setParameter('denominacion', $denominacion);
       $query->setParameter('estado', $estado);
       $query->setParameter('tipo', $tipo);
+      $query->setParameter('estadoAdicional', $estadoAdicional);
       $articulos = $query->getResult();
 
       $total = count($articulos);
@@ -165,7 +168,7 @@ class ArticuloController extends Controller
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
-          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
+          'estadoAdicional' => ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
         );
       };
 
@@ -286,11 +289,6 @@ class ArticuloController extends Controller
           }
         }
       }
-
-
-
-
-
     $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
     $arrayDesCond = [];
     $count = count($arrayValuesCond);
@@ -316,9 +314,64 @@ class ArticuloController extends Controller
         'CondDeshabilitadas' => $arrayDesCond,
         'TiposDeshabilitadas' => $arrayDesTipo
     ));
-
-
   }
+
+  /**
+   * Cambio de estado adicional de articulos vista
+   * @Route("{id}/articulo_change", name="articulo_change")
+   * @Method({"GET", "POST"})
+   */
+    public function changeAction(Request $request, Oficina $oficina)
+    {
+      $id = $oficina->getId();
+      $em = $this->getDoctrine()->getManager();
+      $articulosRepository = $em->getRepository('AppBundle:Articulo');
+      $em = $this->getDoctrine()->getManager();
+      $estadosRepository = $em->getRepository('AppBundle:Estado');
+      $estadoActivo = $estadosRepository->findOneByNombre('Activo');
+
+      $articulos = $articulosRepository->findBy(array('oficina' => $id, 'estado' => $estadoActivo->getId()));
+      //foreach ($articulos as $ar){
+      //  var_dump($ar->getDenominacion());
+      //}
+      //die();
+
+      return $this->render('oficina/change_state.html.twig', array(
+          'articulos' => $articulos,
+          'oficina' => $oficina,
+          //'delete_form' => $deleteForm->createView(),
+          //'editado' => $editado,
+      ));
+
+
+    }
+
+    /**
+     * Cambio de estado adicional de articulos
+     * @Route("{id}/changeArticulos", name="changeArticulos")
+     * @Method({"GET", "POST"})
+     */
+      public function changeArticulosAction(Request $request){
+        $estado = $request->request->get('estado');
+        $articulosSeleccionados = $request->request->get('articulosSeleccionados');
+
+        $em = $this->getDoctrine()->getManager();
+        $estadosRepository = $em->getRepository('AppBundle:estadoAdicional');
+        $estadoAd = $estadosRepository->findOneBy(array('id' => $estado ));
+
+        $count = count($articulosSeleccionados);
+        for ($i=0; $i < $count; $i++) {
+          $em = $this->getDoctrine()->getManager();
+          $articulosRepository = $em->getRepository('AppBundle:Articulo');
+          $idArt = $articulosSeleccionados[$i];
+          $articulo = $articulosRepository->findOneBy(array('id' => $idArt));
+          $articulo->setEstadoAdicional($estadoAd);
+          $this->getDoctrine()->getManager()->flush();
+        }
+        var_dump('El cambio de ha realizado');
+        die();
+      }
+
 
     /**
      * Displays a form to edit an existing articulo entity.

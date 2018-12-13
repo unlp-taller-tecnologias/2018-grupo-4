@@ -1,0 +1,95 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('oficina_show', { 'id': oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a la oficina {{oficina.nombre}}</a>
+  <br>
+    <hr>
+    <h2>Oficina: {{oficina.nombre}}</h2>
+    <hr>
+    <br>
+    <label>Seleccione el estado para realizar el cambio:</label>
+    <div class="form-row" >
+      <div class="form-group col-md-3">
+        <select id="estado" class="form-control" name="estado">
+          <option value=""> Seleecione </option>
+        </select>
+      </div>
+      <div class="form-group col-md-3">
+        <button id="button" class="btn btn-dark">Cambiar estado</button>
+      </div>
+    </div><br>
+    <h5>Seleccione artículo/s del {{oficina.nombre}} para el cambio de estado</h5>
+    <hr>
+    <div style="padding-top: 30px;" class="table-responsive">
+      <table id="tablaArticulos"
+              class="table table-hover table-striped"
+              data-toggle="table"
+              data-side-pagination="server"
+              data-pagination="true"
+              data-page-list="[2, 5, 10, 20, 50, 100, 200]"
+              data-search="false"
+              data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
+              >
+        <thead>
+          <tr>
+            <th data-field="state" data-checkbox="true"></th>
+            <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
+            <th scope="row" data-field="numExpediente" data-sortable="true">NroExpediente</th>
+            <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+            <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+            <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+            <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+var xhttpEstados = new XMLHttpRequest();
+xhttpEstados.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var listado = JSON.parse(this.responseText);
+    var estados = listado.rows;
+    var opciones = "";
+    for(es in estados){
+      if (estados[es].habilitado == 'Si') {
+        opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
+      }
+    }
+    $("#estado").append(opciones);
+  }
+};
+xhttpEstados.open("GET", "{{ path('estadoAdicional_list') }}", true);
+xhttpEstados.send();
+
+$("button").click(function(){
+  var estado = $('#estado').val();
+  var articulos = $('#tablaArticulos');
+  var articulosSeleccionados = articulos.bootstrapTable('getAllSelections');
+  var arId = [];
+  for(art in articulosSeleccionados){
+    arId.push(articulosSeleccionados[art].id);
+  }
+  $.ajax({
+    method: "POST",
+    url: "changeArticulos",
+    data: {
+            "estado":estado,
+            "articulosSeleccionados":arId
+          } ,
+    success: function(data) {
+      alert(data);
+
+      }
+    });
+  });
+
+</script>
+{% endblock %}

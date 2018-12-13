@@ -24,13 +24,19 @@
           <label>Denominación</label>
           <input type="text" id="denominacion" class="form-control" placeholder="Denominación" name="denominacion">
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
           <label>Estado</label>
           <select id="estado" class="form-control" name="estado">
             <option value=""> Seleecione </option>
           </select>
         </div>
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-2">
+          <label>Estado adicional</label>
+          <select id="estadoAdicional" class="form-control" name="tipo">
+            <option value=""> Seleecione </option>
+          </select>
+        </div>
+        <div class="form-group col-md-2">
           <label>Tipo</label>
           <select id="tipo" class="form-control" name="tipo">
             <option value=""> Seleecione </option>
@@ -56,7 +62,6 @@
               class="table table-hover table-striped"
               data-toggle="table"
               data-show-header="true"
-              data-height="700"
               data-side-pagination="server"
               data-pagination="true"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
@@ -308,32 +313,47 @@ xhttpTipos.onreadystatechange = function() {
 xhttpTipos.open("GET", "{{ path('tipo_list') }}", true);
 xhttpTipos.send();
 
-  function operateFormatter(value, row, index) {
-    show = "{{ path('articulo_show', {id: -1})}}";
-    show = show.replace('-1', value);
-    return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
-    ].join('');
+var xhttpTipos = new XMLHttpRequest();
+xhttpTipos.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var listado = JSON.parse(this.responseText);
+    var tipos = listado.rows;
+    var opciones = "";
+    for(ti in tipos){
+      if (tipos[ti].habilitado == 'Si') {
+        opciones += "<option value= \""+ tipos[ti].id + "\">"+ tipos[ti].nombre +"</option>";
+      }
+    }
+    $("#estadoAdicional").append(opciones);
   }
-  var $table = $('#tablaArticulos');
-  $.extend($.fn.bootstrapTable.defaults, {
-      showExport: false,
-      exportDataType: 'basic', // basic, all, selected
-      // 'json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'powerpoint', 'pdf'
-      exportTypes: ['pdf', 'excel'],
-      exportOptions: {}
-  });
-  $.extend($.fn.bootstrapTable.defaults.icons, {
-      export: 'fas fa-file-export'
-  });
+};
+xhttpTipos.open("GET", "{{ path('estadoAdicional_list') }}", true);
+xhttpTipos.send();
+
+function operateFormatter(value, row, index) {
+  show = "{{ path('articulo_show', {id: -1})}}";
+  show = show.replace('-1', value);
+  return [
+    `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
+  ].join('');
+}
+var $table = $('#tablaArticulos');
+$.extend($.fn.bootstrapTable.defaults, {
+    showExport: false,
+    exportDataType: 'basic', // basic, all, selected
+    // 'json', 'xml', 'png', 'csv', 'txt', 'sql', 'doc', 'excel', 'powerpoint', 'pdf'
+    exportTypes: ['pdf', 'excel'],
+    exportOptions: {}
+});
+$.extend($.fn.bootstrapTable.defaults.icons, {
+    export: 'fas fa-file-export'
+});
 
 </script>
 {% endblock %}
 
 {% block serchArticulos  %}
 <script>
-
-
 $("button").click(function(){
   var nroInventario = $('#nroInventario').val();
   var expediente = $('#expediente').val();
@@ -353,7 +373,6 @@ $("button").click(function(){
             "tipo":tipo
           } ,
     success: function(data) {
-      //alert(data);
 
       $table.bootstrapTable('load',data);
       }
@@ -366,11 +385,13 @@ $("button").click(function(){
     $('#denominacion').val('');
     $('#estado').val('');
     $('#tipo').val('');
+    $('#estadoAdicional').val('');
     var nroInventario = $('#nroInventario').val();
     var expediente = $('#expediente').val();
     var denominacion = $('#denominacion').val();
     var estado = $('#estado').val();
     var tipo = $('#tipo').val();
+    var estadoAdicional = $('#estadoAdicional').val();
     $.ajax({
       method: "POST",
       url: "articulo_listFilter",
