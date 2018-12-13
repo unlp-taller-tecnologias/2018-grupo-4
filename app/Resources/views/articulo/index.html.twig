@@ -56,7 +56,6 @@
               class="table table-hover table-striped"
               data-toggle="table"
               data-show-header="true"
-              data-height="700"
               data-side-pagination="server"
               data-pagination="true"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
@@ -70,10 +69,7 @@
             <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
             <th scope="row" data-field="estado" data-sortable="true">Estado</th>
             <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
-            <th data-field="id" data-formatter="operateFormatterShow">Ver</th>
-            {% if is_granted("ROLE_ADMIN") %}
-            <th data-field="id" data-formatter="operateFormatterEdit">Editar</th>
-            {% endif %}
+            <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
           </tr>
         </thead>
         <body>
@@ -249,31 +245,21 @@
 
 //fin excel
 
-
-
-
-
-
-
   {% if editado == 'editado' %}
     $('#editModal').modal('show');
   {%endif%}
 
-
-  function operateFormatterShow(value, row, index) {
+  function operateFormatterAction(value, row, index) {
     show = "{{ path('articulo_show', {id: -1})}}";
     show = show.replace('-1', value);
-    return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
-    ].join('');
-  }
-  function operateFormatterEdit(value, row, index) {
     edit = "{{ path('articulo_edit', {id: -1})}}";
     edit = edit.replace('-1', value);
     return [
-      `<a class="edit ml10" href="${edit}" title="Ver"><i class="fas fa-edit"></i></a>`,
+      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10" href="${edit}" title="Editar"><i class="fas fa-edit"></i></a>`,
     ].join('');
   }
+
 var xhttpEstados = new XMLHttpRequest();
 xhttpEstados.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
@@ -307,15 +293,6 @@ xhttpTipos.onreadystatechange = function() {
 };
 xhttpTipos.open("GET", "{{ path('tipo_list') }}", true);
 xhttpTipos.send();
-
-  function operateFormatter(value, row, index) {
-    show = "{{ path('articulo_show', {id: -1})}}";
-    show = show.replace('-1', value);
-    return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
-    ].join('');
-  }
-  var $table = $('#tablaArticulos');
   $.extend($.fn.bootstrapTable.defaults, {
       showExport: false,
       exportDataType: 'basic', // basic, all, selected

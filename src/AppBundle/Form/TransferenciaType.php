@@ -25,13 +25,13 @@ class TransferenciaType extends AbstractType
     {
         $builder
                 ->add('fecha', DateType::class, array(
-                  'label' => 'Fecha*',
+                  'label' => 'Fecha(*)',
                   'widget' => 'single_text',
                   'required' => true
                 ))
 
                 ->add('oficina_destino', null, array(
-                  'label' => 'Oficina destino*',
+                  'label' => 'Oficina destino(* )',
                   'required' => true
                 ))
                 ->add('observaciones', TextareaType::class, array(

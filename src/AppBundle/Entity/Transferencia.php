@@ -132,11 +132,12 @@ class Transferencia
      */
     private $historiales;
 
-    public function __construct()
+    public function __construct($oficinaOrigen)
     {
         $this->historiales = new ArrayCollection();
         $this->finalizada = 0;
         $this->fecha = new \DateTime();
+        $this->oficinaOrigen=$oficinaOrigen;
     }
 
 
