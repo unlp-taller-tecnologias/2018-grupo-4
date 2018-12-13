@@ -3,12 +3,21 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * estadoAdicional
  *
  * @ORM\Table(name="estado_adicional")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\estadoAdicionalRepository")
+ * @UniqueEntity(
+ *   fields={"nombre"},
+ *   message="El nombre de estado ya existe."
+ * )
+ * @UniqueEntity(
+ *   fields={"color"},
+ *   message="El color ya existe."
+ * )
  */
 class estadoAdicional
 {
@@ -36,16 +45,16 @@ class estadoAdicional
     private $color;
 
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="habilitado", type="integer")
+     * @ORM\Column(name="habilitado", type="boolean")
      */
     private $habilitado;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string", length=255)
+     * @ORM\Column(name="descripcion", type="string", length=255, nullable=true)
      */
     private $descripcion;
 
@@ -158,5 +167,9 @@ class estadoAdicional
 
     public function __toString() {
         return $this->nombre;
+    }
+
+    public function __construct() {
+        $this->habilitado = true;;
     }
 }
