@@ -19,28 +19,24 @@
     <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
     <br>
     <hr>
-    <h2>Nuevo Artículo</h2>
+    <h2>Nuevo Artículo en {{articulo.oficina}}</h2>
     <hr>
     {{ form_start(form) }}
     {{ form_widget(form.oficina, { 'attr': {'class': 'form-control', 'hidden': 'true' }}) }}
     {{ form_widget(form) }}
 
     <label class="" >Estado Adicional: </label>
-
-
-        <select class="form-control" id="estadoAdicional" name="estadoAdicional">
-            {% for e in estados %}
-            
-              <option value="{{e.nombre}}">{{e.nombre}}</option>
-
-            {% endfor %}
-        </select>
+    <select class="form-control" id="estadoAdicional" name="estadoAdicional">
+        {% for e in estados %}
+          <option value="{{e.nombre}}">{{e.nombre}}</option>
+        {% endfor %}
+    </select>
 
     {{ form_errors(form) }}
     <label><strong>Cantidad de Artículos a agregar a la oficina(*): </strong></label>
     <input id="cantidad" type="number" name="cantidad" value="1" min ="1" required><br>
     <input id="num" type="number" name="numInvent" value="1" hidden><br>
-    <label><strong>(*)El número que ingrese, indicará la cantidad artículos idénticos con número de inventario consecutivo que se crearán.</strong></label><br><br>
+    <label><strong>(*)La cantidad indica el número de artículos que se crearán con número de inventario consecutivo.</strong></label><br><br>
     {% if is_granted("ROLE_ADMIN") %}
     <button type="button" id="btnGuardar" data-toggle="modal" data-target="#addModal" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
     {% endif %}
@@ -97,5 +93,7 @@ $('#btnGuardar').click(function(){
 {% for id in TiposDeshabilitadas %}
   $("#appbundle_articulo_tipo").find('[value="{{id}}"]').remove();
 {% endfor %}
+
+
 </script>
 {% endblock %}

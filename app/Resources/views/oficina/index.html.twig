@@ -17,15 +17,15 @@
     <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
       <h4>Buscar oficinas por:</h4>
        <div class="form-row" >
-         <div class="form-group col-md-6">
+         <div class="form-group col-md-4">
            <label>Nombre</label>
            <input type="text" id="nombre" class="form-control" placeholder="Nombre" name="nombre">
          </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <label>Nro. de carpeta</label>
           <input type="text" id="nroCarpeta" class="form-control" placeholder="Nro. de carpeta" name="carpeta">
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <label>Responsable</label>
           <input type="text" id="responsable" class="form-control" placeholder="Responsable" name="carpeta">
         </div>
@@ -44,8 +44,8 @@
       <table  id="tablaOficinas"
               class="table table-hover table-striped"
               data-toggle="table"
-              data-height="700"
               data-side-pagination="server"
+              fixedColumns='true'
               data-pagination="true"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
               data-url="{{ path('oficina_list') }}"
@@ -55,10 +55,7 @@
             <th scope="row" data-field="nombre" data-sortable="true">Nombre</th>
             <th scope="row" data-field="numeroCarpeta" data-sortable="true">Nro. de carpeta</th>
             <th scope="row" data-field="responsableOficina" data-sortable="true">Responsable</th>
-            <th data-field="id" data-formatter="operateFormatterShow">Ver</th>
-            {% if is_granted("ROLE_ADMIN") %}
-            <th data-field="id" data-formatter="operateFormatterEdit">Editar</th>
-            {% endif %}
+            <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
           </tr>
         </thead>
       </table>
@@ -90,20 +87,17 @@
     $('#editModal').modal('show');
   {%endif%}
 
-  function operateFormatterShow(value, row, index) {
+  function operateFormatterAction(value, row, index) {
     show = "{{ path('oficina_show', {id: -1})}}";
     show = show.replace('-1', value);
-    return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>`,
-    ].join('');
-  }
-  function operateFormatterEdit(value, row, index) {
     edit = "{{ path('oficina_edit', {id: -1})}}";
     edit = edit.replace('-1', value);
     return [
-      `<a class="edit ml10" href="${edit}" title="Ver"><i class="fas fa-edit"></i></a>`,
+      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10" href="${edit}" title="Editar"><i class="fas fa-edit"></i></a>`,
     ].join('');
   }
+
   var $table = $('#tablaOficinas');
 </script>
 {% endblock %}
