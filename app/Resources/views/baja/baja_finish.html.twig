@@ -4,18 +4,18 @@
 
     <div class="container">
       <hr>
-        <h2>Transferencia</h2>
+        <h2>Baja</h2>
       <hr>
         <div class="jumbotron" style="padding: 30px;">
-          <h4>La transferencia ha sido realizada con éxito hacia la oficina {{transferencias.oficinaDestino}}</h4>
+          <h4>La baja ha sido realizada con éxito </h4>
           <div id="dataTransfer" class="row justify-content-center">
             <ul>
-              <a class="btn btn-dark" href="{{ path('oficina_show', { 'id': transferencias.oficinaDestino.id }) }}" style="margin-top: 10px;">Ir a {{transferencias.oficinaDestino}}</a>
+
               <a class="btn btn-dark" href="{{ path('oficina_index') }}" style="margin-top: 10px;">Volver a listado de oficinas</a>
             </ul>
         </div>
         </div>
-          <a class="btn btn-dark" href="{{ path('ver_informe', { 'id': transferencias.id }) }}" >Ver Informe</a>
+          <a class="btn btn-dark" href="{{ path('baja_ver_informe', { 'id': bajas.id }) }}" >Ver Informe</a>
       </div>
 
 {% endblock %}

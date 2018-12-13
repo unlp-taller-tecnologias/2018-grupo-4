@@ -65,7 +65,7 @@ class Historial
 
     /**
     * @ORM\ManyToOne(targetEntity="Transferencia", inversedBy="historial")
-    * @ORM\JoinColumn(name="transferencia_id", referencedColumnName="id", nullable=false)
+    * @ORM\JoinColumn(name="transferencia_id", referencedColumnName="id", nullable=true)
     */
     private $transferencia;
     /**
@@ -87,6 +87,34 @@ class Historial
     public function setTransferencia($transferencia)
     {
         $this->transferencia = $transferencia;
+        return $this;
+    }
+
+
+    /**
+    * @ORM\ManyToOne(targetEntity="Baja", inversedBy="historial")
+    * @ORM\JoinColumn(name="baja_id", referencedColumnName="id", nullable=true)
+    */
+    private $baja;
+    /**
+     * Get baja
+     *
+     * @return Baja
+     */
+    public function getBaja()
+    {
+        return $this->baja;
+    }
+
+    /**
+     * Set baja
+     *
+     * @param string $baja
+     * @return Baja
+     */
+    public function setBaja($baja)
+    {
+        $this->baja = $baja;
         return $this;
     }
 

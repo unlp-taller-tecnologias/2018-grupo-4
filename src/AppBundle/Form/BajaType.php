@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BajaType extends AbstractType
@@ -13,9 +14,20 @@ class BajaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('expediente')->add('observaciones')->add('finalizada')->add('responsableBaja');
+        $builder
+        ->add('expediente', null, array(
+          'label' => 'Numero de expediente*',
+          'required' => true
+        ))
+        ->add('fecha', DateType::class, array(
+          'label' => 'Fecha*',
+          'widget' => 'single_text',
+          'required' => true
+        ))
+
+        ->add('observaciones');
     }
-    
+
     /**
      * {@inheritdoc}
      */

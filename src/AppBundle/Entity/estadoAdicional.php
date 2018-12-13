@@ -36,7 +36,7 @@ class estadoAdicional
     private $color;
 
     /**
-     * @var int
+     * @var boolean
      *
      * @ORM\Column(name="habilitado", type="integer")
      */

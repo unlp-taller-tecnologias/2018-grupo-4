@@ -8,8 +8,10 @@
   <hr>
     <h2>Artículo: {{articulo.denominacion}}</h2>
 <hr>
-    <a href="#">Ver historial de oficinas de {{articulo.denominacion}}</a><br>
+    <a href="{{ path('articulo_historial', {'id': articulo.id}) }}">Ver historial de oficinas de {{articulo.denominacion}}</a><br>
+
     <table style="margin: 15px;" class="table table">
+
         <tbody>
           <tr>
               <th scope="row">Oficina</th>

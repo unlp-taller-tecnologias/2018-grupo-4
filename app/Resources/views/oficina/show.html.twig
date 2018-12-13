@@ -11,17 +11,23 @@
     {% if is_granted("ROLE_ADMIN") %}
 
     {% if operaciones %}
-    <div style="margin-bottom: 15px;">
-      <a id="continuar" href="{{ path('transferencia_continue', {'id_oficina': oficina.id}) }}">Actualmente, existe una operación en curso. Continuar</a><br>
-    </div>
+      {% if tipo == 'transferencia' %}
+        <div style="margin-bottom: 15px;">
+          <a id="continuar" href="{{ path('transferencia_continue', {'id_oficina': oficina.id}) }}">Actualmente, existe una transferencia en curso. Continuar</a><br>
+        </div>
+      {% else %}
+        <div style="margin-bottom: 15px;">
+          <a id="continuar" href="{{ path('baja_continue', {'id_oficina': oficina.id}) }}">Actualmente, existe una baja en curso. Continuar</a><br>
+        </div>
     {% endif %}
-
+  {% endif %}
     <div class="">
       <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}"><i class="fas fa-plus"></i> Agregar nuevo artículo</a>
       {% if not operaciones %}
         <a class="btn btn-dark" href="{{ path('transferencia_new', {'id_oficina': oficina.id}) }}">Iniciar Transferencia</a>
+          <a class="btn btn-dark" href="{{ path('baja_new', {'id_oficina': oficina.id}) }}">Iniciar Baja</a>
       {% endif %}
-      <a class="btn btn-dark" href="{{ path('baja_new', {'id': oficina.id}) }}">Iniciar Baja</a>
+
     </div>
     {% endif %}
   <br>

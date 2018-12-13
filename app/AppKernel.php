@@ -3,6 +3,7 @@
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
+//use Knp\Bundle\SnappyBundle\Snappy\Response\Response;
 
 class AppKernel extends Kernel
 {
@@ -15,8 +16,9 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+          //  new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-          
+
             new AppBundle\AppBundle(),
             new FOS\UserBundle\FOSUserBundle(),
         ];

@@ -188,24 +188,38 @@ class OficinaController extends Controller
     {
         $deleteForm = $this->createDeleteForm($oficina);
 
-
+        $tipo="";
         $em = $this->getDoctrine()->getManager();
         $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
-        $existenOperacionesPendientes = $transferenciaRepository->findBy(
+        $existenTransferenciasPendientes = $transferenciaRepository->findBy(
           array('finalizada' => 2,
           'oficinaOrigen' => $oficina)
         );
-        if ($existenOperacionesPendientes == null) {
-          $operacionesPendientes = false;
+        if ($existenTransferenciasPendientes == null) {
+          $bajaRepository = $em->getRepository('AppBundle:Baja');
+          $existenBajasPendientes = $bajaRepository->findBy(
+            array('finalizada' => 2,
+            'oficina' => $oficina)
+          );
+          if ($existenBajasPendientes == null) {
+            $operacionesPendientes = false;
+          }else{
+            $operacionesPendientes = true;
+            $tipo = 'baja';
+          }
         }else{
           $operacionesPendientes = true;
+          $tipo = 'transferencia';
         }
+
+
 
         $editado = $request->query->get('editado');
 
         return $this->render('oficina/show.html.twig', array(
             'operaciones' => $operacionesPendientes,
             'oficina' => $oficina,
+            'tipo' =>$tipo,
             'delete_form' => $deleteForm->createView(),
             'editado' => $editado,
         ));

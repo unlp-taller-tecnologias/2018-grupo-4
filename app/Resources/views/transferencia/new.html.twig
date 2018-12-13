@@ -3,7 +3,7 @@
 {% block content %}
 <div style="margin-left: 2%; margin-right: 2%;">
   <br>
-    <h1>Transferencia</h1>
+    <h1>Transferencia {{transferencia.oficinaOrigen}}</h1>
 
     <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
     <br>
@@ -42,8 +42,8 @@
             <button id="button1" class="btn btn-dark"><i class="fas fa-minus"></i> Quitar de la transferecia</button>
         </div>
         <table id="table1"
-                class="table table-hover table-striped"
-                data-side-pagination="server"
+              class="table table-hover table-striped"
+               data-side-pagination="server"
                data-toggle="table"
                data-toolbar="#toolbar1"
                data-height="460"
@@ -85,18 +85,36 @@
 
 
 {{ form_end(form) }}
-  <button name="guardar" id="guardar" class="btn btn-dark">Guardar</button>
-  <button name="cancelar" id="cancelar" class="btn btn-dark">Cancelar</button>
+  <button name="guardar"  id="guardar" class="btn btn-dark">Guardar</button>
+  <button name="cancelar" type="button" data-toggle="modal" data-target="#myModalCancel"  class="btn btn-dark">Cancelar</button>
 
   {% if historiales %}
     {% for i in historiales %}
-    <input type="hidden" name="" class="idsArticulosActuales" value="{{i.articulo.id}}">
+    <input type="hidden" name="" class="idsArticulosActuales" id="{{i.articulo.id}}" value="{{i.articulo.id}}">
+    <input type="hidden" name="idsArticulosActuales2[]" class="idsArticulosActuales2" id="{{i.articulo.id}}" value="{{i.articulo.id}}">
     {% endfor %}
   {% endif %}
 
-  {% if continuada %}
-    <button class="btn btn-dark" type="button" id="hacer" name="button">Cargar artículos</button>
-  {% endif %}
+  <div class="modal fade" id="myModalCancel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+      	<div class="modal-header">
+        	<h5 class="modal-title" id="exampleModalLabel">Cancelar Transferencia</h5>
+        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          	<span aria-hidden="true">&times;</span>
+        	</button>
+      	</div>
+      	<div class="modal-body">
+        	<i class="fas fa-question-circle"></i> ¿Está seguro/a de cancelar la transferencia?
+      	</div>
+      	<div class="modal-footer">
+        	<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          	<button id="cancelar" class="btn btn-danger"> Si</button>
+      	</div>
+    	</div>
+  	</div>
+
+
 
 {% endblock %}
 
@@ -108,16 +126,18 @@
   }
 </style>
 <script>
-
-
-
-
-
-
-
-
 //cargar articulos
-  $("#hacer").click(function(){
+  window.onload = function(){
+
+//     $(document).ready(function() {
+//     $('#table').DataTable( {
+//         "paging":   false,
+//         "ordering": false,
+//         "info": 	false
+//     } );
+// } );
+
+
     if ("{{continuada}}") {
       //alert('se');
       //$tableTest = $('#table1');
@@ -149,24 +169,24 @@
            $.each( data, function( key, value ) {
             //console.log( key + ": " + value.denominacion );
             console.log(value.denominacion);
-            $('#condiciones').append(`
-              <div class="form-group ${value.id}_container">
-                <label class="idsArticulo" for="condiciones['${value.numInventario}']" >${value.denominacion}</label>
-                <input type="hidden" class="hiddenIds" name="" value="${value.id}">
-                <select class="form-control" name="${value.id}'" id="${value.id}" required>
-                    {% for condicion in condiciones %}
-                        <option class="asd" value="{{condicion}}" >{{condicion}}</option>
-                    {% endfor %}
-                </select>
-              </div>
-              `
-            );
+            let id = `condicion_${value.numInventario}`;
+              $('#condiciones').append(`
+                <div class="form-group ${id}_container">
+                  <label class="idsArticulo" for="condiciones['${value.numInventario}']" >${value.denominacion}</label>
+                  <input type="hidden" class="hiddenIds" name="" id="${value.id}" value="${value.id}">
+                  <select class="form-control" name="${value.id}'" id="${value.id}" required>
+                      {% for condicion in condiciones %}
+                          <option class="asd" value="{{condicion}}" >{{condicion}}</option>
+                      {% endfor %}
+                  </select>
+                </div>
+                `
+              );
+
           });
           $("#hacer").detach();
         },
-        error: function(){
-          alert('error');
-        }
+
         });
         //ajax para tabla
         $.ajax({
@@ -178,52 +198,19 @@
           success: function(data) {
              $tableTest.bootstrapTable('load',data);
              const $dataT = $tableTest.bootstrapTable('getAllSelections');
-
-
           },
-          error: function(){
-            alert('errorss');
-          }
+
           });
     }
-});
+};
 
-    $articulosId = $('#articulosIds');
-    var $table = $('#table'),
-        $tableTest = $('#table1'),
-        $button = $('#button');
-        $buttonTest = $('#button1');
-        $form = $('form');
-        $transferenciasId = $('#articulosIds');
-        $form.submit(function(){
-          $condicionesIds = $('#condicionesIds');
-          $articsIds = $('#articsIds');
-          var idsCondicionesArray = [];
-          var idsArticulosArray = [];
-          var b = "";
-          var c = "";
-          var idsCondiciones = $('.form-control').each(function() {
-            idsCondicionesArray.push($(this).val());
-          });
-          var idsIds = $('.hiddenIds').each(function() {
-            idsArticulosArray.push($(this).val());
-          });
-          console.log(idsArticulosArray);
-          b = idsCondicionesArray.join(",");
-          $condicionesIds.val(b);
-          c = idsArticulosArray.join(",");
-          $articsIds.val(c);
-          var a = "";
-          var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
-          var ids = $.map($tableTest.bootstrapTable('getData'), function (row) {
-                return row.numInventario;
-            });
-            a = ids.join(",");
-            $transferenciasId.val(a);
-            return true;
-        });
-        $('#condiciones-title').hide();
 
+
+
+
+
+
+    $('#condiciones-title').hide();
     function moveTransferencias ($tableIn, $tableOut, createInput) {
       const $dataT = $tableIn.bootstrapTable('getAllSelections');
       const ids = $.map($tableIn.bootstrapTable('getAllSelections'), function (row) {
@@ -239,7 +226,7 @@
           $('#condiciones').append(`
             <div class="form-group ${id}_container">
               <label class="idsArticulo" for="condiciones['${data.numInventario}']" >${data.denominacion}</label>
-              <input type="hidden" class="hiddenIds" name="" value="${data.id}">
+              <input type="hidden" class="hiddenIds" name="" id="${data.id}" value="${data.id}">
               <select class="form-control" name="${data.id}'" id="${data.id}" required>
                   {% for condicion in condiciones %}
                       <option class="asd" value="{{condicion}}" >{{condicion}}</option>
@@ -252,32 +239,27 @@
           $(`.${id}_container`).remove();
         }
       });
-
       $tableIn.bootstrapTable('remove', {
         field: 'numInventario',
         values: ids
       });
-
       if (createInput && $tableOut.bootstrapTable('getData').length > 0) {
         $('#condiciones-title').show();
       } else if (!createInput && $tableIn.bootstrapTable('getData').length == 0) {
         $('#condiciones-title').hide();
       }
-
       $tableIn.bootstrapTable('uncheckAll');
       $tableOut.bootstrapTable('uncheckAll');
     }
-
     $(function () {
       $button.click(() => {
         moveTransferencias($table, $tableTest, true);
       });
-
       $buttonTest.click(() => {
         moveTransferencias($tableTest, $table, false);
+        //sacar
       });
     });
-
     function validarArticulos(){
       console.log('llegamo');
       $tabla = $('#table1');
@@ -287,18 +269,13 @@
       }else{
         return true;
       }
-
     }
-
-
-
 </script>
 
 {% endblock %}
 
 {% block serchArticulos  %}
 <script>
-
     $("#guardar").click(function(){
       $condicionesIds = $('#condicionesIds');
       $articsIds = $('#articsIds');
@@ -312,22 +289,20 @@
       var idsIds = $('.hiddenIds').each(function() {
         idsArticulosArray.push($(this).val());
       });
-      console.log(idsArticulosArray);
+
       b = idsCondicionesArray.join(",");
       $condicionesIds.val(b);
       c = idsArticulosArray.join(",");
       $articsIds.val(c);
-      console.log(c);
-      console.log(b);
       var fecha  = $('#appbundle_transferencia_fecha').val();
       var oficinaDestino = $('#appbundle_transferencia_oficina_destino').val();
       var observaciones = $('#appbundle_transferencia_observaciones').val();
       if (c == ""){
         c = null;
       }
-
-      //console.log('guardar');
+      console.log('guardar');
       $.ajax({
+        url:" " ,
         method: "POST",
         url: "{{oficina}}/test",
         data: {
@@ -338,17 +313,22 @@
                 "idsArticulos": c
               } ,
         success: function(data) {
-
-          console.log(data);
+          //console.log(data);
           alert('La transferencia ha sido guardada con exito');
           $tableTest.bootstrapTable('load',data);
-
+          //location.href = "./oficina_show/{{oficina}}" ;
         },
         error: function(){
-
         }
         });
       });
+
+
+
+
+
+
+
 
 </script>
 
@@ -388,16 +368,96 @@
               "idsArticulos": c
             } ,
       success: function(data) {
-
+        location.href = "./oficina_show/{{oficina}}" ;
+        //console.log('anda el modal');
           //console.log(data);
-        alert('La transferencia ha sido cancelada.');
+        //alert('La transferencia ha sido cancelada.');
         //window.location.replace("{{oficina}}/oficina_show");
         //$table.bootstrapTable('load',data);
       },
       error: function(){
-
       }
       });
     });
+
+
+
+
+
+    $buttonTest = $('#button1');
+    art  = $('#articsIds');
+    $buttonTest.click(function(){
+     a//lert('a');
+      $arreg = [];
+      const $dataT = $('#table1').bootstrapTable('getAllSelections');
+
+        //console.log(names);
+        $.each( $dataT, function( key, value ) {
+          //console.log(value.id);
+          $("input[id='" + value.id + "']").remove();
+          console.log(art.val());
+
+          // var inputs = document.getElementsByClassName( 'idsArticulosActuales2' ),
+          //   names  = [].map.call(inputs, function( input ) {
+          //   return input.value;
+          // }).join( '|' );
+
+
+
+        //  console.log(value);
+        });
+
+    //  console.log($arreg);
+    });
+
+
+
+
+
+
+
+
+
+
+
+    $articulosId = $('#articulosIds');
+    var $table = $('#table'),
+        $tableTest = $('#table1'),
+        $button = $('#button');
+        $buttonTest = $('#button1');
+        $form = $('form');
+        $transferenciasId = $('#articulosIds');
+        $form.submit(function(){
+          //alert('asd');
+          $condicionesIds = $('#condicionesIds');
+          $articsIds = $('#articsIds');
+          var idsCondicionesArray = [];
+          var idsArticulosArray = [];
+          var b = "";
+          var c = "";
+          var idsCondiciones = $('.form-control').each(function() {
+            idsCondicionesArray.push($(this).val());
+          });
+          var idsIds = $('.hiddenIds').each(function() {
+            idsArticulosArray.push($(this).val());
+          });
+
+          b = idsCondicionesArray.join(",");
+          $condicionesIds.val(b);
+          c = idsArticulosArray.join(",");
+          $articsIds.val(c);
+          //alert(c);
+          console.log(c);
+          //alert('miau');
+          var a = "";
+          var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
+          var ids = $.map($tableTest.bootstrapTable('getData'), function (row) {
+                return row.numInventario;
+            });
+            a = ids.join(",");
+            $transferenciasId.val(a);
+            return true;
+
+        });
 </script>
 {% endblock %}

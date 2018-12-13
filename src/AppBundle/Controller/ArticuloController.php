@@ -346,6 +346,94 @@ class ArticuloController extends Controller
         ));
     }
 
+
+    /**
+     * Displays a form to edit an existing articulo entity.
+     *
+     * @Route("/{id}/articulo_historial", name="articulo_historial")
+     * @Method({"GET", "POST"})
+     */
+     public function showHistorial(Request $request, Articulo $articulo)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $articuloRepository = $em->getRepository('AppBundle:Articulo');
+        $historialRepository = $em->getRepository('AppBundle:Historial');
+        $oficinaRepository = $em->getRepository('AppBundle:Oficina');
+
+        $historial = $historialRepository->findByArticulo($articulo->getId());
+
+        if ($historial == null) {
+          $segundaOficina = 'Este Articulo aun no fue transferido.';
+          $primerFechaTransferencia = 'Este Articulo aun no fue transferido.';
+          $flagDate = false;
+          $primerOficina = $articulo->getOficina();
+          $cant =0;
+          echo "no hay";
+        }else{
+          $segundaOficina = $historial[0]->getTransferencia()->getOficinaDestino()->getNombre();
+          $primerOficina = $historial[0]->getTransferencia()->getOficinaOrigen()->getNombre();
+          $primerFechaTransferencia =$historial[0]->getTransferencia()->getFecha();
+          $primerFechaTransferencia->format('Y-m-d');
+          $flagDate = true;
+          $fechasesde = array();
+          $fechasHasta = array();
+          $oficinas = array();
+           var_dump(count($historial)-1);
+           $cant = count($historial);
+          // die();
+          $j=1;
+         for ($i=0; $i < (count($historial)-1) ; $i++) {
+            $fechasDesde[] = $historial[$i]->getFecha();
+            $fechasHasta[] = $historial[$j]->getFecha();
+            $oficinas[] = $historial[$i]->getTransferencia()->getOficinaDestino();
+            $i++;
+         }
+
+         $fechasDesde[] = $historial[$i-1]->getFecha();
+         $ultimoElemento = 'Esta aca';
+         $oficinas[] = $historial[$i-1]->getTransferencia()->getOficinaDestino();
+
+          // $movimiento = array(
+          //   'fechaDesde' => $fechasDesde,
+          //   'fechaHasta' => $fechasHasta,
+          //   'oficinas' => $oficinas
+          // );
+          //echo $segundaOficina;
+        }
+        if ($oficinas ==null) {
+          echo 'null';
+        }else{
+          echo "asd";
+        }
+
+        // echo "<pre>";
+        // var_dump($oficinas);
+        //
+        // echo "</pre>";
+        //  die();
+
+
+
+        $fechaCreacion = $articulo->getFechaEntrada();
+        $fechaCreacion->format('Y-m-d');
+        return $this->render('articulo/historial.html.twig', array(
+
+            'primerOficina' => $primerOficina,
+            'primerFechaTransferencia' => $primerFechaTransferencia,
+            'esDate' => $flagDate,
+            'segundaOficina' => $segundaOficina,
+            'creacion' => $fechaCreacion,
+            'historial' =>$historial,
+            'articulo' => $articulo,
+            'fechaDesde' => $fechasDesde,
+            'fechaHasta' => $fechasHasta,
+            'ultimoElemento' => $ultimoElemento,
+            'cantidadElementos' => $cant,
+            'oficinas' => $oficinas
+
+        ));
+    }
+
     // /**
     //  * Deletes a articulo entity.
     //  *
