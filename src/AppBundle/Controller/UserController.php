@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use AppBundle\Entity\Articulo;
 
 
 /**
@@ -89,10 +90,11 @@ class UserController extends Controller
      */
     public function editAction(Request $request, User $user)
     {
-        // $deleteForm = $this->createDeleteForm($user);
+        $deleteForm = $this->createDeleteForm($user);
+        $eliminado = $request->query->get('eliminado');
         $editRole = $this->isGranted('ROLE_SUPER_ADMIN');
         $editForm = $this->createForm('AppBundle\Form\UserType', $user, array(
-          'edit_role' => $editRole, "edit" => false
+          'edit_role' => $editRole, "edit" => false,
         ));
         $editForm->handleRequest($request);
 
@@ -107,75 +109,84 @@ class UserController extends Controller
         return $this->render('user/edit.html.twig', array(
             'user' => $user,
             'edit_form' => $editForm->createView(),
-            //'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+            'eliminado' => $eliminado,
         ));
+    }
+
+    // /**
+    //  * Displays a form to edit an existing user entity.
+    //  *
+    //  * @Route("/{id}/visibility", name="user_visibility")
+    //  * @Method({"GET", "POST"})
+    //  */
+    // public function visibilityAction(Request $request, User $user)
+    // {
+    //
+    //     $editRole = $this->isGranted('ROLE_SUPER_ADMIN');
+    //     $editForm = $this->createForm('AppBundle\Form\UserType', $user, array(
+    //       'edit_role' => $editRole, 'visibility' => false
+    //     ));
+    //     $editForm->handleRequest($request);
+    //
+    //     if ($editForm->isSubmitted() && $editForm->isValid()) {
+    //         $userManager = $this->container->get('fos_user.user_manager');
+    //         $userManager->updatePassword($user);
+    //         $this->getDoctrine()->getManager()->flush();
+    //
+    //         return $this->redirectToRoute('user_index', array('editado' => 'editado'));
+    //     }
+    //
+    //     return $this->render('user/edit.html.twig', array(
+    //         'user' => $user,
+    //         'edit_form' => $editForm->createView(),
+    //     ));
+    // }
+
+
+    /**
+     * Deletes a user entity.
+     *
+     * @Route("/{id}/delete", name="user_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Request $request, User $user)
+    {
+      $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
+      $articulosCreados = $repository->getByUser($user);
+
+      $form = $this->createDeleteForm($user);
+      $form->handleRequest($request);
+      $em = $this->getDoctrine()->getManager();
+
+       if ($articulosCreados == 0) {
+         if ($form->isSubmitted() && $form->isValid()) {
+             $em = $this->getDoctrine()->getManager();
+             $em->remove($user);
+             $em->flush();
+         }
+         return $this->redirectToRoute('user_index', array('editado' => 'editado'));
+       }
+       else {
+        return $this->redirectToRoute('user_edit', array('id'=> $user->getId(), 'eliminado' => 'eliminado'));
+       }
     }
 
     /**
-     * Displays a form to edit an existing user entity.
+     * Creates a form to delete a user entity.
      *
-     * @Route("/{id}/visibility", name="user_visibility")
-     * @Method({"GET", "POST"})
+     * @param User $user The user entity
+     *
+     * @return \Symfony\Component\Form\Form The form
      */
-    public function visibilityAction(Request $request, User $user)
+    private function createDeleteForm(User $user)
     {
-
-        $editRole = $this->isGranted('ROLE_SUPER_ADMIN');
-        $editForm = $this->createForm('AppBundle\Form\UserType', $user, array(
-          'edit_role' => $editRole, 'visibility' => false
-        ));
-        $editForm->handleRequest($request);
-
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $userManager = $this->container->get('fos_user.user_manager');
-            $userManager->updatePassword($user);
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_index', array('editado' => 'editado'));
-        }
-
-        return $this->render('user/edit.html.twig', array(
-            'user' => $user,
-            'edit_form' => $editForm->createView(),
-        ));
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('user_delete', array('id' => $user->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
     }
-
-
-    // /**
-    //  * Deletes a user entity.
-    //  *
-    //  * @Route("/{id}/delete", name="user_delete")
-    //  * @Method("DELETE")
-    //  */
-    // public function deleteAction(Request $request, User $user)
-    // {
-    //     $form = $this->createDeleteForm($user);
-    //     $form->handleRequest($request);
-    //
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $em = $this->getDoctrine()->getManager();
-    //         $em->remove($user);
-    //         $em->flush();
-    //     }
-    //
-    //     return $this->redirectToRoute('user_index');
-    // }
-
-    // /**
-    //  * Creates a form to delete a user entity.
-    //  *
-    //  * @param User $user The user entity
-    //  *
-    //  * @return \Symfony\Component\Form\Form The form
-    //  */
-    // private function createDeleteForm(User $user)
-    // {
-    //     return $this->createFormBuilder()
-    //         ->setAction($this->generateUrl('user_delete', array('id' => $user->getId())))
-    //         ->setMethod('DELETE')
-    //         ->getForm()
-    //     ;
-    // }
 
 
 

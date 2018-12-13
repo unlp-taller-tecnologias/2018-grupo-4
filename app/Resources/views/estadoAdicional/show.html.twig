@@ -3,11 +3,11 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('estadoAdicional_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados Adicionales</a>
+  <a href="{{ path('estadoAdicional_index') }}"><i class="fas fa-angle-left"></i> Listado de Estados Adicionales de Artículos</a>
   <br>
   <hr>
-    <h2>Estado: {{ estado.nombre }}</h2>
-  <hr>
+    <h2>Estado adicional de Artículo: {{ estado.nombre }}</h2>
+
     <table class="table table">
         <tbody>
             <tr>
@@ -28,8 +28,6 @@
             </tr>
         </tbody>
     </table>
-    <br>
-    <a class="btn btn-dark" style="margin: 15px;" href="{{ path('estadoAdicional_edit', { 'id': estado.id }) }}">Editar</a>
-    <br>
+
 </div>
 {% endblock %}

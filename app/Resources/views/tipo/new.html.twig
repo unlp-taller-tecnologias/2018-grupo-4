@@ -17,3 +17,33 @@
 
     </div>
     {% endblock %}
+
+  {% block serchArticulos  %}
+  <script>
+  var hab = 'true';
+  $( document ).ready(function() {
+    console.log(hab);
+     $("#appbundle_tipo_grupo").prop('disabled', true);
+     $("#appbundle_tipo_subgrupo").prop('disabled', true);
+     $("#appbundle_tipo_descripcion").prop('disabled', true);
+  });
+
+  $(document.body).on('change','#appbundle_tipo_nomenclador',function(){
+    if (hab == 'true'){
+      $("#appbundle_tipo_grupo").removeAttr('disabled');
+      $("#appbundle_tipo_subgrupo").removeAttr('disabled');
+      $("#appbundle_tipo_descripcion").removeAttr('disabled');
+      $("#appbundle_tipo_vidaUtil").prop('disabled', true);
+      hab = 'false';
+      console.log(hab);
+    } else {
+      console.log('cambio a diaguita');
+      $("#appbundle_tipo_grupo").prop('disabled', true);
+      $("#appbundle_tipo_subgrupo").prop('disabled', true);
+      $("#appbundle_tipo_descripcion").prop('disabled', true);
+      $("#appbundle_tipo_vidaUtil").removeAttr('disabled', true);
+        hab = 'true';
+    }
+  });
+  </script>
+  {% endblock %}

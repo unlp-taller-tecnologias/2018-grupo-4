@@ -18,7 +18,7 @@ class estadoAdicionalType extends AbstractType
           $builder
             ->add('nombre', null, array(
                 'label' => 'Nombre(*)',
-                'required' => false,
+                'required' => true ,
                 'attr' => array(
                 'placeholder' => 'Ingrese un nombre para el estado'
                 )

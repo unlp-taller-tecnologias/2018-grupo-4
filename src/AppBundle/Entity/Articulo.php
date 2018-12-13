@@ -812,9 +812,10 @@ class Articulo
         return $this;
     }
 
-    public function __construct($id) {
+    public function __construct($id, $oficina) {
         $this->fechaEntrada = new \DateTime();
         $this->numInventario = $id;
+        $this->oficina = $oficina;
     }
 
 }

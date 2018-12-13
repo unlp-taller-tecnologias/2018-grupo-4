@@ -61,6 +61,7 @@ class UserType extends AbstractType
             'edit_role' => false,
             'edit' => true,
             'visibility' => true,
+            'eliminado' => false,
         ));
     }
 

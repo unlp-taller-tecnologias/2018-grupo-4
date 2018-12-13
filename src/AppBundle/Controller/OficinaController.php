@@ -45,8 +45,8 @@ class OficinaController extends Controller
       $offset = $request->query->get('offset', 0);
       $limit = $request->query->get('limit', 10);
       $search = $request->query->get('search', null);
-      $sort = $request->query->get('sort', null);
-      $order = $request->query->get('order', null);
+      $sort = $request->query->get('sort', 'nombre');
+      $order = $request->query->get('order', 'asc');
 
       $em = $this->getDoctrine()->getManager();
       $repository = $em->getRepository('AppBundle:Oficina');
@@ -108,8 +108,8 @@ class OficinaController extends Controller
       $offset = $request->query->get('offset', 0);
       $limit = $request->query->get('limit', 10);
       $search = $request->query->get('search', null);
-      $sort = $request->query->get('sort', null);
-      $order = $request->query->get('order', null);
+      $sort = $request->query->get('sort', 'nombre');
+      $order = $request->query->get('order', 'asc');
 
       $nombre = $request->request->get('nombre');
       $nroCarpeta = $request->request->get('nroCarpeta');
@@ -235,8 +235,8 @@ class OficinaController extends Controller
       $offset = $request->query->get('offset', 0);
       $limit = $request->query->get('limit', 10);
       $search = $request->query->get('search', null);
-      $sort = $request->query->get('sort', null);
-      $order = $request->query->get('order', null);
+      $sort = $request->query->get('sort', 'denominacion');
+      $order = $request->query->get('order', 'asc');
 
       $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
       $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
@@ -334,8 +334,8 @@ class OficinaController extends Controller
       $offset = $request->query->get('offset', 0);
       $limit = $request->query->get('limit', 10);
       $search = $request->query->get('search', null);
-      $sort = $request->query->get('sort', null);
-      $order = $request->query->get('order', null);
+      $sort = $request->query->get('sort', 'denominacion');
+      $order = $request->query->get('order', 'asc');
 
       $nroInventario = $request->request->get('nroInventario');
       $numExpediente = $request->request->get('expediente');
@@ -343,26 +343,30 @@ class OficinaController extends Controller
       $estado = $request->request->get('estado');
       $tipo = $request->request->get('tipo');
       $oficinaId = $request->query->get('idOficina');
+      $estadoAdicional = $request->request->get('estadoAdicional');
 
       $nroInventario = ($nroInventario == "")? NULL:$nroInventario;
       $numExpediente = ($numExpediente == "")? NULL:$numExpediente;
       $denominacion = ($denominacion == "")? NULL:$denominacion."%";
       $estado = ($estado == "")? NULL:$estado;
       $tipo = ($tipo == "")? NULL:$tipo;
+      $estadoAdicional = ($estadoAdicional == "")? NULL:$estadoAdicional;
 
       $em = $this->getDoctrine()->getEntityManager();
       $dql = "select a from AppBundle:Articulo a where (((a.numInventario = :nroInventario and :nroInventario is not null) or (:nroInventario is null))
               and ((a.numExpediente = :numExpediente and :numExpediente is not null) or (:numExpediente is null))
               and ((a.denominacion like :denominacion and :denominacion is not null) or (:denominacion is null))
               and ((a.estado = :estado and :estado is not null) or (:estado is null))
+              and ((a.estadoAdicional = :estadoAdicional and :estadoAdicional is not null) or (:estadoAdicional is null))
               and ((a.tipo = :tipo and :tipo is not null) or (:tipo is null)))
-              or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :tipo is null)";
+              or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :estadoAdicional is null and :tipo is null)";
       $query = $em->createQuery($dql);
       $query->setParameter('nroInventario', $nroInventario);
       $query->setParameter('numExpediente', $numExpediente);
       $query->setParameter('denominacion', $denominacion);
       $query->setParameter('estado', $estado);
       $query->setParameter('tipo', $tipo);
+      $query->setParameter('estadoAdicional', $estadoAdicional);
       $articulos = $query->getResult();
 
       $rawResponse = array(
@@ -379,7 +383,8 @@ class OficinaController extends Controller
             'numExpendiente' => $articulo->getNumExpediente(),
             'denominacion' => $articulo->getDenominacion(),
             'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-            'estado' => $articulo->getEstado()->getNombre()
+            'estado' => $articulo->getEstado()->getNombre(),
+            'estadoAdicional' => ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
           );
         }
       };

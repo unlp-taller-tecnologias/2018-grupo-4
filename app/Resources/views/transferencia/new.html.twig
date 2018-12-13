@@ -6,8 +6,12 @@
     <h1>Transferencia {{transferencia.oficinaOrigen}}</h1>
 
     <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
+  <hr>
+    <h2>Transferencia</h2>
+  <hr>
+
     <br>
-  <div class="container border" style="padding: 30px">
+  <div class="container-fluid border" style="padding: 30px;">
   <div class="row">
     <div class="col-md-6 order-md-1">
       <h4>Artículos de la oficina</h4>
@@ -81,12 +85,15 @@
     <input type="hidden" id="articulosIds" name="articulosIds" value="">
     <input type="hidden" id="condicionesIds" name="condicionesIds" value="">
     <input type="hidden" id="articsIds" name="articsIds" value="">
-    <input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Transferir" style="margin-top: 10px;">
 
 
+    <div class="container">
+<input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Transferir">
 {{ form_end(form) }}
+
   <button name="guardar"  id="guardar" class="btn btn-dark">Guardar</button>
   <button name="cancelar" type="button" data-toggle="modal" data-target="#myModalCancel"  class="btn btn-dark">Cancelar</button>
+</div>
 
   {% if historiales %}
     {% for i in historiales %}
