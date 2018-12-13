@@ -114,12 +114,10 @@ class estadoAdicionalController extends Controller
            //  $estado->setHabilitado($habilitado);
              $em->persist($estado);
              $em->flush();
-             return $this->redirectToRoute('estadoAdicional_show', array('id'=> $estado->getId(),
-             'editado' => 'editado'
-           ));
+             return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado'));
          }
 
-         return $this->render('estadoadicional/new.html.twig', array(
+         return $this->render('estadoAdicional/new.html.twig', array(
              'estado' => $estado,
              'form' => $form->createView(),
          ));
@@ -135,7 +133,7 @@ class estadoAdicionalController extends Controller
     {
         //$deleteForm = $this->createDeleteForm($estado);
 
-        return $this->render('estadoadicional/show.html.twig', array(
+        return $this->render('estadoAdicional/show.html.twig', array(
             'estado' => $estado
             //'delete_form' => $deleteForm->createView(),
         ));

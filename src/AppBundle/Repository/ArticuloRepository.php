@@ -16,6 +16,7 @@ class ArticuloRepository extends \Doctrine\ORM\EntityRepository
   protected $sort;
   protected $order;
   protected $oficina;
+  protected $user;
 
   function getBy($offset = null, $limit = null, $sort = null, $order = null, $search = null, $oficina = null) {
     $this->offset = (!is_null($offset)) ? $offset : 0;
@@ -74,6 +75,21 @@ class ArticuloRepository extends \Doctrine\ORM\EntityRepository
     return $articulosQuery
       ->getQuery()
       ->getSingleScalarResult();
+  }
+
+  public function getByUser($user){
+      $this->user = $user;
+      $articulosQuery = $this
+        ->createQueryBuilder('a')
+        ->select('count(a.id)');
+
+      $articulosQuery
+      ->andWhere('a.user = :user')
+      ->setParameter('user', $this->user);
+
+      return $articulosQuery
+        ->getQuery()
+        ->getSingleScalarResult();
   }
 
 }

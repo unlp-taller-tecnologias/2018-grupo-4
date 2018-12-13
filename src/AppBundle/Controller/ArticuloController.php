@@ -187,7 +187,7 @@ class ArticuloController extends Controller
       $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
       $numInv = ($artNumInv->getNumInventario())+1;
       $condiciones = $em->getRepository('AppBundle:Condicion')->findByHabilitado(1);
-      $articulo = new Articulo($numInv);
+      $articulo = new Articulo($numInv, $oficina);
       $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
       $form->handleRequest($request);
       $errors = array();

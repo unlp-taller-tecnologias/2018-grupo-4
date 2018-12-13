@@ -45,8 +45,8 @@ class OficinaController extends Controller
       $offset = $request->query->get('offset', 0);
       $limit = $request->query->get('limit', 10);
       $search = $request->query->get('search', null);
-      $sort = $request->query->get('sort', null);
-      $order = $request->query->get('order', null);
+      $sort = $request->query->get('sort', 'nombre');
+      $order = $request->query->get('order', 'asc');
 
       $em = $this->getDoctrine()->getManager();
       $repository = $em->getRepository('AppBundle:Oficina');
@@ -108,8 +108,8 @@ class OficinaController extends Controller
       $offset = $request->query->get('offset', 0);
       $limit = $request->query->get('limit', 10);
       $search = $request->query->get('search', null);
-      $sort = $request->query->get('sort', null);
-      $order = $request->query->get('order', null);
+      $sort = $request->query->get('sort', 'nombre');
+      $order = $request->query->get('order', 'asc');
 
       $nombre = $request->request->get('nombre');
       $nroCarpeta = $request->request->get('nroCarpeta');
@@ -221,8 +221,8 @@ class OficinaController extends Controller
       $offset = $request->query->get('offset', 0);
       $limit = $request->query->get('limit', 10);
       $search = $request->query->get('search', null);
-      $sort = $request->query->get('sort', null);
-      $order = $request->query->get('order', null);
+      $sort = $request->query->get('sort', 'denominacion');
+      $order = $request->query->get('order', 'asc');
 
       $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
       $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
@@ -320,8 +320,8 @@ class OficinaController extends Controller
       $offset = $request->query->get('offset', 0);
       $limit = $request->query->get('limit', 10);
       $search = $request->query->get('search', null);
-      $sort = $request->query->get('sort', null);
-      $order = $request->query->get('order', null);
+      $sort = $request->query->get('sort', 'denominacion');
+      $order = $request->query->get('order', 'asc');
 
       $nroInventario = $request->request->get('nroInventario');
       $numExpediente = $request->request->get('expediente');
