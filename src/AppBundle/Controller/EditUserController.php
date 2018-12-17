@@ -17,24 +17,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class EditUserController extends Controller
 {
-	/**
-	 * Lists all user entities.
-	 *
-	 * @Route("/", name="user_index")
-	 * @Method("GET")
-	 */
-	public function indexAction(Request $request)
-	{
-
-		$em = $this->getDoctrine()->getManager();
-
-		$users = $em->getRepository('AppBundle:User')->findAll();
-		$editado = $request->query->get('editado');
-		return $this->render('user/index.html.twig', array(
-	    	'users' => $users,
-	    	'editado' => $editado,
-		));
-	}
+	// /**
+	//  * Lists all user entities.
+	//  *
+	//  * @Route("/", name="user_index")
+	//  * @Method("GET")
+	//  */
+	// public function indexAction(Request $request)
+	// {
+	//
+	// 	$em = $this->getDoctrine()->getManager();
+	//
+	// 	$users = $em->getRepository('AppBundle:User')->findAll();
+	// 	$editado = $request->query->get('editado');
+	// 	return $this->render('user/index.html.twig', array(
+	//     	'users' => $users,
+	//     	'editado' => $editado,
+	// 	));
+	// }
 
 	// /**
 	//  * Creates a new user entity.
@@ -87,12 +87,21 @@ class EditUserController extends Controller
  	*/
 	public function editAction(Request $request, User $user)
 	{
+				$editRole = $this->isGranted('ROLE_SUPER_ADMIN');
+
+				if ($this->getUser()->getId() != $user->getId()) {
+					$sameUser=true;
+				}
+				else {
+					$sameUser=false;
+				}
+				//canEditRole se utiliza para que un usuario superadmin no pueda cambiar su propio role
+				$canEditRole = $editRole && $sameUser;
 
 				if ($this->getUser()->getId() == $user->getId()) {
 					$deleteForm = $this->createDeleteForm($user);
-		    	$editRole = $this->isGranted('ROLE_SUPER_ADMIN');
 		    	$editForm = $this->createForm('AppBundle\Form\UserType', $user, array(
-		      	'edit_role' => $editRole, "edit" => false
+		      	'edit_role' => $canEditRole, "edit" => false
 		    	));
 		    	$editForm->handleRequest($request);
 
@@ -102,7 +111,7 @@ class EditUserController extends Controller
 		        	$userManager->updatePassword($user);
 		        	$this->getDoctrine()->getManager()->flush();
 
-							return $this->render('oficina/index.html.twig', array(
+							return $this->redirectToRoute('editUser_ver', array('id' => $user->getId(),
 			            'editado' => 'editado',
 			        ));
 		    	}
@@ -115,7 +124,7 @@ class EditUserController extends Controller
 		        	'delete_form' => $deleteForm->createView(),
 		    	 ));
 				}else{
-					return $this->render('oficina/index.html.twig', array(
+					return $this->redirectToRoute('oficina_index', array(
 						'editado' => "",
 					));
 				}
@@ -252,11 +261,12 @@ class EditUserController extends Controller
  	* @Route("/{id}", name="editUser_ver")
  	* @Method("GET")
  	*/
-	public function showAction(User $user)
+	public function showAction(User $user, Request $request)
 	{
-
+			$editado = $request->query->get('editado');
     	return $this->render('user/ver.html.twig', array(
         	'user' => $user,
+					'editado' => $editado,
     	));
 	}
 }

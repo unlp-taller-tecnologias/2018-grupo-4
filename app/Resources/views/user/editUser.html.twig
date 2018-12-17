@@ -14,7 +14,7 @@
 	{{ form_start(edit_form) }}
     	{{ form_widget(edit_form) }}
     	<button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
-      {% if is_granted("ROLE_SUPER_ADMIN") %}
+      {% if (is_granted("ROLE_SUPER_ADMIN")) and (app.user.id != user.id)%}
       <button type="button" data-toggle="modal" data-target="#confirmModal" class="btn btn-danger"><i class="far fa-trash-alt"></i> Eliminar</button>
       {% endif %}
   {{ form_end(edit_form) }}
@@ -52,7 +52,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <i class="fas fa-exclamation-triangle"></i> El usuario seleccionado no se puede eliminar ya que tiene artículos asociados.
+        <i class="fas fa-exclamation-triangle"></i> El usuario seleccionado no se puede eliminar ya que tiene operaciones asociadas.
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

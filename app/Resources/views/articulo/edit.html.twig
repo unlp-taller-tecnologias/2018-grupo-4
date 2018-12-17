@@ -5,6 +5,8 @@
       <br>
       <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
       <br>
+      <a href="{{ path('oficina_show', { 'id': articulo.oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a la oficina {{articulo.oficina}}</a>
+      <br>
       <hr>
       <h2>Editar Artículo: {{articulo.denominacion}}</h2>
       <hr>
