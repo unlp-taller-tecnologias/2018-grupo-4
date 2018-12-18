@@ -114,10 +114,10 @@
 <script>
 
   // //pdf export
-  // $table=$('#tablaArticulos');
   // $a= $table.find('tbody tr').slice(0, 5);
   // console.log($a);
 
+  $table=$('#tablaArticulos');
   jQuery(function ($) {
     $("#exportButtonPdf").click(function () {
         var dataSource = shield.DataSource.create({
