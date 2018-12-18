@@ -56,7 +56,7 @@ class TipoType extends AbstractType
               )
           ))
           ->add('vidaUtil', null, array(
-              'label' => 'Vida útil (*) Ingrese vida útil solo si el nomenclador es Diaguita'
+              'label' => 'Vida útil - Ingrese vida útil solo si el nomenclador es Diaguita'
           ));
         };
         if ($options['edit']) {

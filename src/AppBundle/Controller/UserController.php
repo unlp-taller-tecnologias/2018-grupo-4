@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Articulo;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 
 /**
@@ -148,6 +150,7 @@ class UserController extends Controller
      * Deletes a user entity.
      *
      * @Route("/{id}/delete", name="user_delete")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, User $user)

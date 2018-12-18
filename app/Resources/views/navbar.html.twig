@@ -1,6 +1,6 @@
 {% block navbar %}
-<nav style="background-color: #1f898e" class="navbar navbar-dark navbar-expand-lg" >
-  <a id="a" class="navbar-brand" href="/">INVENTARIO</a>
+<nav style="background-color: #1f898e; padding: 1%;" class="navbar navbar-dark navbar-expand-lg" >
+  <a class="navbar-brand" href="/">INVENTARIO</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
      <span class="navbar-toggler-icon"></span>
    </button>
@@ -23,11 +23,13 @@
               type="button" id="dropdownMenu1" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false" style="background-color:#1f898e; border-color: #1f898e;">Administración</button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <a class="dropdown-item" href="/condicion">Condición</a>
-            <a class="dropdown-item" href="/estado">Estados</a>
-              <a class="dropdown-item" href="/estadoAdicional">Estados adicionales</a>
-            <a class="dropdown-item" href="/tipo">Tipos</a>
             <a class="dropdown-item" href="/user">Usuarios</a>
+            <a class="dropdown-item" href="/tipo">Tipos de artículos</a>
+            <a class="dropdown-item" href="/estado">Estados de artículos</a>
+            <a class="dropdown-item" href="/condicion">Condición de artículos</a>
+            <a class="dropdown-item" href="/estadoAdicional">Estados adicionales de artículos</a>
+
+
           </div>
         </li>
       {% endif %}

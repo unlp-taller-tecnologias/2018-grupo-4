@@ -27,7 +27,15 @@
             <tr>
               <th scope="row">Rol</th>
               {% for role in user.roles %}
-                <td scope="row">{{role}}</td>
+              {% if role == "ROLE_ADMIN" %}
+                <td scope="row">Rol Administrador</td>
+              {% endif %}
+              {% if role == "ROLE_USER" %}
+                <td scope="row">Rol Visitante</td>
+              {% endif %}
+              {% if role == "ROLE_SUPER_ADMIN" %}
+                <td scope="row">Rol Superusuario</td>
+              {% endif %}
               {% endfor %}
             {% endif %}
             </tr>

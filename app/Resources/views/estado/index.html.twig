@@ -65,9 +65,8 @@
     visibility = "{{ path('estado_visibility', {id: -1})}}";
     visibility = visibility.replace('-1', value);
     return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${edit}" title="Ver"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${edit}" title="Ver"><i class="fas fa-eye"></i></a>`,
+      `<a class="edit ml10" href="${show}" title="Ver estado de artículo"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10" href="${edit}" title="Editar estado de artículo"><i class="fas fa-edit"></i></a>`,
     ].join('');
   }
   var $table = $('#tablaEstados');

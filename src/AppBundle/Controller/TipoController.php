@@ -160,7 +160,7 @@ class TipoController extends Controller
         return $this->render('tipo/edit.html.twig', array(
             'tipo' => $tipo,
             'edit_form' => $editForm->createView(),
-            // 'delete_form' => $deleteForm->createView(),
+            'editado' => '',
         ));
     }
 

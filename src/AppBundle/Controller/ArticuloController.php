@@ -11,6 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 /**
  * Articulo controller.
@@ -101,6 +103,7 @@ class ArticuloController extends Controller
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
+          'fechaEntrada' => $articulo->getFechaEntrada()->format('Y-m-d'),
           'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
         );
       };
@@ -179,6 +182,7 @@ class ArticuloController extends Controller
      * Creates a new articulo entity.
      *
      * @Route("{id}/new", name="articulo_new")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request, Oficina $oficina)
@@ -241,9 +245,9 @@ class ArticuloController extends Controller
             $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
             $articulo->setEstado($estado);
             $articulo->setUser($this->getUser());
-            if ($oficina) {
-              $articulo->setOficina($oficina);
-            }
+            // if ($oficina) {
+            //   $articulo->setOficina($oficina);
+            // }
             $em->persist($articulo);
             $em->flush();
             //$articulo->setNumInventario($ultimoNum);
@@ -267,7 +271,7 @@ class ArticuloController extends Controller
             $cond = $articulo->getCondicion();
             $tipo = $articulo->getTipo();
 
-            $articulo = new Articulo($ultimoNum);
+            $articulo = new Articulo($ultimoNum, $oficina);
             $articulo->setDenominacion($denomin);
             $articulo->setMaterial($material);
             $articulo->setMarca($marca);
@@ -287,6 +291,7 @@ class ArticuloController extends Controller
             $articulo->setCondicion($cond);
             $articulo->setTipo($tipo);
           }
+          return $this->redirectToRoute('oficina_show', array('id' => $oficinaId, 'editado' => 'editado'));
         }
       }
     $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
@@ -340,8 +345,9 @@ class ArticuloController extends Controller
           'articulos' => $articulos,
           'oficina' => $oficina,
           //'delete_form' => $deleteForm->createView(),
-          //'editado' => $editado,
+          //'editado' => '',
       ));
+
 
 
     }
@@ -354,6 +360,8 @@ class ArticuloController extends Controller
       public function changeArticulosAction(Request $request){
         $estado = $request->request->get('estado');
         $articulosSeleccionados = $request->request->get('articulosSeleccionados');
+        //$oficinaId = $request->query->get('id');
+
 
         $em = $this->getDoctrine()->getManager();
         $estadosRepository = $em->getRepository('AppBundle:estadoAdicional');
@@ -368,8 +376,12 @@ class ArticuloController extends Controller
           $articulo->setEstadoAdicional($estadoAd);
           $this->getDoctrine()->getManager()->flush();
         }
-        var_dump('El cambio de ha realizado');
-        die();
+
+        $rawResponse = array(
+          'res' => true
+        );
+
+        return new JsonResponse($rawResponse);
       }
 
 

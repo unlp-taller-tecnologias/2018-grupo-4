@@ -80,4 +80,7 @@ class InformesController extends Controller
 
 
 
+
+
+
 }

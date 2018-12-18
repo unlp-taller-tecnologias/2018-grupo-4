@@ -14,3 +14,13 @@
     {{ form_end(edit_form) }}
   </div>
 {% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+$( document ).ready(function() {
+  $("#appbundle_estado_nombre").prop('disabled', true);
+});
+
+</script>
+{% endblock %}
