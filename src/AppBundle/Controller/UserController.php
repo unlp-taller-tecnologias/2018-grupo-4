@@ -230,15 +230,16 @@ class UserController extends Controller
         'total' => $total,
         'rows' => array()
       );
-
       foreach($users as $user) {
-        $rawResponse['rows'][] = array(
-          'id' => $user->getId(),
-          'username' => $user->getUsername(),
-          'name' => $user->getName(),
-          'lastname' => $user->getLastname(),
-          'enabled' => ($user->getEnabled() == 1)?'Si':'No',
-        );
+        if ($user->getId() != $this->getUser()->getId()) {
+          $rawResponse['rows'][] = array(
+            'id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'name' => $user->getName(),
+            'lastname' => $user->getLastname(),
+            'enabled' => ($user->getEnabled() == 1)?'Si':'No',
+          );
+        }
       };
 
       return new JsonResponse($rawResponse);
@@ -257,6 +258,7 @@ class UserController extends Controller
 
         return $this->render('user/ver.html.twig', array(
             'user' => $user,
+            'editado' => '',
             //'delete_form' => $deleteForm->createView(),
         ));
     }

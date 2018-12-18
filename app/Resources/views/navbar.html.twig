@@ -34,6 +34,7 @@
         </li>
       {% endif %}
       {% block login %}
+      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
       <li class="nav-item">
         <li class="dropdown mr-sm-2">
           <button class="btn btn-secondary dropdown-toggle"
@@ -46,6 +47,8 @@
       <li class="nav-item">
         <a class="btn mr-sm-2" style="color:white" href="/logout">Cerrar Sesión</a>
       </li>
+      {% endif %}
+      
       {% endblock %}
     </ul>
 
