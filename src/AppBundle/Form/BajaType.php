@@ -16,16 +16,18 @@ class BajaType extends AbstractType
     {
         $builder
         ->add('expediente', null, array(
-          'label' => 'Numero de expediente*',
+          'label' => 'Numero de expediente(*)',
           'required' => true
         ))
         ->add('fecha', DateType::class, array(
-          'label' => 'Fecha*',
+          'label' => 'Fecha(*)',
           'widget' => 'single_text',
           'required' => true
         ))
 
-        ->add('observaciones');
+        ->add('observaciones', null, array(
+          'label' => 'Observaciones(*)',
+        ));
     }
 
     /**

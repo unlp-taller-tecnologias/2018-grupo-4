@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Ps\PdfBundle\Annotation\Pdf;
 
 /**
  * Baja controller.
@@ -80,7 +81,6 @@ class BajaController extends Controller
             $baja->setFinalizada(1);
             $em->persist($baja);
             $em->flush();
-
             $fecha = $baja->getFecha();
             return $this->redirectToRoute('baja_select_condition', array(
               'id' => $baja->getId(),
@@ -94,8 +94,8 @@ class BajaController extends Controller
         return $this->render('baja/new.html.twig', array(
             'continuada' => false,
             'oficina' => $id_oficina,
+            'nombreOficina' => $oficina->getNombre(),
             'historiales' => $historiales,
-            //'condiciones' => $allCondiciones,
             'baja' => $baja,
             'bajaId' => $baja->getId(),
             'form' => $form->createView(),
@@ -181,7 +181,7 @@ class BajaController extends Controller
     // }
 
     /**
-     * Solicita condicion de los articulos a dar de baja
+     * S
      * @Route("/select_condition/{id}", name="baja_select_condition")
      * @Method({"GET", "POST"})
      */
@@ -212,7 +212,7 @@ class BajaController extends Controller
       foreach ($articulosIds as $id){
         $articuloActual =  $articuloRepository->findOneById($id);
         $articulos[$i] = $articuloActual;
-        $estado = $em->getRepository('AppBundle:Estado')->findOneById(3);
+        $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Baja');
         $articuloActual->setEstado($estado);
         //$condicionSeleccionada = $condicionesArreglo[$j];
         //$condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
@@ -385,7 +385,7 @@ class BajaController extends Controller
            //$condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
            $historial = new Historial;
            $historial
-               ->setCondicion($condicionReal)
+
                ->setFecha($fechaDate)
                ->setArticulo($articulos[$i])
                ->setBaja($baja);
@@ -459,7 +459,7 @@ class BajaController extends Controller
           //$condicionReal = $condicionRepository->findOneByNombre($condicionSeleccionada);
           $historial = new Historial;
           $historial
-              ->setCondicion($condicionReal)
+
               ->setFecha($fechaDate)
               ->setArticulo($articulos[$i])
               ->setBaja($baja);
@@ -526,20 +526,11 @@ class BajaController extends Controller
       );
       $form = $this->createForm('AppBundle\Form\BajaType', $baja);
       $form->handleRequest($request);
-      //$allCondiciones = $em->getRepository('AppBundle:Condicion')->findAll();
+
       $baja->setOficina($oficina);
       $historiales = $historialRepository->findByBaja($baja);
-
-
       if ($form->isSubmitted() && $form->isValid()) {
           $articulosIds = $request->request->get('articsIds');
-          //  echo "<pre>";
-          //  var_dump($articulosIds);
-          //  echo "</pre>";
-          //  echo 'adada';
-          // die();
-          //$condicionesArreglo = $request->request->get('condicionesIds');
-          //$condiciones = $request->request->get('condiciones');
           $oficinaId = $id_oficina;
 
           $em->persist($baja);
@@ -559,7 +550,7 @@ class BajaController extends Controller
           'continuada' => true,
           'oficina' => $id_oficina,
           'historiales' => $historiales,
-          //'condiciones' => $allCondiciones,
+          'nombreOficina' => $oficina->getNombre(),
           'baja' => $baja,
           'bajaId' => $baja->getId(),
           'form' => $form->createView(),
@@ -675,29 +666,59 @@ class BajaController extends Controller
 
 
 
-                      /**
-                       * @Route("/new/oficina_show/{id}", name="baja_redirect")
-                       * @Method({"GET", "POST"})
-                       */
+      /**
+       * @Route("/new/oficina_show/{id}", name="baja_redirect")
+       * @Method({"GET", "POST"})
+       */
 
-                       public function redireccionar(Request $request, Oficina $oficina)
-                           {
-                               return $this->redirectToRoute('oficina_show', array(
-                               'id' => $oficina->getId()
-                             ));
-                           }
+       public function redireccionar(Request $request, Oficina $oficina)
+           {
+               return $this->redirectToRoute('oficina_show', array(
+               'id' => $oficina->getId()
+             ));
+           }
 
 
 
-                     /**
-                      * @Route("/baja_continue/oficina_show/{id}", name="baja_redirect2")
-                      * @Method({"GET", "POST"})
-                      */
+     /**
+      * @Route("/baja_continue/oficina_show/{id}", name="baja_redirect2")
+      * @Method({"GET", "POST"})
+      */
 
-                      public function redireccionarContinue(Request $request, Oficina $oficina)
-                          {
-                              return $this->redirectToRoute('oficina_show', array(
-                              'id' => $oficina->getId()
-                            ));
-                          }
+      public function redireccionarContinue(Request $request, Oficina $oficina)
+          {
+              return $this->redirectToRoute('oficina_show', array(
+              'id' => $oficina->getId()
+            ));
+          }
+
+
+
+          /**
+           * @Pdf()
+           *@Route("/informePDF/{id}", defaults={ "_format"="pdf" }, name="baja_informePDF")
+           */
+          public function reportePDF(Request $request, Baja $baja)
+          {
+              $format = $request->get('_format');
+              $em = $this->getDoctrine()->getManager();
+              $historiales = $em->getRepository('AppBundle:Historial')->findByBaja($baja);
+              $articuloRepository = $em->getRepository('AppBundle:Articulo');
+              $articulos = array();
+              foreach ($historiales as $item) {
+                $articulos[] = $item->getArticulo();
+              }
+              if ($baja->getObservaciones()== null) {
+                $tieneObservaciones = false;
+              }else{
+                $tieneObservaciones = true;
+              }
+              return $this->render(sprintf('baja/informe.%s.twig', $format), array(
+                'articulos' => $articulos,
+                'baja' => $baja,
+                'tieneObservaciones' => $tieneObservaciones,
+                'oficinaOrigen' => $baja->getOficina()
+
+              ));
+          }
 }

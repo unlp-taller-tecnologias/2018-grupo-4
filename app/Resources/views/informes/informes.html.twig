@@ -11,7 +11,6 @@
     <hr>
     <h3>Listado de todas las operaciones</h3>
     <hr>
-
     <div class="table-responsive" >
       <div id="toolbar">
         <button id="button1" hidden class="btn btn-default">filterBy</button>
@@ -27,7 +26,6 @@
               data-url="{{path('informes_list')}}"
               >
         <thead>
-
           <tr>
             <th scope="row" data-field="tipo" data-sortable="true">Operacion</th>
             <th scope="row" data-field="oficinaOrigen" data-sortable="true">Origen</th>
@@ -67,6 +65,8 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
+
+
   function operateFormatterShow(value, row, index) {
     console.log(row.tipo);
     if (row.tipo == 'Transferencia') {

@@ -94,7 +94,8 @@
       <hr>
       <h4>Artículos de la oficina: {{oficina.nombre}}</h4>
       <hr>
-      <button id="exportButtonPdf" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</button>
+
+      <a  href="{{ path('listado_articulos_oficina_pdf', {'id':oficina}) }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</a>
       <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
       <div style="padding-top: 30px;" class="table-responsive">
 
@@ -110,12 +111,27 @@
           <thead>
             <tr>
               <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
-              <th scope="row" data-field="numExpediente" data-sortable="true">NroExpediente</th>
+              <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
               <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
               <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-              <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+              <th scope="row" data-field="condicion" data-visible="true">Condicion</th>
+              <th scope="row" data-field="oficina" data-visible="true">Oficina</th>
               <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
+              <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+              <th scope="row" data-field="material" data-visible="true">Material</th>
+              <th scope="row" data-field="marca" data-visible="true">Marca</th>
+              <th scope="row" data-field="numFabrica" data-visible="true">NumFabrica</th>
+              <th scope="row" data-field="largo" data-visible="true">Largo</th>
+              <th scope="row" data-field="alto" data-visible="true">Alto</th>
+              <th scope="row" data-field="ancho" data-visible="true">Ancho</th>
+              <th scope="row" data-field="estantes" data-visible="true">Estantes</th>
+              <th scope="row" data-field="cajones" data-visible="true">Cajones</th>
+              <th scope="row" data-field="detalleOrigen" data-visible="true">DetalleOrigen</th>
+              <th scope="row" data-field="importe" data-visible="true">Importe</th>
+              <th scope="row" data-field="fechaEntrada" data-visible="true">Entrada</th>
+              <th scope="row" data-field="codigoCuentaSubcuenta" data-visible="true">CodigoCuentaSubcuenta</th>
+
             </tr>
           </thead>
         </table>
@@ -216,87 +232,220 @@
 //fin pdf
 
 //excel export
+$("#exportButtonExcel").click(function () {
+    var dataSourceExcel = shield.DataSource.create({
+        data: "#tablaArticulos",
+        schema: {
+            type: "table",
+            fields: {
+              NroInventario: { type: Number },
+              NroExpediente: { type: Number },
+              Denominación: { type: String },
+              Tipo: { type: String },
+              Estado: { type: String },
+              Condicion: { type: String },
+              Oficina: { type: String },
+              Material: { type: String },
+              Marca: { type: String },
+              NumFabrica: { type: String },
+              Largo: { type: String },
+              Alto: { type: String },
+              Ancho: { type: String },
+              Estantes: { type: String },
+              Cajones: { type: String },
+              DetalleOrigen: { type: String },
+              Importe: { type: String },
+              Entrada: { type: String },
+              CodigoCuentaSubcuenta: { type: String }
 
-    $("#exportButtonExcel").click(function () {
-        var dataSourceExcel = shield.DataSource.create({
-            data: "#tablaArticulos",
-            schema: {
-                type: "table",
-                fields: {
-                  NroInventario: { type: Number },
-                  NroExpediente: { type: Number },
-                  Denominación: { type: String },
-                  Tipo: { type: String },
-                  Estado: { type: String }
-                }
+
+
             }
-        });
-        dataSourceExcel.read().then(function (data) {
-            new shield.exp.OOXMLWorkbook({
-                author: "PrepBootstrap",
-                worksheets: [
-                    {
-                        name: "PrepBootstrap Table",
-                        rows: [
-                            {
-                                cells: [
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        width: 120,
-                                        value: "Numero de Inventario"
+        }
+    });
+    dataSourceExcel.read().then(function (data) {
+        new shield.exp.OOXMLWorkbook({
+            author: "PrepBootstrap",
+            worksheets: [
+                {
+                    name: "PrepBootstrap Table",
+                    rows: [
+                        {
+                            cells: [
+                                {
+                                    style: {
+                                        bold: true
                                     },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Numero de Expediente"
+                                    type: String,
+                                    width: 120,
+                                    value: "Numero de Inventario"
+                                },
+                                {
+                                    style: {
+                                        bold: true
                                     },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Denominacion"
+                                    type: String,
+                                    value: "Numero de Expediente"
+                                },
+                                {
+                                    style: {
+                                        bold: true
                                     },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Tipo"
+                                    type: String,
+                                    value: "Denominacion"
+                                },
+                                {
+                                    style: {
+                                        bold: true
                                     },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Estado"
-                                    }
-                                ]
-                            }
-                        ].concat($.map(data, function(item) {
-                            console.log(item);
-                            return {
-                                cells: [
-                                    { type: Number, value: item.NroInventario },
-                                    { type: Number, value: item.NroExpediente },
-                                    { type: String, value: item.Denominación },
-                                    { type: String, value: item.Tipo },
-                                    { type: String, value: item.Estado }
-                                ]
-                            };
-                        }))
-                    }
-                ]
-            }).saveAs({
-                fileName: "Listado_de_articulos_por_oficina"
-            });
+                                    type: String,
+                                    value: "Tipo"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Estado"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Condicion"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Oficina"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Material"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Marca"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "NumFabrica"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Largo"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Alto"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Ancho"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Estantes"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Cajones"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "DetalleOrigen"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Importe"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "Entrada"
+                                },
+                                {
+                                    style: {
+                                        bold: true
+                                    },
+                                    type: String,
+                                    value: "CodigoCuentaSubcuenta"
+                                }
+
+
+                            ]
+                        }
+                    ].concat($.map(data, function(item) {
+                        console.log(item);
+                        return {
+                            cells: [
+                                { type: Number, value: item.NroInventario },
+                                { type: Number, value: item.NroExpediente },
+                                { type: String, value: item.Denominación },
+                                { type: String, value: item.Tipo },
+                                { type: String, value: item.Estado },
+                                { type: String, value: item.Condicion },
+                                { type: String, value: item.Oficina },
+                                { type: String, value: item.Material },
+                                { type: String, value: item.Marca },
+                                { type: String, value: item.NumFabrica },
+                                { type: String, value: item.Largo },
+                                { type: String, value: item.Alto },
+                                { type: String, value: item.Ancho },
+                                { type: String, value: item.Estantes },
+                                { type: String, value: item.Cajones },
+                                { type: String, value: item.DestalleOrigen },
+                                { type: String, value: item.Importe },
+                                { type: String, value: item.Entrada },
+                                { type: String, value: item.CodigoCuentaSubcuenta }
+
+
+
+                            ]
+                        };
+                    }))
+                }
+            ]
+        }).saveAs({
+            fileName: "Listado_de_articulos"
         });
     });
+});
 });
 
   {% if editado == 'editado' %}

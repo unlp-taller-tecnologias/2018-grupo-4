@@ -1,0 +1,20 @@
+{% block content %}
+<pdf>
+    <dynamic-page>
+    <table style="width:100%">
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Age</th>
+      </tr>
+      {% for a in articulo %}
+        <tr>
+          <td>{{a.denominacion}}</td>
+          <td>{{a.numInventario}}</td>
+          <td>{{a.condicion}}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </dynamic-page>
+</pdf>
+{% endblock %}
