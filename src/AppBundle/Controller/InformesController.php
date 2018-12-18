@@ -49,7 +49,7 @@ class InformesController extends Controller
       $transferencias =  $transferenciaRepository->findBy(array('finalizada' => '1'));
       $bajas =  $bajaRepository->findBy(array('finalizada' => '1'));
       foreach($transferencias as $item) {
-      
+
         $rawResponse['rows'][] = array(
           'id' => $item->getId(),
           'oficinaOrigen' => $item->getOficinaOrigen()->getNombre(),
@@ -72,6 +72,9 @@ class InformesController extends Controller
 
       return new JsonResponse($rawResponse);
     }
+
+
+
 
 
 

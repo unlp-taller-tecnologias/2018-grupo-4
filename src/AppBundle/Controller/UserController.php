@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Entity\Articulo;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use AppBundle\Entity\Transferencia;
 
 
 /**
@@ -148,28 +150,26 @@ class UserController extends Controller
      * Deletes a user entity.
      *
      * @Route("/{id}/delete", name="user_delete")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, User $user)
     {
-      $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
-      $articulosCreados = $repository->getByUser($user);
-
       $form = $this->createDeleteForm($user);
       $form->handleRequest($request);
       $em = $this->getDoctrine()->getManager();
 
-       if ($articulosCreados == 0) {
-         if ($form->isSubmitted() && $form->isValid()) {
-             $em = $this->getDoctrine()->getManager();
-             $em->remove($user);
-             $em->flush();
-         }
-         return $this->redirectToRoute('user_index', array('editado' => 'editado'));
-       }
-       else {
-        return $this->redirectToRoute('user_edit', array('id'=> $user->getId(), 'eliminado' => 'eliminado'));
-       }
+      if ($form->isSubmitted() && $form->isValid()) {
+        try {
+          $em = $this->getDoctrine()->getManager();
+          $em->remove($user);
+          $em->flush();
+          return $this->redirectToRoute('user_index', array('editado' => 'editado'));
+        }
+        catch (\Exception $e) {
+          return $this->redirectToRoute('user_edit', array('id'=> $user->getId(), 'eliminado' => 'eliminado'));
+        }
+      }
     }
 
     /**
@@ -230,15 +230,16 @@ class UserController extends Controller
         'total' => $total,
         'rows' => array()
       );
-
       foreach($users as $user) {
-        $rawResponse['rows'][] = array(
-          'id' => $user->getId(),
-          'username' => $user->getUsername(),
-          'name' => $user->getName(),
-          'lastname' => $user->getLastname(),
-          'enabled' => ($user->getEnabled() == 1)?'Si':'No',
-        );
+        if ($user->getId() != $this->getUser()->getId()) {
+          $rawResponse['rows'][] = array(
+            'id' => $user->getId(),
+            'username' => $user->getUsername(),
+            'name' => $user->getName(),
+            'lastname' => $user->getLastname(),
+            'enabled' => ($user->getEnabled() == 1)?'Si':'No',
+          );
+        }
       };
 
       return new JsonResponse($rawResponse);
@@ -257,6 +258,7 @@ class UserController extends Controller
 
         return $this->render('user/ver.html.twig', array(
             'user' => $user,
+            'editado' => '',
             //'delete_form' => $deleteForm->createView(),
         ));
     }

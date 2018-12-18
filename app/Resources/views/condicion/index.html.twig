@@ -64,9 +64,9 @@
     visibility = "{{ path('condicion_visibility', {id: -1})}}";
     visibility = visibility.replace('-1', value);
     return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${edit}" title="Editar"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${visibility}" title="Habilitado"><i class="fas fa-eye"></i></a>`,
+      `<a class="edit ml10" href="${show}" title="Ver condición de artículo"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10" href="${edit}" title="Editar condición de artículo"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10" href="${visibility}" title="Habilitar/deshabilitar condición de artículo"><i class="fas fa-eye"></i></a>`,
     ].join('');
   }
   var $table = $('#tablaCondiciones');

@@ -22,6 +22,7 @@
     {% endif %}
   {% endif %}
     <div class="">
+
       <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}"><i class="fas fa-plus"></i> Agregar nuevo artículo</a>
       <a class="btn btn-dark" href="{{ path('articulo_change', {'id': oficina.id}) }}">Cambio de estado</a>
       {% if not operaciones %}
@@ -69,19 +70,19 @@
         <div class="form-group col-md-2">
           <label>Estado</label>
           <select id="estado" class="form-control" name="estado">
-            <option value=""> Seleecione </option>
+            <option value=""> Seleccione </option>
           </select>
         </div>
         <div class="form-group col-md-2">
           <label>Estado adicional</label>
           <select id="estadoAdicional" class="form-control" name="tipo">
-            <option value=""> Seleecione </option>
+            <option value=""> Seleccione </option>
           </select>
         </div>
         <div class="form-group col-md-2">
           <label>Tipo</label>
           <select id="tipo" class="form-control" name="tipo">
-            <option value=""> Seleecione </option>
+            <option value=""> Seleccione </option>
           </select>
         </div>
         <div class="form-group col-md-12">
@@ -106,10 +107,13 @@
                 data-pagination="true"
                 data-page-list="[2, 5, 10, 20, 50, 100, 200]"
                 data-search="false"
+                data-sort-name="fechaEntrada"
+                data-sort-order="desc"
                 data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
                 >
           <thead>
             <tr>
+              <th scope="row" data-field="fechaEntrada" data-sortable="true">Fecha entrada</th>
               <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
               <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
@@ -457,8 +461,13 @@ $("#exportButtonExcel").click(function () {
     edit = "{{ path('articulo_edit', {id: -1})}}";
     edit = edit.replace('-1', value);
     return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${edit}" title="Ver"><i class="fas fa-edit"></i></a>`,
+      {% if is_granted("ROLE_ADMIN") %}
+      `<a class="edit ml10" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10" href="${edit}" title="Editar artículo"><i class="fas fa-edit"></i></a>`,
+      {% else %}
+      `<a class="edit ml10" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>`,
+      {% endif %}
+
     ].join('');
   }
 

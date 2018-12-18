@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Oficina controller.
@@ -157,6 +158,7 @@ class OficinaController extends Controller
      * Creates a new oficina entity.
      *
      * @Route("/new", name="oficina_new")
+     * @Security("is_granted('ROLE_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -356,6 +358,7 @@ class OficinaController extends Controller
      * Displays a form to edit an existing oficina entity.
      *
      * @Route("/{id}/edit", name="oficina_edit")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Oficina $oficina)

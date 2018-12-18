@@ -16,7 +16,7 @@
           <p><a href="{{ path(backPath) }}">Volver a {{ backTitle }}</a></p>
       </div>
     {% else %}
-    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
+    <a href="{{ path('oficina_show', {'id': articulo.oficina.id}) }}"><i class="fas fa-angle-left"></i> Volver a {{articulo.oficina}}</a>
     <br>
     <hr>
     <h2>Nuevo Artículo en {{articulo.oficina}}</h2>
@@ -33,7 +33,7 @@
     </select>
 
     {{ form_errors(form) }}
-    <label><strong>Cantidad de Artículos a agregar a la oficina(*): </strong></label>
+    <label style="margin-top: 2%;"><strong>Cantidad de Artículos a agregar a la oficina(*): </strong></label>
     <input id="cantidad" type="number" name="cantidad" value="1" min ="1" required><br>
     <input id="num" type="number" name="numInvent" value="1" hidden><br>
     <label><strong>(*)La cantidad indica el número de artículos que se crearán con número de inventario consecutivo.</strong></label><br><br>
@@ -46,7 +46,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar artículo/s</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Agregar artículo/s en {{articulo.oficina}}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -75,11 +75,12 @@ $('#btnGuardar').click(function(){
   var denominacion = $('#appbundle_articulo_denominacion').val();
   var nroAct = $('#appbundle_articulo_numInventario').val();
   for (var i = 0; i < $('#cantidad').val(); i++) {
-    leyenda += "<p> (*) Número de inventario: "+ nroAct +" - Denominación: "+ denominacion +"<p>";
+    leyenda += "<p class=\"texto\"> (*) Número de inventario: "+ nroAct +" - Denominación: "+ denominacion +"<p>";
     nroAct++;
   }
   $('#textoMensaje').text("Se agregarán  "+ $('#cantidad').val() + " artículo/s "+ $('#appbundle_articulo_denominacion').val() + " a partir del número de inventario "
   + $('#appbundle_articulo_numInventario').val());
+  $('.texto').remove();
   $('#modal-body').append(leyenda);
 });
   $form.submit(function(){

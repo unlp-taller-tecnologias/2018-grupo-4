@@ -45,8 +45,9 @@
               class="table table-hover table-striped"
               data-toggle="table"
               data-side-pagination="server"
-              fixedColumns='true'
               data-pagination="true"
+              data-sort-name="nombre"
+              data-sort-order="asc"
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
               data-url="{{ path('oficina_list') }}"
               >
@@ -93,8 +94,12 @@
     edit = "{{ path('oficina_edit', {id: -1})}}";
     edit = edit.replace('-1', value);
     return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${edit}" title="Editar"><i class="fas fa-edit"></i></a>`,
+      {% if is_granted("ROLE_ADMIN") %}
+      `<a class="edit ml10" href="${show}" title="Ver oficina"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10" href="${edit}" title="Editar oficina"><i class="fas fa-edit"></i></a>`,
+      {% else %}
+        `<a class="edit ml10" href="${show}" title="Ver oficina"><i class="fas fa-search-plus"></i></a>`,
+      {% endif %}
     ].join('');
   }
 

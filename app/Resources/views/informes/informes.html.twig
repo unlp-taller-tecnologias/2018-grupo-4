@@ -3,18 +3,29 @@
 {% block content %}
   <div class="container">
     <br>
-
+    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
     <br>
+    <hr>
+    <h2>Listado de operaciones</h2>
+    <hr>
     {% block filters %}
-    <!-- filtros aqui -->
+    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
+      <h4>Buscar informes de operaciones por:</h4>
+       <div class="form-row" >
+         <div class="form-group col-md-2">
+           <label>Tipo de operación</label>
+           <select id="estado" class="form-control" name="estado">
+             <option value=""> Seleccione </option>
+           </select>
+         </div>
+         <div class="form-group col-md-12">
+           <button id="button" class="btn btn-dark">Buscar</button>
+           <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
+         </div>
+       </div>
+     </div>
     {% endblock %}
-    <hr>
-    <h3>Listado de todas las operaciones</h3>
-    <hr>
     <div class="table-responsive" >
-      <div id="toolbar">
-        <button id="button1" hidden class="btn btn-default">filterBy</button>
-      </div>
       <table  id="tablaOperaciones"
               class="table table-hover table-striped"
               data-toggle="table"
@@ -27,9 +38,9 @@
               >
         <thead>
           <tr>
-            <th scope="row" data-field="tipo" data-sortable="true">Operacion</th>
-            <th scope="row" data-field="oficinaOrigen" data-sortable="true">Origen</th>
-            <th scope="row" data-field="oficinaDestino" data-sortable="true">Destino</th>
+            <th scope="row" data-field="tipo" data-sortable="true">Operación</th>
+            <th scope="row" data-field="oficinaOrigen" data-sortable="true">Oficina origen</th>
+            <th scope="row" data-field="oficinaDestino" data-sortable="true">Oficina destino</th>
             <th scope="row" data-field="fecha.date" data-sortable="true">Fecha</th>
             <th data-field="id" data-formatter="operateFormatterShow">Ver Informe</th>
           </tr>
@@ -42,23 +53,6 @@
   <hr>
 </div>
 
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Artículo</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <i class="fas fa-info-circle"></i> Se guardaron los cambios.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
 
 {% endblock %}
 
@@ -66,6 +60,22 @@
 {{ parent() }}
 <script>
 
+var xhttpEstados = new XMLHttpRequest();
+xhttpEstados.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var listado = JSON.parse(this.responseText);
+    var estados = listado.rows;
+    var opciones = "";
+    for(es in estados){
+      if (estados[es].habilitado == 'Si') {
+        opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
+      }
+    }
+    $("#estado").append(opciones);
+  }
+};
+xhttpEstados.open("GET", "{{ path('estado_list') }}", true);
+xhttpEstados.send();
 
   function operateFormatterShow(value, row, index) {
     console.log(row.tipo);
@@ -83,3 +93,38 @@
 
 </script>
 {% endblock %}
+{# {% block serchArticulos  %}
+<script>
+$("button").click(function(){
+  var estado = $('#estado').val();
+  $.ajax({
+    method: "POST",
+    url: "informes_listFilter",
+    data: {
+            "estado":estado,
+          } ,
+    success: function(data) {
+
+      $table.bootstrapTable('load',data);
+      }
+    });
+  });
+
+  $("#buttonBorrar").click(function(){
+    $('#estado').val('');
+    var estado = $('#estado').val();
+    $.ajax({
+      method: "POST",
+      url: "informes_listFilter",
+      data: {
+              "estado":estado,
+            } ,
+      success: function(data) {
+        //alert(data);
+        $table.bootstrapTable('load',data);
+        }
+      });
+    });
+
+</script>
+{% endblock %} #}

@@ -14,6 +14,8 @@
         <table  id="tablaUser"
                 class="table table-hover table-striped"
                 data-toggle="table"
+                data-sort-name="username"
+                data-sort-order="desc"
                 data-side-pagination="server"
                 data-pagination="true"
                 data-page-list="[2, 5, 10, 20, 50, 100, 200]"
@@ -66,8 +68,8 @@
     edit = "{{ path('user_edit', {id: -1})}}";
     edit = edit.replace('-1', value);
     return [
-      `<a class="edit ml10" href="${show}" title="Ver"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${edit}" title="Editar"><i class="fas fa-edit"></i></a>`,
+      `<a class="edit ml10" href="${show}" title="Ver usuario"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10" href="${edit}" title="Editar usuario"><i class="fas fa-edit"></i></a>`,
     ].join('');
   }
   var $table = $('#tablaUser');

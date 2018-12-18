@@ -27,9 +27,17 @@
                   {% endif %}
 
                   <button class="btn btn-lg btn-dark btn-block" id="_submit" name="_submit">Acceder</button>
+
                 </form>
               </div>
             </div>
+            {% if error %}
+              <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-e  xclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                  Usuario y/o contraseña incorrectos
+              </div>
+            {% endif %}
           </div>
         </div>
       </div>
