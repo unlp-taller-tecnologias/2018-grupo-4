@@ -4,11 +4,17 @@
 {% block body %}
 <div class="container">
   <br>
+  {% if is_granted("ROLE_SUPER_ADMIN") %}
   <a href="{{ path('user_index') }}"><i class="fas fa-angle-left"></i> Listado de usuarios</a>
   <br>
   <hr>
+  {% else %}
+  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de oficinas</a>
+  <br>
+  <hr>
+  {% endif %}
     <h2>Usuario: {{ user.username }}</h2>
-    <hr>
+    <br>
     <table class="table table">
         <tbody>
             <tr>
@@ -42,7 +48,32 @@
         </tbody>
     </table>
     <br>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Editar Usuario</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <i class="fas fa-info-circle"></i> Se guardaron los cambios.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
 </div>
-
 {% endblock %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+  {% if editado == 'editado' %}
+    $('#editModal').modal('show');
+  {%endif%}
+</script>
 {% endblock %}
