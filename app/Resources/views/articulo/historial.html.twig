@@ -9,48 +9,27 @@
     <h2>Artículo: {{articulo.denominacion}}</h2>
 <hr>
     <table style="margin: 15px;" class="table table">
-
         <tbody>
-          <tr>
-              <th scope="row">Fecha desde:</th>
-              <td scope="row">{{ creacion.date }}</td>
-              <th scope="row">Fecha hasta:</th>
-              {%if esDate == false %}
-                <td scope="row">{{ primerFechaTransferencia }}</td>
-              {% else %}
-                <td scope="row">{{ primerFechaTransferencia.date }}</td>
-              {% endif %}
-              <th scope="row">En oficina:</th>
-              <td scope="row">{{ primerOficina }}</td>
-          </tr>
+            {%  for h in historial %}
+              <tr>
+                  <th scope="row">Desde:</th>
+                  <td scope="row">{{ h.fechaDesde }}</td>
 
-          {% for item in historial %}
-            <tr>
-                <th scope="row">Fecha desde:</th>
-                <td scope="row">{{ item.articulo.oficina }}</td>
-                <th scope="row">Fecha hasta:</th>
-                <td scope="row">{{ item.fecha.date }}</td>
-                <th scope="row">En oficina:</th>
-            </tr>
-          {% endfor %}
+                  {% if h.estado == false %}
+                    <th scope="row"> en: </th>
+                    <td scope="row">{{ h.oficina }}</td>
+                  {% else %}
+                    <td><p style="color:red">El articulo fue dado de baja.</p></td>
+                  {% endif %}
+              </tr>
+            {% endfor %}
         </tbody>
     </table>
     <br>
 </div>
 
-{% for i in fechaDesde %}
-  Dsde: {{i.date}}
-{% endfor %}
-
-{% for j in fechaHasta %}
-  Hasta: {{j.date}}
-{% endfor %}
-{{ultimoElemento}}
 
 
-{% for item in oficinas %}
-    En: {{item.nombre}}
-{% endfor %}
 
 
 

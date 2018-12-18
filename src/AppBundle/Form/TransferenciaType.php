@@ -29,11 +29,11 @@ class TransferenciaType extends AbstractType
                   'widget' => 'single_text',
                   'required' => true
                 ))
-
-                ->add('oficina_destino', null, array(
-                  'label' => 'Oficina destino(* )',
-                  'required' => true
-                ))
+                //
+                // ->add('oficina_destino', null, array(
+                //   'label' => 'Oficina destino(* )',
+                //   'required' => true
+                // ))
                 ->add('observaciones', TextareaType::class, array(
                   'attr' => array('class' => 'tinymce'),
                   'required' => false

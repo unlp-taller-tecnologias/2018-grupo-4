@@ -11,7 +11,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+
+use Ps\PdfBundle\Annotation\Pdf;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 
 /**
@@ -86,7 +90,7 @@ class ArticuloController extends Controller
 
       $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
       $articulos = $repository->getBy($offset, $limit, $sort, $order, $search);
-
+    //  $historialRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Historial');
       $total = $repository->countBy($search);
 
       $rawResponse = array(
@@ -95,16 +99,47 @@ class ArticuloController extends Controller
       );
 
       foreach($articulos as $articulo) {
+        $condiciones = array();
+        $historialesCollection = $articulo->getHistoriales();
+        if (!($historialesCollection->isEmpty())) {
+            foreach ($historialesCollection as $h) {
+              if ($h->getTransferencia() != null) {
+                $condiciones[] = $h->getCondicion()->getNombre();
+              }
+            }
 
+        }else{
+          if ($articulo->getCondicion() != null) {
+            $condicionInicial = $articulo->getCondicion()->getNombre();
+          }else{
+            $condicionInicial = null;
+          }
+
+        }
+        $condicion = end($condiciones);
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
           'numInventario' => $articulo->getNumInventario(),
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
+          'oficina' => $articulo->getOficina()->getNombre(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
-          'fechaEntrada' => $articulo->getFechaEntrada()->format('Y-m-d'),
-          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
+          'condicion' => ($condicion) ? $condicion : $condicionInicial,
+          'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
+          'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
+          'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
+          'largo' =>  ($articulo->getLargo()) ? $articulo->getLargo() : null,
+          'ancho' =>  ($articulo->getAncho()) ? $articulo->getAncho() : null,
+          'alto' =>  ($articulo->getAlto()) ? $articulo->getAlto() : null,
+          'estantes' =>  ($articulo->getNumsEstantes()) ? $articulo->getNumsEstantes() : null,
+          'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
+          'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
+          'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
+          'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
+          'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
+
         );
       };
 
@@ -420,84 +455,94 @@ class ArticuloController extends Controller
      */
      public function showHistorial(Request $request, Articulo $articulo)
     {
-        $em = $this->getDoctrine()->getManager();
-        $articuloRepository = $em->getRepository('AppBundle:Articulo');
-        $historialRepository = $em->getRepository('AppBundle:Historial');
-        $oficinaRepository = $em->getRepository('AppBundle:Oficina');
+      $em = $this->getDoctrine()->getManager();
+      $qb = $em->createQueryBuilder();
 
-        $historial = $historialRepository->findByArticulo($articulo->getId());
+      $articuloRepository = $em->getRepository('AppBundle:Articulo');
+      $historialRepository = $em->getRepository('AppBundle:Historial');
+      $oficinaRepository = $em->getRepository('AppBundle:Oficina');
+      $historiales = $articulo->getHistoriales();
+      $historial = array();
 
-        if ($historial == null) {
-          $segundaOficina = 'Este Articulo aun no fue transferido.';
-          $primerFechaTransferencia = 'Este Articulo aun no fue transferido.';
-          $flagDate = false;
-          $primerOficina = $articulo->getOficina();
-          $cant =0;
-          echo "no hay";
-        }else{
-          $segundaOficina = $historial[0]->getTransferencia()->getOficinaDestino()->getNombre();
-          $primerOficina = $historial[0]->getTransferencia()->getOficinaOrigen()->getNombre();
-          $primerFechaTransferencia =$historial[0]->getTransferencia()->getFecha();
-          $primerFechaTransferencia->format('Y-m-d');
-          $flagDate = true;
-          $fechasesde = array();
-          $fechasHasta = array();
-          $oficinas = array();
-           var_dump(count($historial)-1);
-           $cant = count($historial);
-          // die();
-          $j=1;
-         for ($i=0; $i < (count($historial)-1) ; $i++) {
-            $fechasDesde[] = $historial[$i]->getFecha();
-            $fechasHasta[] = $historial[$j]->getFecha();
-            $oficinas[] = $historial[$i]->getTransferencia()->getOficinaDestino();
-            $i++;
-         }
+      $articulo->getOficina();
 
-         $fechasDesde[] = $historial[$i-1]->getFecha();
-         $ultimoElemento = 'Esta aca';
-         $oficinas[] = $historial[$i-1]->getTransferencia()->getOficinaDestino();
+      $historial[0]['fechaDesde'] = $articulo->getFechaEntrada()->format('d-m-Y');
+      $historial[0]['estado'] = false;
+      $historial[0]['oficina'] = $articulo->getOficina();
+      if ($historiales->isEmpty()) {
 
-          // $movimiento = array(
-          //   'fechaDesde' => $fechasDesde,
-          //   'fechaHasta' => $fechasHasta,
-          //   'oficinas' => $oficinas
-          // );
-          //echo $segundaOficina;
-        }
-        if ($oficinas ==null) {
-          echo 'null';
-        }else{
-          echo "asd";
-        }
+      }else{
+          $a = $historiales[0];
+          $b = $historiales[1];
 
-        // echo "<pre>";
-        // var_dump($oficinas);
-        //
-        // echo "</pre>";
-        //  die();
+          //el primer historial es una transferencia?
+          if ($a->getTransferencia() != null) {
+            $oficinaNombre = $a->getTransferencia()->getOficinaOrigen()->getNombre();
+            $historial[0]['oficina'] = $oficinaNombre;
+          }else{
+            $oficinaNombre = $a->getBaja()->getOficina()->getNombre();
+            $historial[1]['estado'] = true;
+          }
 
+          $i=1;
+          $j=0;
+          foreach ($historiales as $h){
+          	$historial[$i]['fechaDesde'] = $h->getFecha()->format('d-m-Y');
+            if ($h->getTransferencia() !=null) {
+              $oficinaNombre = $h->getTransferencia()->getOficinaDestino()->getNombre();
+              $historial[$i]['estado'] = false;
+            }else{
+              $oficinaNombre = $h->getBaja()->getOficina()->getNombre();
+              $historial[$i]['estado'] = true;
+            }
+          	$historial[$i]['oficina'] = $oficinaNombre;
+          	$i++;
+          }
+      }
 
+      return $this->render('articulo/historial.html.twig', array(
+          'historial' => $historial,
 
-        $fechaCreacion = $articulo->getFechaEntrada();
-        $fechaCreacion->format('Y-m-d');
-        return $this->render('articulo/historial.html.twig', array(
-
-            'primerOficina' => $primerOficina,
-            'primerFechaTransferencia' => $primerFechaTransferencia,
-            'esDate' => $flagDate,
-            'segundaOficina' => $segundaOficina,
-            'creacion' => $fechaCreacion,
-            'historial' =>$historial,
-            'articulo' => $articulo,
-            'fechaDesde' => $fechasDesde,
-            'fechaHasta' => $fechasHasta,
-            'ultimoElemento' => $ultimoElemento,
-            'cantidadElementos' => $cant,
-            'oficinas' => $oficinas
-
-        ));
+          'articulo' => $articulo,
+          // 'delete_form' => $deleteForm->createView(),
+      ));
     }
+
+
+
+    /**
+     *
+     * @Route("/listadoArticulosPDF",   name="listado_articulos_pdf")
+     */
+     public function exportTabla(Request $request){
+
+       $em = $this->getDoctrine()->getManager();
+       $articulos = $em->getRepository('AppBundle:Articulo')->findAll();
+
+       return $this->render('articulo/reporte.html.twig', array(
+          'articulo' => $articulos
+       ));
+     }
+
+
+         /**
+          *
+          * @Route("/listadoArticulosOficinaPDF/{id}",   name="listado_articulos_oficina_pdf")
+          */
+          public function exportTablaOficina(Request $request, $id){
+            $format = $request->get('_format');
+            $em = $this->getDoctrine()->getManager();
+            $oficina = $em->getRepository('AppBundle:Oficina')->findOneByNombre($id);
+            $articulos = $em->getRepository('AppBundle:Articulo')->findByOficina($oficina);
+            return $this->render('articulo/reportePorOficina.html.twig', array(
+               'articulo' => $articulos,
+               'oficina' => $id
+            ));
+          }
+
+
+
+
 
     // /**
     //  * Deletes a articulo entity.

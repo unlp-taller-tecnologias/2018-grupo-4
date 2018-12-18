@@ -52,7 +52,8 @@
     <hr>
     <h3>Listado de todos los artículos</h3>
     <hr>
-    <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonPdf" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</button>
+
+    <a style="margin-bottom: 2%; margin-top: 1%;" href="{{ path('listado_articulos_pdf') }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</a>
     <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
     <div class="table-responsive" >
       <div id="toolbar">
@@ -77,8 +78,24 @@
             <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
             <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
             <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-            <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+            <th scope="row" data-field="condicion" data-visible="true">Condicion</th>
+            <th scope="row" data-field="oficina" data-visible="true">Oficina</th>
             <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
+            <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+            <th scope="row" data-field="material" data-visible="true">Material</th>
+            <th scope="row" data-field="marca" data-visible="true">Marca</th>
+            <th scope="row" data-field="numFabrica" data-visible="true">NumFabrica</th>
+            <th scope="row" data-field="largo" data-visible="true">Largo</th>
+            <th scope="row" data-field="alto" data-visible="true">Alto</th>
+            <th scope="row" data-field="ancho" data-visible="true">Ancho</th>
+            <th scope="row" data-field="estantes" data-visible="true">Estantes</th>
+            <th scope="row" data-field="cajones" data-visible="true">Cajones</th>
+            <th scope="row" data-field="detalleOrigen" data-visible="true">DetalleOrigen</th>
+            <th scope="row" data-field="importe" data-visible="true">Importe</th>
+            <th scope="row" data-field="fechaEntrada" data-visible="true">Entrada</th>
+            <th scope="row" data-field="codigoCuentaSubcuenta" data-visible="true">CodigoCuentaSubcuenta</th>
+
+
           </tr>
         </thead>
         <body>
@@ -180,7 +197,24 @@
                   NroExpediente: { type: Number },
                   Denominación: { type: String },
                   Tipo: { type: String },
-                  Estado: { type: String }
+                  Estado: { type: String },
+                  Condicion: { type: String },
+                  Oficina: { type: String },
+                  Material: { type: String },
+                  Marca: { type: String },
+                  NumFabrica: { type: String },
+                  Largo: { type: String },
+                  Alto: { type: String },
+                  Ancho: { type: String },
+                  Estantes: { type: String },
+                  Cajones: { type: String },
+                  DetalleOrigen: { type: String },
+                  Importe: { type: String },
+                  Entrada: { type: String },
+                  CodigoCuentaSubcuenta: { type: String }
+
+
+
                 }
             }
         });
@@ -228,7 +262,107 @@
                                         },
                                         type: String,
                                         value: "Estado"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Condicion"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Oficina"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Material"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Marca"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "NumFabrica"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Largo"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Alto"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Ancho"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Estantes"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Cajones"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "DetalleOrigen"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Importe"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "Entrada"
+                                    },
+                                    {
+                                        style: {
+                                            bold: true
+                                        },
+                                        type: String,
+                                        value: "CodigoCuentaSubcuenta"
                                     }
+
+
                                 ]
                             }
                         ].concat($.map(data, function(item) {
@@ -239,7 +373,24 @@
                                     { type: Number, value: item.NroExpediente },
                                     { type: String, value: item.Denominación },
                                     { type: String, value: item.Tipo },
-                                    { type: String, value: item.Estado }
+                                    { type: String, value: item.Estado },
+                                    { type: String, value: item.Condicion },
+                                    { type: String, value: item.Oficina },
+                                    { type: String, value: item.Material },
+                                    { type: String, value: item.Marca },
+                                    { type: String, value: item.NumFabrica },
+                                    { type: String, value: item.Largo },
+                                    { type: String, value: item.Alto },
+                                    { type: String, value: item.Ancho },
+                                    { type: String, value: item.Estantes },
+                                    { type: String, value: item.Cajones },
+                                    { type: String, value: item.DestalleOrigen },
+                                    { type: String, value: item.Importe },
+                                    { type: String, value: item.Entrada },
+                                    { type: String, value: item.CodigoCuentaSubcuenta }
+
+
+
                                 ]
                             };
                         }))

@@ -1,0 +1,107 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+<pdf>
+
+    <dynamic-page>
+      <h1>Listado Articulos</h1>
+      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button">Exportar</button>
+      <table class="table row-border hover stripe" name="TABLA">
+          <thead class="thead">
+              <tr>
+                <th>NroInventario</th>
+                <th>Nro.Expediente</th>
+                <th>Denominación</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Condicion</th>
+                <th>Oficina</th>
+
+                <th>Estado Adicional</th>
+                <th>Material</th>
+                <th>Marca</th>
+                <th>NumFabrica</th>
+                <th>Largo</th>
+                <th>Alto</th>
+                <th>Ancho</th>
+                <th>Estantes</th>
+                <th>Cajones</th>
+                <th>DetalleOrigen</th>
+                <th>Importe</th>
+                <th>Entrada</th>
+                <th>CodigoCuentaSubcuenta</th>
+              </tr>
+          </thead>
+          <tbody>
+          {% for a in articulo %}
+              <tr>
+                  <td>{{a.numInventario}}</td>
+                  <td>{{ a.numExpediente }}</td>
+                  <td>{{ a.denominacion }}</td>
+                  <td>{{a.tipo}}</td>
+                  <td>{{ a.estado }}</td>
+                  <td>{{ a.condicion }}</td>
+                  <td>{{a.oficina}}</td>
+                  <td>{{ a.estadoAdicional }}</td>
+                  <td>{{ a.material }}</td>
+                  <td>{{a.marca}}</td>
+                  <td>{{ a.numFabrica }}</td>
+                  <td>{{ a.largo }}</td>
+                  <td>{{a.alto}}</td>
+                  <td>{{ a.ancho }}</td>
+                  <td>{{ a.numsEstantes }}</td>
+                  <td>{{a.numsCajones}}</td>
+                  <td>{{ a.detalleOrigen }}</td>
+                  <td>{{ a.importe }}</td>
+                  <td>{{ a.fechaEntrada.date }}</td>
+                  <td>{{ a.codigoCuentaSubcuenta }}</td>
+
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+
+
+
+    </dynamic-page>
+</pdf>
+{% endblock %}
+{% block transferenciaJs  %}
+<script src="{{ asset('scripts/jquery.js') }}"></script>
+<link href="{{ asset('bootstrap/css/style.css') }}" rel="stylesheet">
+<link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+<script src="{{ asset('scripts/pdfmake/pdfmake.min.js') }}"> </script>
+<script src="{{ asset('scripts/pdfmake/vfs_fonts.js') }}" > </script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ asset('lib/bootstrap-table/assets/bootstrap4/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('lib/bootstrap-table/bootstrap-table.min.css') }}">
+<script>
+var docDefinition = {
+  content: [
+    {
+
+      table: {
+        headerRows: 1,
+        widths: [ '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'],
+        body: [
+          [ 'Inventario', 'Expediente', 'Denominacion', 'Tipo', 'Condicion', 'Oficina', 'Estado', 'Material', 'Marca', 'Fabrica', 'Largo', 'Alto', 'Ancho', 'Estantes', 'Cajones', 'Detalle Origen', 'Importe', 'Entrada', 'Cod Cuenta Subcuenta' ],
+          {% for a in articulo %}
+          [ '{{a.numInventario}}', '{{a.numExpediente}}', '{{a.denominacion}}', '{{a.tipo}}', '{{a.condicion}}', '{{a.oficina}}', '{{a.estadoAdicional}}',  '{{a.material}}', '{{a.marca}}', '{{a.numFabrica}}', '{{a.largo}}', '{{a.alto}}', '{{a.ancho}}', '{{a.numsEstantes}}', '{{a.numsCajones}}', '{{a.detalleOrigen}}', '{{a.importe}}', '{{a.fechaEntrada.date}}', '{{a.codigoCuentaSubcuenta}}'],
+          {% endfor %}
+        ]
+      }
+
+    }
+  ],
+  defaultStyle: {
+    fontSize: 6,
+    bold: true
+  }
+};
+
+function imprimirPagina() {
+   pdfMake.createPdf(docDefinition).download('Articulos.pdf');
+}
+
+</script>
+{% endblock %}

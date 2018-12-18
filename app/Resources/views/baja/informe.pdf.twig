@@ -1,0 +1,23 @@
+
+{% block content %}
+<pdf>
+    <dynamic-page>
+      <h1>Informe de Baja de articulo</h1>
+      <h2>En: {{oficinaOrigen}} </h2>
+
+      <h3 style="font-style: bold;">Articulos dados de baja:</h3>
+      {% for i in articulos %}
+
+      <h6 style="font-style: bold;">Denominacion:</h6>   {{i.denominacion}}
+      <h6 style="font-style: bold;">Numero de Inventario:</h6>  {{i.numInventario}}
+
+      {% endfor %}
+
+      {% if tieneObservaciones %}
+        <h6 style="font-style: bold;">Observaciones:</h6>
+        {{baja.observaciones}}
+      {% endif %}
+  </dynamic-page>
+</pdf>
+
+{% endblock %}

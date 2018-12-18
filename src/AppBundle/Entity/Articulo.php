@@ -812,10 +812,26 @@ class Articulo
         return $this;
     }
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="Historial", mappedBy="articulo")
+     */
+    private $historiales;
+
+    public function getHistoriales() {
+        return $this->historiales;
+    }
+
+    public function addHistorial($historiales) {
+        $this->historiales[] = $historiales;
+    }
+
+
     public function __construct($id, $oficina) {
         $this->fechaEntrada = new \DateTime();
         $this->numInventario = $id;
         $this->oficina = $oficina;
+        $this->historiales = new ArrayCollection();
     }
 
 }

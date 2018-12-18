@@ -1,0 +1,18 @@
+{% block content %}
+  <pdf>
+      <dynamic-page>
+        <h1>Informe de Transferencia de articulo</h1>
+        <h2>Desde: {{oficinaOrigen}} </h2>
+        <h2>Hacia: {{oficinaDestino}}</h2>
+        <h3 style="font-style: bold;">Articulos transferidos:</h3>
+        {% for i in articulos %}
+          <h6 style="font-style: bold;">Denominacion:</h6> {{i.denominacion}}
+          <h6 style="font-style: bold;">Numero de Inventario </h6>{{i.numInventario}}
+        {% endfor %}
+        {% if tieneObservaciones %}
+          <h6 style="font-style: bold;">Observaciones:</h6>
+          {{transferencia.observaciones}}
+        {% endif %}
+    </dynamic-page>
+  </pdf>
+{% endblock %}

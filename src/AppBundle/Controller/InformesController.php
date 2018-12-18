@@ -48,18 +48,13 @@ class InformesController extends Controller
       // $articulos = $repository->getBy($offset, $limit, $sort, $order, $search);
       $transferencias =  $transferenciaRepository->findBy(array('finalizada' => '1'));
       $bajas =  $bajaRepository->findBy(array('finalizada' => '1'));
-    //  $total = $repository->countBy($search);
-
-      // $rawResponse = array(
-      //   'total' => $total,
-      //   'rows' => array()
-      // );
-      //$operaciones = array_merge($transferencias, $bajas);
       foreach($transferencias as $item) {
+
         $rawResponse['rows'][] = array(
           'id' => $item->getId(),
           'oficinaOrigen' => $item->getOficinaOrigen()->getNombre(),
           'oficinaDestino' =>  ($item->getOficinaDestino()) ? $item->getOficinaDestino()->getNombre() : null,
+
           'fecha' => $item->getFecha(),
           'tipo' => 'Transferencia',
         );
