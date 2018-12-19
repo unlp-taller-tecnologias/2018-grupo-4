@@ -254,7 +254,7 @@ class ArticuloController extends Controller
     {
       $em = $this->getDoctrine()->getManager();
       $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
-      $numInv = ($artNumInv->getNumInventario())+1;
+      $numInv = ((is_null($artNumInv))? 1 : $artNumInv->getNumInventario()+1);
       $condiciones = $em->getRepository('AppBundle:Condicion')->findByHabilitado(1);
       $articulo = new Articulo($numInv, $oficina);
       $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
