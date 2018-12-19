@@ -6,20 +6,21 @@
   <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Volver </a>
   <br>
   <hr>
-    <h2>Artículo: {{articulo.denominacion}}</h2>
-<hr>
-    <table style="margin: 15px;" class="table table">
+    <h2>Historial del artículo: {{articulo.denominacion}}</h2>
+    <hr>
+    <table class="table table">
         <tbody>
             {%  for h in historial %}
               <tr>
-                  <th scope="row">Desde:</th>
+                  <th scope="row">El artículo desde la fecha:</th>
                   <td scope="row">{{ h.fechaDesde }}</td>
 
                   {% if h.estado == false %}
-                    <th scope="row"> en: </th>
+                    <th scope="row">se encuentra en la oficina: </th>
                     <td scope="row">{{ h.oficina }}</td>
                   {% else %}
-                    <td><p style="color:red">El articulo fue dado de baja.</p></td>
+                    <th scope="row">se encuentra:</th>
+                    <td scope="row"><p style="color:red">Dado de baja</p></td>
                   {% endif %}
               </tr>
             {% endfor %}

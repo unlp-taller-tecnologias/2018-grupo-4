@@ -1,140 +1,135 @@
 {% extends 'layout.html.twig' %}
+{% block content %}
 
+<div style="margin-left: 2%; margin-right: 2%;">
+  <br>
+  <a href="{{ path('oficina_show', { 'id': oficina }) }}"><i class="fas fa-angle-left"></i> Volver a {{nombreOficina}} </a>
+  <hr>
+    <h2>Baja en {{nombreOficina}}</h2>
+  <hr>
 
-
-
-
-
-
-
-
-    {% block content %}
-    <div style="margin-left: 2%; margin-right: 2%;">
-      <br>
-        <h1>Baja en: {{nombreOficina}}</h1>
-
-        <a href="{{ path('oficina_show', { 'id': oficina }) }}"><i class="fas fa-angle-left"></i> Volver a {{nombreOficina}} </a>
-        <br>
-
-        <div id="guardada">
-
-
-        </div>
-
-      <div class="container border" style="padding: 30px">
-      <div class="row">
-        <div class="col-md-6 order-md-1">
-          <h4>Artículos de la oficina</h4>
-              <div id="toolbar">
-                  <button id="button" class="btn btn-dark"><i class="fas fa-plus"></i> Agregar a la baja</button>
-              </div>
-              <table id="table"
-                     class="table table-hover table-striped"
-                     data-side-pagination="server"
-                     data-toggle="table"
-                     data-toolbar="#toolbar"
-                     data-height="460"
-                     data-search="true"
-                     data-pagination="true"
-                     data-click-to-select="true"
-                     data-url="{{ path('oficina_show_listadoActivos', { 'oficina': oficina }) }}">
-                     <thead>
-                       <tr>
-                         <th data-field="state" data-checkbox="true"></th>
-                         <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-                         <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
-                         <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-                         <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-                         <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-                       </tr>
-                     </thead>
-              </table>
+    <div id="guardada">
+    </div>
+  <div class="container-fluid border" style="padding: 30px">
+  <div class="row">
+    <div class="col-md-6 order-md-1">
+      <h4>Artículos de la oficina</h4>
+          <div id="toolbar">
+              <button id="button" class="btn btn-dark"><i class="fas fa-plus"></i> Agregar a la baja</button>
           </div>
-          <div class="col-md-6 order-md-1">
-            <h4>Artículo/s a dar de baja</h4>
-            <div id="toolbar1">
-                <button id="button1" class="btn btn-dark"><i class="fas fa-minus"></i> Quitar de la baja</button>
-            </div>
-            <table id="table1"
-                    class="table table-hover table-striped"
-                    data-side-pagination="server"
-                   data-toggle="table"
-                   data-toolbar="#toolbar1"
-                   data-height="460"
-                   data-pagination="true"
-                   data-search="true"
-                   data-click-to-select="true"
-                   data-url=>
-                   <thead>
-                     <tr>
-                       <th data-field="state" data-checkbox="true"></th>
-                       <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-                       <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
-                       <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-                       <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-                       <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-                     </tr>
-                   </thead>
-            </table>
-          </div>
+          <table id="table"
+                 class="table table-hover table-striped"
+                 data-side-pagination="server"
+                 data-toggle="table"
+                 data-toolbar="#toolbar"
+                 data-height="460"
+                 data-search="true"
+                 data-pagination="true"
+                 data-click-to-select="true"
+                 data-url="{{ path('oficina_show_listadoActivos', { 'oficina': oficina }) }}">
+                 <thead>
+                   <tr>
+                     <th data-field="state" data-checkbox="true"></th>
+                     <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
+                     <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+                     <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                     <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+                     <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                   </tr>
+                 </thead>
+          </table>
+      </div>
+      <div class="col-md-6 order-md-1">
+        <h4>Artículo/s a dar de baja</h4>
+        <div id="toolbar1">
+            <button id="button1" class="btn btn-dark"><i class="fas fa-minus"></i> Quitar de la baja</button>
         </div>
+        <table id="table1"
+                class="table table-hover table-striped"
+                data-side-pagination="server"
+               data-toggle="table"
+               data-toolbar="#toolbar1"
+               data-height="460"
+               data-pagination="true"
+               data-search="true"
+               data-click-to-select="true"
+               data-url=>
+               <thead>
+                 <tr>
+                   <th data-field="state" data-checkbox="true"></th>
+                   <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
+                   <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+                   <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                   <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+                   <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                 </tr>
+               </thead>
+        </table>
       </div>
     </div>
-    <div class="container">
+  </div>
 
-    <div style="margin-top: 2%;">
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
+</div>
 
-        <div id="condiciones" >
-          <div class="titulo">
-            <h5>Articulos que se estan dando de baja:</h5>
-            <p id="ninguno" >Ninguno</p>
+<div class="container">
+<hr>
+<h5>Datos de la baja:</h5>
+<hr>
+<div style="margin-top: 2%;">
+{{ form_start(form) }}
+    {{ form_widget(form) }}
 
-          </div>
+    <div id="condiciones" >
+      <div class="titulo">
+        <hr>
+        <h5>Artículos a dar de baja:</h5>
+        <hr>
+        <p id="ninguno">No se encuentran artículos seleccionados para dar de baja</p>
 
-        </div>
+      </div>
+
     </div>
+</div>
+<div class="container">
+    <input type="hidden" id="articulosIds" name="articulosIds" value="">
 
-        <input type="hidden" id="articulosIds" name="articulosIds" value="">
-
-        <input type="hidden" id="articsIds" name="articsIds" value="">
-        <input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Dar de baja" style="margin-top: 10px;">
-
-
-    {{ form_end(form) }}
-      <button name="guardar" id="guardar" class="btn btn-dark">Guardar</button>
-        <button name="cancelar" type="button" data-toggle="modal" data-target="#myModalCancel"  class="btn btn-dark">Cancelar</button>
-
-      {% if historiales %}
-        {% for i in historiales %}
-        <input type="hidden" name="" class="idsArticulosActuales" id="{{i.articulo.id}}" value="{{i.articulo.id}}">
-        <input type="hidden" name="idsArticulosActuales2[]" class="idsArticulosActuales2" id="{{i.articulo.id}}" value="{{i.articulo.id}}">
-        {% endfor %}
-      {% endif %}
-
-      <div class="modal fade" id="myModalCancel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      	<div class="modal-dialog" role="document">
-        	<div class="modal-content">
-          	<div class="modal-header">
-            	<h5 class="modal-title" id="exampleModalLabel">Cancelar Transferencia</h5>
-            	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              	<span aria-hidden="true">&times;</span>
-            	</button>
-          	</div>
-          	<div class="modal-body">
-            	<i class="fas fa-question-circle"></i> ¿Está seguro/a de cancelar la baja?
-          	</div>
-          	<div class="modal-footer">
-            	<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-              	<button id="cancelar" class="btn btn-danger"> Si</button>
-          	</div>
-        	</div>
+    <input type="hidden" id="articsIds" name="articsIds" value="">
+    <input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Dar de baja">
 
 
+{{ form_end(form) }}
+    <button name="guardar" id="guardar" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+    <button name="cancelar" type="button" data-toggle="modal" data-target="#myModalCancel"  class="btn btn-dark"><i class="fa fa-ban" aria-hidden="true"></i> Cancelar</button>
+</div>
+  {% if historiales %}
+    {% for i in historiales %}
+    <input type="hidden" name="" class="idsArticulosActuales" id="{{i.articulo.id}}" value="{{i.articulo.id}}">
+    <input type="hidden" name="idsArticulosActuales2[]" class="idsArticulosActuales2" id="{{i.articulo.id}}" value="{{i.articulo.id}}">
+    {% endfor %}
+  {% endif %}
+
+  <div class="modal fade" id="myModalCancel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  	<div class="modal-dialog" role="document">
+    	<div class="modal-content">
+      	<div class="modal-header">
+        	<h5 class="modal-title" id="exampleModalLabel">Cancelar Transferencia</h5>
+        	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          	<span aria-hidden="true">&times;</span>
+        	</button>
+      	</div>
+      	<div class="modal-body">
+        	<i class="fas fa-question-circle"></i> ¿Está seguro/a de cancelar la baja?
+      	</div>
+      	<div class="modal-footer">
+        	<button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          	<button id="cancelar" class="btn btn-danger"> Si</button>
+      	</div>
+    	</div>
 
 
-    {% endblock %}
+
+
+{% endblock %}
     {% block transferenciaJs %}
     <style>
       /*TODO: SACARLO DE ACA Y PONERLO EN LOS ESTILOS DE LA PAGINA */

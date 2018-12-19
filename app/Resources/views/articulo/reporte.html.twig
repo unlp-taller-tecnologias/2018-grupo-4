@@ -1,35 +1,42 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-<pdf>
 
+<pdf>
+<div class="container">
     <dynamic-page>
-      <h1>Listado Articulos</h1>
-      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button">Exportar</button>
-      <table class="table row-border hover stripe" name="TABLA">
+      <br>
+      <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
+      <br>
+      <hr>
+      <h2>Listado de Artículos</h2>
+      <hr>
+      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button"><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a PDF</button><br>
+      <div class="table-responsive">
+      <table class="table" name="TABLA"><br>
           <thead class="thead">
               <tr>
-                <th>NroInventario</th>
-                <th>Nro.Expediente</th>
+                <th>Nro. Inventario</th>
+                <th>Nro. Expediente</th>
                 <th>Denominación</th>
                 <th>Tipo</th>
                 <th>Estado</th>
-                <th>Condicion</th>
+                <th>Condición</th>
                 <th>Oficina</th>
 
                 <th>Estado Adicional</th>
                 <th>Material</th>
                 <th>Marca</th>
-                <th>NumFabrica</th>
+                <th>Nro. Fábrica</th>
                 <th>Largo</th>
                 <th>Alto</th>
                 <th>Ancho</th>
                 <th>Estantes</th>
                 <th>Cajones</th>
-                <th>DetalleOrigen</th>
+                <th>Detalle de origen</th>
                 <th>Importe</th>
                 <th>Entrada</th>
-                <th>CodigoCuentaSubcuenta</th>
+                <th>Codigo cuenta/Subcuenta</th>
               </tr>
           </thead>
           <tbody>
@@ -53,18 +60,19 @@
                   <td>{{a.numsCajones}}</td>
                   <td>{{ a.detalleOrigen }}</td>
                   <td>{{ a.importe }}</td>
-                  <td>{{ a.fechaEntrada.date }}</td>
+                  <td>{{ a.fechaEntrada|date('d-m-Y ')}}</td>
                   <td>{{ a.codigoCuentaSubcuenta }}</td>
 
               </tr>
               {% endfor %}
           </tbody>
       </table>
-
-
-
+          </div>
     </dynamic-page>
+    </div>
 </pdf>
+
+
 {% endblock %}
 {% block transferenciaJs  %}
 <script src="{{ asset('scripts/jquery.js') }}"></script>

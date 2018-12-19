@@ -1,35 +1,38 @@
 {% block navbar %}
-<nav style="background-color: #1f898e; padding: 1%;" class="navbar navbar-dark navbar-expand-lg" >
-  <a class="navbar-brand" href="/">INVENTARIO</a>
+<div style="background-color: #1f898e; padding: 0%;" class="navbar navbar-dark navbar-expand-lg" >
+  <a href="/oficina"><img src="{{asset('images/unlp.png')}}" alt="Logo Universidad Nacional de La Plata" style="width:190px; height:80px; padding-left: 30px; padding-top: 10px;"></a>
+</div>
+<nav style="background-color: #1f898e; padding: 0%;" class="navbar navbar-dark navbar-expand-lg" >
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
      <span class="navbar-toggler-icon"></span>
    </button>
    <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white" href="/oficina">Oficinas</a>
+        <label class="btn mr-sm-2" style="color:black; font-size:15px;"><strong>Facultad de Ciencias Médicas</strong></label>
       </li>
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white" href="/articulo">Artículos</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/oficina">Oficinas</a>
+      </li>
+      <li class="nav-item">
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/articulo">Artículos</a>
       </li>
       {% if is_granted("ROLE_ADMIN") %}
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white" href="/informes">Informes</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/informes">Informes</a>
       </li>
       {% endif %}
       {% if is_granted("ROLE_SUPER_ADMIN") %}
         <li class="dropdown mr-sm-2">
           <button class="btn btn-secondary dropdown-toggle"
               type="button" id="dropdownMenu1" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false" style="background-color:#1f898e; border-color: #1f898e;">Administración</button>
+              aria-haspopup="true" aria-expanded="false" style="background-color:#1f898e; border-color: #1f898e; font-size:19px;">Administración</button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
             <a class="dropdown-item" href="/user">Usuarios</a>
             <a class="dropdown-item" href="/tipo">Tipos de artículos</a>
             <a class="dropdown-item" href="/estado">Estados de artículos</a>
             <a class="dropdown-item" href="/condicion">Condición de artículos</a>
             <a class="dropdown-item" href="/estadoAdicional">Estados adicionales de artículos</a>
-
-
           </div>
         </li>
       {% endif %}
@@ -39,16 +42,16 @@
         <li class="dropdown mr-sm-2">
           <button class="btn btn-secondary dropdown-toggle"
               type="button" id="dropdownMenu1" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false" style="background-color:#1f898e; border-color: #1f898e;"><b>{{ app.user.username }}</b></button>
+              aria-haspopup="true" aria-expanded="false" style="background-color:#1f898e; border-color: #1f898e; font-size:20px;"><b>{{ app.user.username }}</b></button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
                 <a class="dropdown-item" href="{{ path('editUser_edit', {id: app.user.id})}}" >Editar perfil</a>
               </div>
       </li>
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white" href="/logout">Cerrar Sesión</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/logout">Cerrar Sesión</a>
       </li>
       {% endif %}
-      
+
       {% endblock %}
     </ul>
 

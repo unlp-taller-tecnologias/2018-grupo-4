@@ -3,6 +3,8 @@
 {% block content %}
   <div class="container">
     <br>
+    <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
+    <br>
     <hr>
     <h2>Artículos</h2>
     <hr>
@@ -43,7 +45,8 @@
           </select>
         </div>
         <div class="form-group col-md-12">
-          <button id="button" class="btn btn-dark">Buscar</button>
+          <button id="button" class="btn btn-dark"><i class="fa fa-search" aria-hidden="true"></i>
+            Buscar</button>
           <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
         </div>
       </div>
@@ -53,8 +56,8 @@
     <h3>Listado de todos los artículos</h3>
     <hr>
 
-    <a style="margin-bottom: 2%; margin-top: 1%;" href="{{ path('listado_articulos_pdf') }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</a>
-    <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
+    <a style="margin-bottom: 2%; margin-top: 1%;" href="{{ path('listado_articulos_pdf') }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a PDF</a>
+    <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a Excel</button>
     <div class="table-responsive" >
       <div id="toolbar">
         <button id="button1" hidden class="btn btn-default">filterBy</button>
@@ -72,16 +75,16 @@
               >
         <thead>
           <tr>
-            <th scope="row" data-field="fechaEntrada" data-sortable="true">Fecha entrada</th>
-            <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
-            <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
-            <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-            <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-            <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-            <th scope="row" data-field="condicion" data-visible="true">Condicion</th>
-            <th scope="row" data-field="oficina" data-visible="true">Oficina</th>
             <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
+            <th scope="row" data-field="fechaEntrada" data-sortable="true">Fecha entrada</th>
+            <th scope="row" data-field="oficina" data-visible="true">Oficina</th>
+            <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
+            <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+            <th scope="row" data-field="estado" data-sortable="true">Estado</th>
             <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+            <th scope="row" data-field="condicion" data-visible="true">Condicion</th>
+            <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+            <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
             <th scope="row" data-field="material" data-visible="true">Material</th>
             <th scope="row" data-field="marca" data-visible="true">Marca</th>
             <th scope="row" data-field="numFabrica" data-visible="true">NumFabrica</th>
@@ -92,7 +95,6 @@
             <th scope="row" data-field="cajones" data-visible="true">Cajones</th>
             <th scope="row" data-field="detalleOrigen" data-visible="true">DetalleOrigen</th>
             <th scope="row" data-field="importe" data-visible="true">Importe</th>
-            <th scope="row" data-field="fechaEntrada" data-visible="true">Entrada</th>
             <th scope="row" data-field="codigoCuentaSubcuenta" data-visible="true">CodigoCuentaSubcuenta</th>
 
 
@@ -129,300 +131,280 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-
-  // //pdf export
-  // $a= $table.find('tbody tr').slice(0, 5);
-  // console.log($a);
-
-  $table=$('#tablaArticulos');
-  jQuery(function ($) {
-    $("#exportButtonPdf").click(function () {
-        var dataSource = shield.DataSource.create({
-            data: $('#tablaArticulos').slice(0,6),
-            schema: {
-                type: "table",
-                fields: {
-                    NroInventario: { type: Number },
-                    NroExpediente: { type: Number },
-                    Denominación: { type: String },
-                    Tipo: { type: String },
-                    Estado: { type: String }
-
-                }
-            }
-        });
-        dataSource.read().then(function (data) {
-            var pdf = new shield.exp.PDFDocument({
-                author: "PrepBootstrap",
-                created: new Date()
-            });
-
-            pdf.addPage("a4", "portrait");
-            pdf.table(
-                50,
-                50,
-                data,
-                [
-                    { field: "NroInventario", title: "Numero de Inventario", width: 120 },
-                    { field: "Nro.Expendiente", title: "Numero de Expediente", width: 125 },
-                    { field: "Denominación", title: "Denominación", width: 100 },
-                    { field: "Tipo", title: "Tipo", width: 50 },
-                    { field: "Estado", title: "Estado", width: 50 }
-                ],
-                {
-                    margins: {
-                        top: 50,
-                        left: 50
-                    }
-                }
-            );
-
-            pdf.saveAs({
-                fileName: "Listado_de_articulos"
-            });
-        });
-    });
-
-//fin pdf
-
-//excel export
-
-    $("#exportButtonExcel").click(function () {
-        var dataSourceExcel = shield.DataSource.create({
-            data: "#tablaArticulos",
-            schema: {
-                type: "table",
-                fields: {
+$table=$('#tablaArticulos');
+jQuery(function ($) {
+  $("#exportButtonPdf").click(function () {
+      var dataSource = shield.DataSource.create({
+          data: $('#tablaArticulos').slice(0,6),
+          schema: {
+              type: "table",
+              fields: {
                   NroInventario: { type: Number },
                   NroExpediente: { type: Number },
                   Denominación: { type: String },
                   Tipo: { type: String },
-                  Estado: { type: String },
-                  Condicion: { type: String },
-                  Oficina: { type: String },
-                  Material: { type: String },
-                  Marca: { type: String },
-                  NumFabrica: { type: String },
-                  Largo: { type: String },
-                  Alto: { type: String },
-                  Ancho: { type: String },
-                  Estantes: { type: String },
-                  Cajones: { type: String },
-                  DetalleOrigen: { type: String },
-                  Importe: { type: String },
-                  Entrada: { type: String },
-                  CodigoCuentaSubcuenta: { type: String }
+                  Estado: { type: String }
+              }
+          }
+      });
+    dataSource.read().then(function (data) {
+        var pdf = new shield.exp.PDFDocument({
+            author: "PrepBootstrap",
+            created: new Date()
+        });
 
-
-
+        pdf.addPage("a4", "portrait");
+        pdf.table(
+            50,
+            50,
+            data,
+            [
+                { field: "NroInventario", title: "Numero de Inventario", width: 120 },
+                { field: "Nro.Expendiente", title: "Numero de Expediente", width: 125 },
+                { field: "Denominación", title: "Denominación", width: 100 },
+                { field: "Tipo", title: "Tipo", width: 50 },
+                { field: "Estado", title: "Estado", width: 50 }
+            ],
+            {
+                margins: {
+                    top: 50,
+                    left: 50
                 }
             }
-        });
-        dataSourceExcel.read().then(function (data) {
-            new shield.exp.OOXMLWorkbook({
-                author: "PrepBootstrap",
-                worksheets: [
-                    {
-                        name: "PrepBootstrap Table",
-                        rows: [
-                            {
-                                cells: [
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        width: 120,
-                                        value: "Numero de Inventario"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Numero de Expediente"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Denominacion"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Tipo"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Estado"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Condicion"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Oficina"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Material"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Marca"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "NumFabrica"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Largo"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Alto"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Ancho"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Estantes"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Cajones"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "DetalleOrigen"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Importe"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "Entrada"
-                                    },
-                                    {
-                                        style: {
-                                            bold: true
-                                        },
-                                        type: String,
-                                        value: "CodigoCuentaSubcuenta"
-                                    }
+        );
 
-
-                                ]
-                            }
-                        ].concat($.map(data, function(item) {
-                            console.log(item);
-                            return {
-                                cells: [
-                                    { type: Number, value: item.NroInventario },
-                                    { type: Number, value: item.NroExpediente },
-                                    { type: String, value: item.Denominación },
-                                    { type: String, value: item.Tipo },
-                                    { type: String, value: item.Estado },
-                                    { type: String, value: item.Condicion },
-                                    { type: String, value: item.Oficina },
-                                    { type: String, value: item.Material },
-                                    { type: String, value: item.Marca },
-                                    { type: String, value: item.NumFabrica },
-                                    { type: String, value: item.Largo },
-                                    { type: String, value: item.Alto },
-                                    { type: String, value: item.Ancho },
-                                    { type: String, value: item.Estantes },
-                                    { type: String, value: item.Cajones },
-                                    { type: String, value: item.DestalleOrigen },
-                                    { type: String, value: item.Importe },
-                                    { type: String, value: item.Entrada },
-                                    { type: String, value: item.CodigoCuentaSubcuenta }
-
-
-
-                                ]
-                            };
-                        }))
-                    }
-                ]
-            }).saveAs({
-                fileName: "Listado_de_articulos"
-            });
+        pdf.saveAs({
+            fileName: "Listado_de_articulos"
         });
     });
 });
 
-//fin excel
+$("#exportButtonExcel").click(function () {
+var dataSourceExcel = shield.DataSource.create({
+    data: "#tablaArticulos",
+    schema: {
+        type: "table",
+        fields: {
+          NroInventario: { type: Number },
+          NroExpediente: { type: Number },
+          Denominación: { type: String },
+          Tipo: { type: String },
+          Estado: { type: String },
+          Condicion: { type: String },
+          Oficina: { type: String },
+          Material: { type: String },
+          Marca: { type: String },
+          NumFabrica: { type: String },
+          Largo: { type: String },
+          Alto: { type: String },
+          Ancho: { type: String },
+          Estantes: { type: String },
+          Cajones: { type: String },
+          DetalleOrigen: { type: String },
+          Importe: { type: String },
+          Entrada: { type: String },
+          CodigoCuentaSubcuenta: { type: String }
+        }
+    }
+});
+dataSourceExcel.read().then(function (data) {
+    new shield.exp.OOXMLWorkbook({
+        author: "PrepBootstrap",
+        worksheets: [
+{
+name: "PrepBootstrap Table",
+rows: [
+{
+cells: [
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        width: 120,
+        value: "Numero de Inventario"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Numero de Expediente"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Denominacion"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Tipo"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Estado"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Condicion"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Oficina"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Material"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Marca"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "NumFabrica"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Largo"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Alto"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Ancho"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Estantes"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Cajones"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "DetalleOrigen"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Importe"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "Entrada"
+    },
+    {
+        style: {
+            bold: true
+        },
+        type: String,
+        value: "CodigoCuentaSubcuenta"
+    }
+  ]
+}
+].concat($.map(data, function(item) {
+console.log(item);
+return {
+  cells: [
+          { type: Number, value: item.NroInventario },
+          { type: Number, value: item.NroExpediente },
+          { type: String, value: item.Denominación },
+          { type: String, value: item.Tipo },
+          { type: String, value: item.Estado },
+          { type: String, value: item.Condicion },
+          { type: String, value: item.Oficina },
+          { type: String, value: item.Material },
+          { type: String, value: item.Marca },
+          { type: String, value: item.NumFabrica },
+          { type: String, value: item.Largo },
+          { type: String, value: item.Alto },
+          { type: String, value: item.Ancho },
+          { type: String, value: item.Estantes },
+          { type: String, value: item.Cajones },
+          { type: String, value: item.DestalleOrigen },
+          { type: String, value: item.Importe },
+          { type: String, value: item.Entrada },
+          { type: String, value: item.CodigoCuentaSubcuenta }
+          ]
+        };
+      }))
+      }
+    ]
+    }).saveAs({
+    fileName: "Listado_de_articulos"
+    });
+  });
+  });
+});
 
-  {% if editado == 'editado' %}
-    $('#editModal').modal('show');
-  {%endif%}
+{% if editado == 'editado' %}
+  $('#editModal').modal('show');
+{%endif%}
 
-  function operateFormatterAction(value, row, index) {
-    show = "{{ path('articulo_show', {id: -1})}}";
-    show = show.replace('-1', value);
-    edit = "{{ path('articulo_edit', {id: -1})}}";
-    edit = edit.replace('-1', value);
-    return [
-      {% if is_granted("ROLE_ADMIN") %}
-      `<a class="edit ml10" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${edit}" title="Editar artículo"><i class="fas fa-edit"></i></a>`,
-      {% else %}
-      `<a class="edit ml10" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>`,
-      {% endif %}
-    ].join('');
-  }
+function operateFormatterAction(value, row, index) {
+  show = "{{ path('articulo_show', {id: -1})}}";
+  show = show.replace('-1', value);
+  edit = "{{ path('articulo_edit', {id: -1})}}";
+  edit = edit.replace('-1', value);
+  return [
+    {% if is_granted("ROLE_ADMIN") %}
+    `<a class="edit ml10" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+    <a class="edit ml10" href="${edit}" title="Editar artículo"><i class="fas fa-edit"></i></a>`,
+    {% else %}
+    `<a class="edit ml10" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>`,
+    {% endif %}
+  ].join('');
+}
 
 var xhttpEstados = new XMLHttpRequest();
 xhttpEstados.onreadystatechange = function() {
@@ -518,42 +500,40 @@ $("button").click(function(){
             "tipo":tipo
           } ,
     success: function(data) {
-
       $table.bootstrapTable('load',data);
       }
     });
   });
 
-  $("#buttonBorrar").click(function(){
-    $('#nroInventario').val('');
-    $('#expediente').val('');
-    $('#denominacion').val('');
-    $('#estado').val('');
-    $('#tipo').val('');
-    $('#estadoAdicional').val('');
-    var nroInventario = $('#nroInventario').val();
-    var expediente = $('#expediente').val();
-    var denominacion = $('#denominacion').val();
-    var estado = $('#estado').val();
-    var tipo = $('#tipo').val();
-    var estadoAdicional = $('#estadoAdicional').val();
-    $.ajax({
-      method: "POST",
-      url: "articulo_listFilter",
-      data: {
-              "nroInventario":nroInventario,
-              "expediente":expediente,
-              "denominacion":denominacion,
-              "estado":estado,
-              "estadoAdicional": estadoAdicional,
-              "tipo":tipo
-            } ,
-      success: function(data) {
-        //alert(data);
-        $table.bootstrapTable('load',data);
-        }
-      });
+$("#buttonBorrar").click(function(){
+  $('#nroInventario').val('');
+  $('#expediente').val('');
+  $('#denominacion').val('');
+  $('#estado').val('');
+  $('#tipo').val('');
+  $('#estadoAdicional').val('');
+  var nroInventario = $('#nroInventario').val();
+  var expediente = $('#expediente').val();
+  var denominacion = $('#denominacion').val();
+  var estado = $('#estado').val();
+  var tipo = $('#tipo').val();
+  var estadoAdicional = $('#estadoAdicional').val();
+  $.ajax({
+    method: "POST",
+    url: "articulo_listFilter",
+    data: {
+            "nroInventario":nroInventario,
+            "expediente":expediente,
+            "denominacion":denominacion,
+            "estado":estado,
+            "estadoAdicional": estadoAdicional,
+            "tipo":tipo
+          } ,
+    success: function(data) {
+      $table.bootstrapTable('load',data);
+      }
     });
+  });
 
 </script>
 {% endblock %}

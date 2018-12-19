@@ -2,17 +2,23 @@
 
 {% block content %}
 <pdf>
-
+  <div class="container">
     <dynamic-page>
-      <h1>Listado Articulos de {{oficina}}</h1>
-      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button">Exportar</button>
-      <table class="table row-border hover stripe" name="TABLA">
+      <br>
+      <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
+      <br>
+      <hr>
+      <h2>Listado de Artículos de {{oficina}}</h2>
+      <hr>
+      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button"><i class="fa fa-paperclip" aria-hidden="true"></i>
+        Exportar a PDF</button><br>
+      <div class="table-responsive">
+      <table class="table" name="TABLA"><br>
           <thead class="thead">
               <tr>
-                  <th>Denominacion</th>
-                  <th>Num Inventario</th>
-                  <th>Condicion</th>
-
+                  <th>Denominación</th>
+                  <th>Nro. Inventario</th>
+                  <th>Condición</th>
               </tr>
           </thead>
           <tbody>
@@ -21,13 +27,13 @@
                   <td>{{a.denominacion}}</td>
                   <td>{{ a.numInventario }}</td>
                   <td>{{ a.Condicion }}</td>
-
               </tr>
               {% endfor %}
           </tbody>
-      </table>
-
-    </dynamic-page>
+        </table>
+      </dynamic-page>
+    </div>
+  </div>
 </pdf>
 {% endblock %}
 {% block transferenciaJs  %}

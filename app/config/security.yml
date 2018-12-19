@@ -54,11 +54,11 @@ security:
       - { path: ^/baja/, role: ROLE_ADMIN }
       - { path: ^/historial/, role: ROLE_ADMIN }
 
-      - { path: ^/condicion/, role: ROLE_SUPER_ADMIN }
-      - { path: ^/tipo/, role: ROLE_SUPER_ADMIN }
-      - { path: ^/estado/, role: ROLE_SUPER_ADMIN }
+      # - { path: ^/condicion/, role: ROLE_SUPER_ADMIN }
+      # - { path: ^/tipo/, role: ROLE_SUPER_ADMIN }
+      # - { path: ^/estado/, role: ROLE_SUPER_ADMIN }
       - { path: ^/user/, role: ROLE_SUPER_ADMIN }
-      - { path: ^/estadoAdicional/, role: ROLE_SUPER_ADMIN }
+      # - { path: ^/estadoAdicional/, role: ROLE_SUPER_ADMIN }
 
 
       - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }

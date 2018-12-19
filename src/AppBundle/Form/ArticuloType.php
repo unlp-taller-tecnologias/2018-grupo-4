@@ -32,9 +32,9 @@ class ArticuloType extends AbstractType
              )
           ))
 
-          ->add('estadoAdicional', null, array(
-               'label'=> 'Estado Adicional'
-          ))
+          // ->add('estadoAdicional', null, array(
+          //      'label'=> 'Estado Adicional'
+          // ))
 
           ->add('oficina', null, array(
             'label' => 'Oficina(*)',
@@ -49,11 +49,14 @@ class ArticuloType extends AbstractType
 
 
           ->add('tipo', null, array(
-               'label'=> 'Tipo'
+               'label'=> 'Tipo',
+               'placeholder' => 'Seleccione'
           ))
 
           ->add('condicion', null, array(
-               'label'=> 'Condición'
+               'label'=> 'Condición',
+               'placeholder' => 'Seleccione'
+               
           ))
 
 

@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 /**
  * estadoAdicional controller.
@@ -20,6 +22,7 @@ class estadoAdicionalController extends Controller
      * Lists all estadoAdicional entities.
      *
      * @Route("/", name="estadoAdicional_index")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      */
     public function indexAction(Request $request)
@@ -100,6 +103,7 @@ class estadoAdicionalController extends Controller
      * Creates a new estadoAdicional entity.
      *
      * @Route("/new", name="estadoAdicional_new")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
      public function newAction(Request $request)
@@ -127,6 +131,7 @@ class estadoAdicionalController extends Controller
      * Finds and displays a estadoAdicional entity.
      *
      * @Route("/{id}", name="estadoAdicional_show")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      */
     public function showAction(estadoAdicional $estado)
@@ -143,6 +148,7 @@ class estadoAdicionalController extends Controller
      * Displays a form to edit an existing estadoAdicional entity.
      *
      * @Route("/{id}/edit", name="estadoAdicional_edit")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, estadoAdicional $estado)
@@ -190,6 +196,7 @@ class estadoAdicionalController extends Controller
      * Displays a form to edit an existing estado entity.
      *
      * @Route("/{id}/visibility", name="estadoAdicional_visibility")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function visibilityAction(Request $request, estadoAdicional $estado)
