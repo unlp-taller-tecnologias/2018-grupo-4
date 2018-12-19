@@ -100,29 +100,23 @@ class ArticuloController extends Controller
       );
 
       foreach($articulos as $articulo) {
-        // $historialRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Historial')->findBy(array('articulo' => $articulo ));
-        // var_dump($historialRepository);
-        // $condiciones = array();
-        // $condicion = null;
-        // $historialesCollection = $articulo->getHistoriales();
-        // if (is) {
-        //   var_dump($historialesCollection);
-        //     foreach ($historialesCollection as $h) {
-        //       // if ($h->getTransferencia() != null) {
-        //       //   $condiciones[] = $h->getCondicion()->getNombre();
-        //        }
-        // }
-        //     }
-        //     if (count($condiciones) > 0) {
-        //       $condicion = end($condiciones);
-        //     }
-        // }else{
-        //   if (!is_null($articulo->getCondicion())) {
-        //     $condicionInicial = $articulo->getCondicion()->getNombre();
-        //   }else{
-        //     $condicionInicial = null;
-        //   }
-        // }
+        $condiciones = array();
+        $historialesCollection = $articulo->getHistoriales();
+        if (!($historialesCollection->isEmpty())) {
+            foreach ($historialesCollection as $h) {
+              if ($h->getTransferencia() != null) {
+                $condiciones[] = $h->getCondicion()->getNombre();
+              }
+            }
+        }else{
+          if ($articulo->getCondicion() != null) {
+            $condicionInicial = $articulo->getCondicion()->getNombre();
+          }else{
+            $condicionInicial = null;
+          }
+
+        }
+        $condicion = end($condiciones);
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
           'numInventario' => $articulo->getNumInventario(),
@@ -132,7 +126,7 @@ class ArticuloController extends Controller
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
           'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
-          'condicion' => (is_null($articulo->getCondicion()))? 'Sin condicion': $articulo->getCondicion()->getNombre(),//(is_null($condicion)) ? ((is_null($condicionInicial))? 'sin condicion':$condicionInicial): $condicion,
+          'condicion' => ($condicion) ? $condicion : $condicionInicial,
           'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
           'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
           'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
@@ -145,7 +139,6 @@ class ArticuloController extends Controller
           'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
           'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
           'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
-
         );
       };
 
@@ -205,6 +198,23 @@ class ArticuloController extends Controller
 
 
       foreach($articulos as $articulo) {
+        $condiciones = array();
+        $historialesCollection = $articulo->getHistoriales();
+        if (!($historialesCollection->isEmpty())) {
+            foreach ($historialesCollection as $h) {
+              if ($h->getTransferencia() != null) {
+                $condiciones[] = $h->getCondicion()->getNombre();
+              }
+            }
+        }else{
+          if ($articulo->getCondicion() != null) {
+            $condicionInicial = $articulo->getCondicion()->getNombre();
+          }else{
+            $condicionInicial = null;
+          }
+
+        }
+        $condicion = end($condiciones);
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
           'numInventario' => $articulo->getNumInventario(),
@@ -214,7 +224,7 @@ class ArticuloController extends Controller
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
           'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
-          'condicion' => (is_null($articulo->getCondicion()))? 'Sin condicion': $articulo->getCondicion()->getNombre(),//(is_null($condicion)) ? ((is_null($condicionInicial))? 'sin condicion':$condicionInicial): $condicion,
+          'condicion' => ($condicion) ? $condicion : $condicionInicial,
           'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
           'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
           'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
