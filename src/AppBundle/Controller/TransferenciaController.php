@@ -402,7 +402,7 @@ class TransferenciaController extends Controller
       $articuloRepository = $em->getRepository('AppBundle:Articulo');
       $condicionRepository = $em->getRepository('AppBundle:Condicion');
       $oficinaOrig = $oficinaRepository->findOneById($id);
-      $transferencia->setOficinaDestino($oficinaDest);
+      $transferencia->setOficinaDestino($oficinaDestino);
       $transferencia->setOficinaOrigen($oficinaOrig);
       $transferencia->setUsuario($this->getUser());
       $oficinaDestinoNombre = $request->request->get('oficinaDestino');
