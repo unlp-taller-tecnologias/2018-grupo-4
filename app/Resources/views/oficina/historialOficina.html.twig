@@ -1,0 +1,26 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+<div class="container">
+  <br>
+  <a href="{{ path('oficina_show', { 'id': oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a la Oficina {{ oficina.nombre }}</a>
+  <br>
+    <hr>
+    <h2>Historial de artículos transferidos de {{oficina.nombre}}</h2>
+    <hr>
+    <table class="table table">
+        <tbody>
+            {%  for a in articulos %}
+              <tr>
+                  <th scope="row">El artículo:</th>
+                  <td scope="row">{{ a.denominacion }}</td>
+                  <th scope="row">con número de inventario: </th>
+                  <td scope="row">{{ a.numInventario }}</td>
+                  <th scope="row">fue transferido a: </th>
+                  <td scope="row">{{ a.oficina }}</td>
+              </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

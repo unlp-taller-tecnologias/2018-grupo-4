@@ -292,9 +292,6 @@ class OficinaController extends Controller
       return new JsonResponse($rawResponse);
     }
 
-
-
-
     /**
      * Lists all articulo entities.
      *
@@ -506,5 +503,32 @@ class OficinaController extends Controller
       };
       $rawResponse['total'] = count($rawResponse['rows']);
       return new JsonResponse($rawResponse);
+    }
+
+    /**
+     * History of oficina entity.
+     *
+     * @Route("/{id}/historial", name="oficina_historial")
+     * @Method({"GET", "POST"})
+     */
+    public function historialAction(Request $request, Oficina $oficina)
+    {
+      $em = $this->getDoctrine()->getManager();
+      $historialRepository = $em->getRepository('AppBundle:Historial')->findAll();
+      $coleccionHistorial = [];
+      foreach ($historialRepository as $historial) {
+        if (!is_null($historial->getTransferencia())) {
+          $tranfe = $historial->getTransferencia();
+          if (!is_null($tranfe->getOficinaOrigen())) {
+            if ($tranfe->getOficinaOrigen()->getId() == $oficina->getId()) {
+              array_push($coleccionHistorial,$historial->getArticulo());
+            }
+          }
+        }
+      }
+      return $this->render('oficina/historialOficina.html.twig', array(
+          'oficina' => $oficina,
+          'articulos' => $coleccionHistorial
+      ));
     }
 }
