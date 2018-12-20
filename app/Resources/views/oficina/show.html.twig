@@ -49,6 +49,10 @@
           <th scope="row">Número Carpeta</th>
           <td scope="row">{{ oficina.numeroCarpeta }}</td>
         </tr>
+        <tr>
+          <th scope="row">Historial de artículos</th>
+          <td scope="row"><a href="{{ path('oficina_historial', { 'id': oficina.id }) }}">Ver historial de artículos transferidos de {{oficina.nombre}}</a></td>
+        </tr>
       </tbody>
     </table>
 
@@ -462,7 +466,7 @@ xhttpEstados.onreadystatechange = function() {
     var estados = listado.rows;
     var opciones = "";
     for(es in estados){
-      if (estados[es].habilitado == 'Si') {
+      if (estados[es].habilitado == 'Si' && estados[es].nombre != 'Transferido') {
       opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
       }
     }

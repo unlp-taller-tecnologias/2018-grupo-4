@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 /**
  * Tipo controller.
@@ -19,6 +21,7 @@ class TipoController extends Controller
      * Lists all tipo entities.
      *
      * @Route("/", name="tipo_index")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      */
     public function indexAction (Request $request)
@@ -36,6 +39,7 @@ class TipoController extends Controller
      * Creates a new tipo entity.
      *
      * @Route("/new", name="tipo_new")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -127,6 +131,7 @@ class TipoController extends Controller
      * Finds and displays a tipo entity.
      *
      * @Route("/{id}", name="tipo_show")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      */
     public function showAction(Tipo $tipo)
@@ -143,6 +148,7 @@ class TipoController extends Controller
      * Displays a form to edit an existing tipo entity.
      *
      * @Route("/{id}/edit", name="tipo_edit")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Tipo $tipo)
@@ -168,6 +174,7 @@ class TipoController extends Controller
      * Displays a form to edit an existing tipo entity.
      *
      * @Route("/{id}/visibility", name="tipo_visibility")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function visibilityAction(Request $request, Tipo $tipo)

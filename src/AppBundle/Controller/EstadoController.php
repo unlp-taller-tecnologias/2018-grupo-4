@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 /**
  * Estado controller.
@@ -20,6 +22,7 @@ class EstadoController extends Controller
      * Lists all estado entities.
      *
      * @Route("/", name="estado_index")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      */
     public function indexAction(Request $request)
@@ -100,6 +103,7 @@ class EstadoController extends Controller
      * Creates a new estado entity.
      *
      * @Route("/new", name="estado_new")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -128,6 +132,7 @@ class EstadoController extends Controller
      * Finds and displays a estado entity.
      *
      * @Route("/{id}", name="estado_show")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method("GET")
      */
     public function showAction(Estado $estado)
@@ -144,6 +149,7 @@ class EstadoController extends Controller
      * Displays a form to edit an existing estado entity.
      *
      * @Route("/{id}/edit", name="estado_edit")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Estado $estado)
@@ -169,6 +175,7 @@ class EstadoController extends Controller
      * Displays a form to edit an existing estado entity.
      *
      * @Route("/{id}/visibility", name="estado_visibility")
+     * @Security("is_granted('ROLE_SUPER_ADMIN')")
      * @Method({"GET", "POST"})
      */
     public function visibilityAction(Request $request, Estado $estado)

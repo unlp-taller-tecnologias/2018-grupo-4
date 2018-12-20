@@ -413,7 +413,7 @@ xhttpEstados.onreadystatechange = function() {
     var estados = listado.rows;
     var opciones = "";
     for(es in estados){
-      if (estados[es].habilitado == 'Si') {
+      if (estados[es].habilitado == 'Si' && estados[es].nombre != 'Transferido') {
         opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
       }
     }
