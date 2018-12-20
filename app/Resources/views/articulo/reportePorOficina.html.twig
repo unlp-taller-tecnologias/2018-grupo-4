@@ -4,28 +4,57 @@
 <pdf>
 
     <dynamic-page>
-      <h1>Listado Articulos de {{oficina}}</h1>
+      <h1>Listado de Articulos de {{oficina}}</h1>
       <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button">Exportar</button>
       <table class="table row-border hover stripe" name="TABLA">
           <thead class="thead">
               <tr>
-                  <th>Denominacion</th>
-                  <th>Num Inventario</th>
-                  <th>Condicion</th>
+                <th>NroInventario</th>
+                <th>Nro.Expediente</th>
+                <th>Denominación</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Condicion</th>
+                <th>Oficina</th>
+
+
+
+                <th>Marca</th>
+                <th>NumFabrica</th>
+
+
+
+                <th>Importe</th>
+                <th>Entrada</th>
 
               </tr>
           </thead>
           <tbody>
           {% for a in articulo %}
               <tr>
-                  <td>{{a.denominacion}}</td>
-                  <td>{{ a.numInventario }}</td>
-                  <td>{{ a.Condicion }}</td>
+                  <td>{{a.numInventario}}</td>
+                  <td>{{ a.numExpediente }}</td>
+                  <td>{{ a.denominacion }}</td>
+                  <td>{{a.tipo}}</td>
+                  <td>{{ a.estado }}</td>
+                  <td>{{ a.condicion }}</td>
+                  <td>{{a.oficina}}</td>
+
+
+                  <td>{{a.marca}}</td>
+                  <td>{{ a.numFabrica }}</td>
+
+
+                  <td>{{ a.importe }}</td>
+                  <td>{{ a.fechaEntrada|date('d-m-Y ') }}</td>
+
 
               </tr>
               {% endfor %}
           </tbody>
       </table>
+
+
 
     </dynamic-page>
 </pdf>
@@ -45,16 +74,21 @@ var docDefinition = {
     {
       table: {
         headerRows: 1,
-        widths: [ '*', '*', '*'],
+        widths: [ 40, 40, 50, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40],
         body: [
-          [ 'Denominacion', 'Num Inventario', 'Condicion' ],
+          [ 'Inventario', 'Expediente', 'Denominacion', 'Tipo', 'Condicion', 'Oficina', 'Estado', 'Marca', 'Fabrica',  'Importe', 'Entrada' ],
           {% for a in articulo %}
-          [ '{{a.denominacion}}', '{{a.numInventario}}', '{{a.condicion}}'],
+          [ '{{a.numInventario}}', '{{a.numExpediente}}', '{{a.denominacion}}', '{{a.tipo}}', '{{a.condicion}}', '{{a.oficina}}', '{{a.estado}}', '{{a.marca}}', '{{a.numFabrica}}',  '{{a.importe}}', '{{ a.fechaEntrada|date("d-m-Y ") }}'],
           {% endfor %}
         ]
-      }
+    , margin: 0  }
+
     }
-  ]
+  ],
+  defaultStyle: {
+    fontSize: 6,
+    bold: true
+  }
 };
 
 function imprimirPagina() {

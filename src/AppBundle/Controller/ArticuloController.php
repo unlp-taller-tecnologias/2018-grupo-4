@@ -92,7 +92,7 @@ class ArticuloController extends Controller
       $articulos = $repository->getBy($offset, $limit, $sort, $order, $search);
     //  $historialRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Historial');
       $total = $repository->countBy($search);
-
+      $condicionInicial = null;
       $rawResponse = array(
         'total' => $total,
         'rows' => array()
@@ -521,6 +521,7 @@ class ArticuloController extends Controller
 
        return $this->render('articulo/reporte.html.twig', array(
           'articulo' => $articulos
+
        ));
      }
 

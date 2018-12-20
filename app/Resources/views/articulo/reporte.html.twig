@@ -17,19 +17,16 @@
                 <th>Condicion</th>
                 <th>Oficina</th>
 
-                <th>Estado Adicional</th>
-                <th>Material</th>
+
+
                 <th>Marca</th>
                 <th>NumFabrica</th>
-                <th>Largo</th>
-                <th>Alto</th>
-                <th>Ancho</th>
-                <th>Estantes</th>
-                <th>Cajones</th>
-                <th>DetalleOrigen</th>
+
+
+
                 <th>Importe</th>
                 <th>Entrada</th>
-                <th>CodigoCuentaSubcuenta</th>
+
               </tr>
           </thead>
           <tbody>
@@ -42,19 +39,10 @@
                   <td>{{ a.estado }}</td>
                   <td>{{ a.condicion }}</td>
                   <td>{{a.oficina}}</td>
-                  <td>{{ a.estadoAdicional }}</td>
-                  <td>{{ a.material }}</td>
                   <td>{{a.marca}}</td>
                   <td>{{ a.numFabrica }}</td>
-                  <td>{{ a.largo }}</td>
-                  <td>{{a.alto}}</td>
-                  <td>{{ a.ancho }}</td>
-                  <td>{{ a.numsEstantes }}</td>
-                  <td>{{a.numsCajones}}</td>
-                  <td>{{ a.detalleOrigen }}</td>
                   <td>{{ a.importe }}</td>
-                  <td>{{ a.fechaEntrada.date }}</td>
-                  <td>{{ a.codigoCuentaSubcuenta }}</td>
+                  <td>{{ a.fechaEntrada|date('d-m-Y ') }}</td>
 
               </tr>
               {% endfor %}
@@ -79,17 +67,16 @@
 var docDefinition = {
   content: [
     {
-
       table: {
         headerRows: 1,
-        widths: [ '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*', '*'],
+        widths: [ 40, 40, 50, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40],
         body: [
-          [ 'Inventario', 'Expediente', 'Denominacion', 'Tipo', 'Condicion', 'Oficina', 'Estado', 'Material', 'Marca', 'Fabrica', 'Largo', 'Alto', 'Ancho', 'Estantes', 'Cajones', 'Detalle Origen', 'Importe', 'Entrada', 'Cod Cuenta Subcuenta' ],
+          [ 'Inventario', 'Expediente', 'Denominacion', 'Tipo', 'Condicion', 'Oficina', 'Estado', 'Marca', 'Fabrica',  'Importe', 'Entrada' ],
           {% for a in articulo %}
-          [ '{{a.numInventario}}', '{{a.numExpediente}}', '{{a.denominacion}}', '{{a.tipo}}', '{{a.condicion}}', '{{a.oficina}}', '{{a.estadoAdicional}}',  '{{a.material}}', '{{a.marca}}', '{{a.numFabrica}}', '{{a.largo}}', '{{a.alto}}', '{{a.ancho}}', '{{a.numsEstantes}}', '{{a.numsCajones}}', '{{a.detalleOrigen}}', '{{a.importe}}', '{{a.fechaEntrada.date}}', '{{a.codigoCuentaSubcuenta}}'],
+          [ '{{a.numInventario}}', '{{a.numExpediente}}', '{{a.denominacion}}', '{{a.tipo}}', '{{a.condicion}}', '{{a.oficina}}', '{{a.estado}}', '{{a.marca}}', '{{a.numFabrica}}',  '{{a.importe}}', '{{ a.fechaEntrada|date("d-m-Y ") }}'],
           {% endfor %}
         ]
-      }
+    , margin: 0  }
 
     }
   ],

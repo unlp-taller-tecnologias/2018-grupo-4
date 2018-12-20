@@ -241,7 +241,7 @@ class OficinaController extends Controller
       $order = $request->query->get('order', 'asc');
 
       $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
-
+      $condicionInicial = null;
       $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
       $total = $repository->countBy($search, $oficina);
 
