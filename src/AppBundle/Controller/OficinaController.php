@@ -455,7 +455,7 @@ class OficinaController extends Controller
         'total' => 0,
         'rows' => array()
       );
-
+      $condicionInicial = null;
       foreach($articulos as $articulo) {
         $of = $articulo->getOficina();
         if ($of->getId() ==  $oficina->getId()) {
