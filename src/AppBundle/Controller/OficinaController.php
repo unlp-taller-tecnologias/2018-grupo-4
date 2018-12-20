@@ -239,20 +239,15 @@ class OficinaController extends Controller
       $search = $request->query->get('search', null);
       $sort = $request->query->get('sort', 'denominacion');
       $order = $request->query->get('order', 'asc');
-
       $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
       $condicionInicial = null;
       $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
       $total = $repository->countBy($search, $oficina);
-
-
+      $condicionInicial = null;
       $rawResponse = array(
         'total' => $total,
         'rows' => array()
       );
-
-
-
       foreach($articulos as $articulo) {
         $condiciones = array();
         $historialesCollection = $articulo->getHistoriales();
@@ -262,7 +257,6 @@ class OficinaController extends Controller
                 $condiciones[] = $h->getCondicion()->getNombre();
               }
             }
-
         }else{
           if ($articulo->getCondicion() != null) {
             $condicionInicial = $articulo->getCondicion()->getNombre();
@@ -296,7 +290,6 @@ class OficinaController extends Controller
           'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
         );
       };
-
       return new JsonResponse($rawResponse);
     }
 
@@ -466,18 +459,49 @@ class OficinaController extends Controller
         'total' => 0,
         'rows' => array()
       );
-
+      $condicionInicial = null;
       foreach($articulos as $articulo) {
         $of = $articulo->getOficina();
         if ($of->getId() ==  $oficina->getId()) {
+          $condiciones = array();
+          $historialesCollection = $articulo->getHistoriales();
+          if (!($historialesCollection->isEmpty())) {
+              foreach ($historialesCollection as $h) {
+                if ($h->getTransferencia() != null) {
+                  $condiciones[] = $h->getCondicion()->getNombre();
+                }
+              }
+          }else{
+            if ($articulo->getCondicion() != null) {
+              $condicionInicial = $articulo->getCondicion()->getNombre();
+            }else{
+              $condicionInicial = null;
+            }
+
+          }
+          $condicion = end($condiciones);
           $rawResponse['rows'][] = array(
             'id' => $articulo->getId(),
-            'numInventario' =>$articulo->getNumInventario(),
+            'numInventario' => $articulo->getNumInventario(),
             'numExpendiente' => $articulo->getNumExpediente(),
             'denominacion' => $articulo->getDenominacion(),
+            'oficina' => $articulo->getOficina()->getNombre(),
             'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
             'estado' => $articulo->getEstado()->getNombre(),
-            'estadoAdicional' => ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
+            'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
+            'condicion' => ($condicion) ? $condicion : $condicionInicial,
+            'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
+            'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
+            'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
+            'largo' =>  ($articulo->getLargo()) ? $articulo->getLargo() : null,
+            'ancho' =>  ($articulo->getAncho()) ? $articulo->getAncho() : null,
+            'alto' =>  ($articulo->getAlto()) ? $articulo->getAlto() : null,
+            'estantes' =>  ($articulo->getNumsEstantes()) ? $articulo->getNumsEstantes() : null,
+            'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
+            'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
+            'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
+            'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
+            'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
           );
         }
       };

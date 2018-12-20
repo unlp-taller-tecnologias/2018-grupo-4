@@ -78,7 +78,7 @@ class ArticuloController extends Controller
     /**
      * Lists all articulo entities.
      *
-     * @Route("/listado", name="articulo_list")
+       * @Route("/listado", name="articulo_list")
      * @Method({"GET"})
      */
     public function listadoAction(Request $request){
@@ -90,7 +90,8 @@ class ArticuloController extends Controller
 
       $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
       $articulos = $repository->getBy($offset, $limit, $sort, $order, $search);
-    //  $historialRepository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Historial');
+      $condicionInicial = null;
+
       $total = $repository->countBy($search);
       $condicionInicial = null;
       $rawResponse = array(
@@ -107,7 +108,6 @@ class ArticuloController extends Controller
                 $condiciones[] = $h->getCondicion()->getNombre();
               }
             }
-
         }else{
           if ($articulo->getCondicion() != null) {
             $condicionInicial = $articulo->getCondicion()->getNombre();
@@ -139,7 +139,6 @@ class ArticuloController extends Controller
           'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
           'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
           'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
-
         );
       };
 
@@ -197,16 +196,47 @@ class ArticuloController extends Controller
         'rows' => array()
       );
 
-
+      $condicionInicial = null;
       foreach($articulos as $articulo) {
+        $condiciones = array();
+        $historialesCollection = $articulo->getHistoriales();
+        if (!($historialesCollection->isEmpty())) {
+            foreach ($historialesCollection as $h) {
+              if ($h->getTransferencia() != null) {
+                $condiciones[] = $h->getCondicion()->getNombre();
+              }
+            }
+        }else{
+          if ($articulo->getCondicion() != null) {
+            $condicionInicial = $articulo->getCondicion()->getNombre();
+          }else{
+            $condicionInicial = null;
+          }
+
+        }
+        $condicion = end($condiciones);
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
-          'numInventario' =>$articulo->getNumInventario(),
+          'numInventario' => $articulo->getNumInventario(),
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
+          'oficina' => $articulo->getOficina()->getNombre(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
-          'estadoAdicional' => ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
+          'condicion' => ($condicion) ? $condicion : $condicionInicial,
+          'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
+          'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
+          'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
+          'largo' =>  ($articulo->getLargo()) ? $articulo->getLargo() : null,
+          'ancho' =>  ($articulo->getAncho()) ? $articulo->getAncho() : null,
+          'alto' =>  ($articulo->getAlto()) ? $articulo->getAlto() : null,
+          'estantes' =>  ($articulo->getNumsEstantes()) ? $articulo->getNumsEstantes() : null,
+          'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
+          'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
+          'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
+          'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
+          'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
         );
       };
 
@@ -224,7 +254,7 @@ class ArticuloController extends Controller
     {
       $em = $this->getDoctrine()->getManager();
       $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
-      $numInv = ($artNumInv->getNumInventario())+1;
+      $numInv = ((is_null($artNumInv))? 1 : $artNumInv->getNumInventario()+1);
       $condiciones = $em->getRepository('AppBundle:Condicion')->findByHabilitado(1);
       $articulo = new Articulo($numInv, $oficina);
       $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
@@ -280,12 +310,8 @@ class ArticuloController extends Controller
             $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
             $articulo->setEstado($estado);
             $articulo->setUser($this->getUser());
-            // if ($oficina) {
-            //   $articulo->setOficina($oficina);
-            // }
             $em->persist($articulo);
             $em->flush();
-            //$articulo->setNumInventario($ultimoNum);
             $ultimoNum = $ultimoNum + 1;
             $denomin = $articulo->getDenominacion();
             $material = $articulo->getMaterial();
@@ -305,7 +331,6 @@ class ArticuloController extends Controller
             $obs = $articulo->getObservaciones();
             $cond = $articulo->getCondicion();
             $tipo = $articulo->getTipo();
-
             $articulo = new Articulo($ultimoNum, $oficina);
             $articulo->setDenominacion($denomin);
             $articulo->setMaterial($material);

@@ -2,10 +2,10 @@
 {% block content %}
 <pdf>
     <dynamic-page>
-      <h1>Informe de Baja de articulo</h1>
-      <h2>En: {{oficinaOrigen}} </h2>
+      <h2>Informe de Baja de artículo/s</h2>
+      <h5>En: {{oficinaOrigen}} </h5>
 
-      <h3 style="font-style: bold;">Articulos dados de baja:</h3>
+      <h5 style="font-style: bold;">Artículos dados de baja:</h5>
       {% for i in articulos %}
 
       <h6 style="font-style: bold;">Denominacion:</h6>   {{i.denominacion}}

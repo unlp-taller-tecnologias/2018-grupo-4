@@ -2,11 +2,18 @@
 
 {% block content %}
 <pdf>
-
+  <div class="container">
     <dynamic-page>
-      <h1>Listado de Articulos de {{oficina}}</h1>
-      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button">Exportar</button>
-      <table class="table row-border hover stripe" name="TABLA">
+      <br>
+      <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
+      <br>
+      <hr>
+      <h2>Listado de Artículos de {{oficina}}</h2>
+      <hr>
+      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button"><i class="fa fa-paperclip" aria-hidden="true"></i>
+        Exportar a PDF</button><br>
+      <div class="table-responsive">
+          <table class="table" name="TABLA"><br>
           <thead class="thead">
               <tr>
                 <th>NroInventario</th>
@@ -16,14 +23,8 @@
                 <th>Estado</th>
                 <th>Condicion</th>
                 <th>Oficina</th>
-
-
-
                 <th>Marca</th>
                 <th>NumFabrica</th>
-
-
-
                 <th>Importe</th>
                 <th>Entrada</th>
 
@@ -39,24 +40,17 @@
                   <td>{{ a.estado }}</td>
                   <td>{{ a.condicion }}</td>
                   <td>{{a.oficina}}</td>
-
-
                   <td>{{a.marca}}</td>
                   <td>{{ a.numFabrica }}</td>
-
-
                   <td>{{ a.importe }}</td>
                   <td>{{ a.fechaEntrada|date('d-m-Y ') }}</td>
-
-
-              </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-
-
-
-    </dynamic-page>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </dynamic-page>
+      </div>
+    </div>
 </pdf>
 {% endblock %}
 {% block transferenciaJs  %}

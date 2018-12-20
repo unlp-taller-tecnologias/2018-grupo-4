@@ -55,7 +55,7 @@ class InformesController extends Controller
           'oficinaOrigen' => $item->getOficinaOrigen()->getNombre(),
           'oficinaDestino' =>  ($item->getOficinaDestino()) ? $item->getOficinaDestino()->getNombre() : null,
 
-          'fecha' => $item->getFecha(),
+          'fecha' => $item->getFecha()->format('d-m-Y'),
           'tipo' => 'Transferencia',
         );
       };
@@ -64,13 +64,12 @@ class InformesController extends Controller
         $rawResponse['rows'][] = array(
           'id' => $item->getId(),
           'oficinaOrigen' => $item->getOficina()->getNombre(),
-
-          'fecha' => $item->getFecha(),
+          'fecha' => $item->getFecha()->format('d-m-Y'),
           'tipo' => 'Baja',
         );
       };
 
-      return new JsonResponse($rawResponse);
+      return new JsonResponse($rawResponse['rows']);
     }
 
 

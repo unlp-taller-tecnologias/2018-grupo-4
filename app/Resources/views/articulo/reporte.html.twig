@@ -1,18 +1,25 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-<pdf>
 
+<pdf>
+<div class="container">
     <dynamic-page>
-      <h1>Listado Articulos</h1>
-      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button">Exportar</button>
-      <table class="table row-border hover stripe" name="TABLA">
+      <br>
+      <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
+      <br>
+      <hr>
+      <h2>Listado de Artículos</h2>
+      <hr>
+      <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button"><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a PDF</button><br>
+      <div class="table-responsive">
+      <table class="table" name="TABLA"><br>
           <thead class="thead">
               <tr>
-                <th>NroInventario</th>
-                <th>Nro.Expediente</th>
+                <th>Entrada</th>
+                <th>Oficina</th>
+                <th>Nro. Inventario</th>
                 <th>Denominación</th>
-                <th>Tipo</th>
                 <th>Estado</th>
                 <th>Condicion</th>
                 <th>Oficina</th>
@@ -29,12 +36,15 @@
 
               </tr>
           </thead>
-          <tbody>
+          <tbody><td>
           {% for a in articulo %}
               <tr>
+                  <td>{{a.fechaEntrada|date('d-m-Y ')}}</td>
+                  <td>{{a.oficina}}</td>
                   <td>{{a.numInventario}}</td>
-                  <td>{{ a.numExpediente }}</td>
-                  <td>{{ a.denominacion }}</td>
+                  <td>{{a.denominacion}}</td>
+                  <td>{{a.estado}}</td>
+                  <td>{{a.condicion}}</td>
                   <td>{{a.tipo}}</td>
                   <td>{{ a.estado }}</td>
                   <td>{{ a.condicion }}</td>
@@ -48,11 +58,12 @@
               {% endfor %}
           </tbody>
       </table>
-
-
-
+          </div>
     </dynamic-page>
+    </div>
 </pdf>
+
+
 {% endblock %}
 {% block transferenciaJs  %}
 <script src="{{ asset('scripts/jquery.js') }}"></script>

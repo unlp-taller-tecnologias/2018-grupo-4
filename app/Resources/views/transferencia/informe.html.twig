@@ -2,27 +2,30 @@
 
 {% block content %}
 
-
-
-<a href="/informes"><i class="fas fa-angle-left">Volver a Informes </i></a>
 <div id="printJS-div">
-<h1>Informe de Transferencia de articulo</h1>
-<h3>Desde: {{oficinaOrigen}} </h3>
-<h3>Hacia: {{oficinaDestino}}</h3>
-<h4>Articulos transferidos:</h4><br>
-{% for i in articulos %}
+<div class="container">
+  <br>
+  <a href="/informes"><i class="fas fa-angle-left"></i> Volver a Informes</a>
+  <hr>
+  <h2>Informe de Transferencia de artículo/s</h2>
+  <hr>
+  <h5>Transferecia realizada desde: {{oficinaOrigen}} </h5>
+  <h5>Hacia: {{oficinaDestino}}</h5>
+  <hr>
+  <h5>Artículos transferidos:</h5>
+  {% for i in articulos %}
 
-    Denominacion: {{i.denominacion}}
-  Numero de Inventario:  {{i.numInventario}}<br>
+    <label>Denominación: {{i.denominacion}}</label> -
+    <label>Número de Inventario:  {{i.numInventario}}</label><br>
 
-{% endfor %}
+  {% endfor %}
 
-{% if tieneObservaciones %}
-  <h6>Observaciones:</h6>
-  {{transferencia.observaciones}}
-{% endif %}
+  {% if tieneObservaciones %}
+    <h5>Observaciones de la transferencia:</h5>
+    <p>{{transferencia.observaciones}}</p><br>
+  {% endif %}
 
+  <a class="btn btn-dark" href="{{ path('informePDF', {'id': transferencia.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i> Generar PDF</a>
+  </div>
 </div>
-
-<a class="btn btn-dark" href="{{ path('informePDF', {'id': transferencia.id}) }}">Generar PDF</a>
 {% endblock %}

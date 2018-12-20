@@ -27,6 +27,7 @@
 
     <label class="" >Estado Adicional: </label>
     <select class="form-control" id="estadoAdicional" name="estadoAdicional">
+        <option value="">Seleccione</option>
         {% for e in estados %}
           <option value="{{e.nombre}}">{{e.nombre}}</option>
         {% endfor %}
@@ -78,8 +79,7 @@ $('#btnGuardar').click(function(){
     leyenda += "<p class=\"texto\"> (*) Número de inventario: "+ nroAct +" - Denominación: "+ denominacion +"<p>";
     nroAct++;
   }
-  $('#textoMensaje').text("Se agregarán  "+ $('#cantidad').val() + " artículo/s "+ $('#appbundle_articulo_denominacion').val() + " a partir del número de inventario "
-  + $('#appbundle_articulo_numInventario').val());
+  $('#textoMensaje').text("Se agregarán  "+ $('#cantidad').val() + " artículo/s "+ $('#appbundle_articulo_denominacion').val() + " con los siguientes números de inventario:");
   $('.texto').remove();
   $('#modal-body').append(leyenda);
 });

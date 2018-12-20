@@ -88,7 +88,6 @@ class TransferenciaController extends Controller
             $oficinaOrigenId = $id_oficina;
             $em->persist($transferencia);
             $em->flush();
-            //$oficinaDestino = $transferencia->getOficinaDestino();
             $fecha = $transferencia->getFecha();
 
             return $this->redirectToRoute('select_condition', array(
@@ -169,12 +168,7 @@ class TransferenciaController extends Controller
       $oficinaOrigenId = $request->query->get('idOficinaOrigen');
       $em = $this->getDoctrine()->getManager();
       $oficinaOrigen = $em->getRepository('AppBundle:Oficina')->findOneById($oficinaOrigenId);
-    //  $transferencia->setOficinaOrigen($oficinaOrigen);
       $oficinaDestino = $transferencia->getOficinaDestino();
-      //$oficinaDestino = $request->query->get('oficinaDestino');
-
-      //$transferencia->setOficinaDestino($oficinaDestino);
-
       $fecha = $transferencia->getFecha();
 
       $articulosIds = explode(",", $articulosIds);
@@ -255,7 +249,6 @@ class TransferenciaController extends Controller
       }
 
       $articuloRepository = $em->getRepository('AppBundle:Articulo');
-      //$oficinaRepository = $em->getRepository('AppBundle:Oficina');
       $condicionRepository = $em->getRepository('AppBundle:Condicion');
       $oficinaDest = $oficinaRepository->findOneById($oficinaDestino);
       $oficinaOrig = $oficinaRepository->findOneById($id);
@@ -294,7 +287,6 @@ class TransferenciaController extends Controller
       }
       $em->flush();
       $arreglo = array(
-        //'success' => false
         'articulos' => $articulosIds
       );
       return new JsonResponse($arreglo);
@@ -341,8 +333,6 @@ class TransferenciaController extends Controller
        $oficinaOrig = $oficinaRepository->findOneById($id);
        $oficinaDestinoNombre = $request->request->get('oficinaDestino');
        $oficinaDestino = $em->getRepository('AppBundle:Oficina')->findOneByNombre($oficinaDestinoNombre);
-       // echo $oficinaDestino->getNombre();
-       // die();
        $transferencia->setOficinaDestino($oficinaDestino);
 
        $transferencia->setOficinaOrigen($oficinaOrig);
@@ -375,7 +365,6 @@ class TransferenciaController extends Controller
        $em->flush();
 
        $arreglo = array(
-         //'success' => false
          'articulos' => $articulosIds
        );
        return new JsonResponse($arreglo);
@@ -411,9 +400,7 @@ class TransferenciaController extends Controller
 
       }
       $articuloRepository = $em->getRepository('AppBundle:Articulo');
-      //$oficinaRepository = $em->getRepository('AppBundle:Oficina');
       $condicionRepository = $em->getRepository('AppBundle:Condicion');
-      //$oficinaDest = $oficinaRepository->findOneById($oficinaDestino);
       $oficinaOrig = $oficinaRepository->findOneById($id);
       $transferencia->setOficinaDestino($oficinaDest);
       $transferencia->setOficinaOrigen($oficinaOrig);
@@ -515,13 +502,10 @@ class TransferenciaController extends Controller
       $transferencia->setOficinaOrigen($oficina);
       $historiales = $historialRepository->findByTransferencia($transferencia);
       $oficinaDestinoNombre = $request->request->get('oficinaDestino');
-      //$oficinaDestino = $em->getRepository('AppBundle:Oficina')->findOneByNombre($oficinaDestinoNombre);
 
       $oficinaDestino = $transferencia->getOficinaDestino()->getNombre();
 
-      //die();
       if ($form->isSubmitted() && $form->isValid()) {
-        //echo 'submitedd'; die();
           $articulosIds = $request->request->get('articsIds');
           $oficinaDestinoName = $request->request->get('oficinaDestino');//aca es importante
           $oficinaDestino = $em->getRepository('AppBundle:Oficina')->findOneByNombre($oficinaDestinoName);
@@ -593,12 +577,8 @@ class TransferenciaController extends Controller
             'estado' => $articulo->getEstado()->getNombre()
 
           );
-
-
-
         };
         return new JsonResponse($data);
-      //  return new JsonResponse($arreglo);
       }
 
       /**

@@ -3,126 +3,113 @@
 {% block content %}
 <div style="margin-left: 2%; margin-right: 2%;">
   <br>
-    <h1>Transferencia en {{nombreOficina}} </h1>
-
-  <a href="{{ path('oficina_show', { 'id': oficina }) }}"><i class="fas fa-angle-left"></i> {{nombreOficina}}</a>
+  <a href="{{ path('oficina_show', { 'id': oficina }) }}"><i class="fas fa-angle-left"></i> Volver a {{nombreOficina}}</a>
   <hr>
-
+  <h2>Transferencia en {{nombreOficina}} </h2>
   <hr>
-
-    <br>
-      <div id="guardada">
-
-
-      </div>
-
-
+  <br>
+  <div id="guardada">
+  </div>
   <div class="container-fluid border" style="padding: 30px;">
   <div class="row">
     <div class="col-md-6 order-md-1">
       <h4>Artículos de la oficina</h4>
           <div id="toolbar">
               <button id="button" class="btn btn-dark"><i class="fas fa-plus"></i> Agregar a la transferecia</button>
+
           </div>
           <table id="table"
-                 class="table table-hover table-striped"
-                 data-side-pagination="server"
-                 data-toggle="table"
-                 data-toolbar="#toolbar"
-                 data-height="460"
-                 data-search="true"
-                 data-pagination="true"
-                 data-click-to-select="true"
-                 data-url="{{ path('oficina_show_listadoActivos', { 'oficina': oficina }) }}">
-                 <thead>
-                   <tr>
-                     <th data-field="state" data-checkbox="true"></th>
-                     <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-                     <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
-                     <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-                     <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-                     <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-                   </tr>
-                 </thead>
-          </table>
+            class="table table-hover table-striped"
+            data-search="true"
+            data-click-to-select="true"
+            data-toggle="table"
+            data-toolbar="#toolbar"
+            data-pagination="true"
+            data-page-size = "200"
+            data-side-pagination="server"
+            data-height="460"
+            data-url="{{ path('oficina_show_listadoActivos', { 'oficina': oficina }) }}">
+           <thead>
+             <tr>
+               <th data-field="state" data-checkbox="true"></th>
+               <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
+               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+               <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+               <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+               <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+             </tr>
+           </thead>
+        </table>
       </div>
       <div class="col-md-6 order-md-1">
         <h4>Artículo/s a transferir</h4>
         <div id="toolbar1">
-            <button id="button1" class="btn btn-dark"><i class="fas fa-minus"></i> Quitar de la transferecia</button>
+          <button id="button1" class="btn btn-dark"><i class="fas fa-minus"></i> Quitar de la transferecia</button>
         </div>
         <table id="table1"
-              class="table table-hover table-striped"
-               data-side-pagination="server"
-               data-toggle="table"
-               data-toolbar="#toolbar1"
-               data-height="460"
-               data-pagination="true"
-               data-search="true"
-               data-click-to-select="true"
-               data-url=>
-               <thead>
-                 <tr>
-                   <th data-field="state" data-checkbox="true"></th>
-                   <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-                   <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
-                   <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-                   <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-                   <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-                 </tr>
-               </thead>
+          class="table table-hover table-striped"
+           data-side-pagination="server"
+           data-toggle="table"
+           data-toolbar="#toolbar1"
+           data-pagination="true"
+           data-search="true"
+           data-click-to-select="true"
+           data-url=>
+           <thead>
+             <tr>
+               <th data-field="state" data-checkbox="true"></th>
+               <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
+               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+               <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+               <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+               <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+             </tr>
+           </thead>
         </table>
       </div>
     </div>
   </div>
 </div>
 <div class="container">
-
-<div style="margin-top: 2%;">
-{{ form_start(form) }}
-
-  Oficina destino:*
-    <select  id="oficinaDestino" name="oficinaDestino" class="form-control" name="">
-
-        {% for o in oficinas %}
-          {{o.nombre}}
-          {% if continuada %}
-            {% set selected = '' %}
-            {% if (o.nombre) == transferencia.oficinaDestino.nombre %}
-               {% set selected = 'selected' %}
+  <div style="margin-top: 2%;">
+    {{ form_start(form) }}
+    <hr>
+    <h4>Datos de la transferencia:</h4>
+    <hr><br>
+      <label>Oficina destino(*)</label>
+      <select  id="oficinaDestino" name="oficinaDestino" class="form-control" name="">
+            {% for o in oficinas %}
+              {{o.nombre}}
+              {% if continuada %}
+                {% set selected = '' %}
+                {% if (o.nombre) == transferencia.oficinaDestino.nombre %}
+                   {% set selected = 'selected' %}
+                {% endif %}
+                <option value="{{o.nombre}}" {{ selected }}>{{o.nombre}}</option>
+            {% else %}
+                <option value="{{o.nombre}}" >{{o.nombre}}</option>
             {% endif %}
-            <option value="{{o.nombre}}" {{ selected }}>{{o.nombre}}</option>
-        {% else %}
-            <option value="{{o.nombre}}" >{{o.nombre}}</option>
-        {% endif %}
-    {% endfor %}
-
-
-
-
-    </select>
-
-    {{ form_widget(form) }}
-
-    <div id="condiciones" >
-      <h3 id="condiciones-title">Seleccione condición</h3>
-
-    </div>
-</div>
-
+        {% endfor %}
+      </select>
+      {{ form_widget(form) }}
+      <br>
+      <div id="condiciones" >
+        <hr>
+        <h4 id="condiciones-title">Seleccione la condición de el/los artículo/s a transferir</h4>
+        <hr>
+      </div>
+  </div>
     <input type="hidden" id="articulosIds" name="articulosIds" value="">
     <input type="hidden" id="condicionesIds" name="condicionesIds" value="">
     <input type="hidden" id="articsIds" name="articsIds" value="">
-
-
-    <div class="container">
-
-<input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Transferir">
-{{ form_end(form) }}
-
-  <button name="guardar"  id="guardar" class="btn btn-dark">Guardar</button>
-  <button name="cancelar" type="button" data-toggle="modal" data-target="#myModalCancel"  class="btn btn-dark">Cancelar</button>
-</div>
+  <div class="container">
+    <input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Transferir">
+    {{ form_end(form) }}
+    <button name="guardar"  id="guardar" class="btn btn-dark"><i class="fas fa-save"></i>
+ Guardar</button>
+    <button name="cancelar" type="button" data-toggle="modal" data-target="#myModalCancel"  class="btn btn-dark"><i class="fa fa-ban" aria-hidden="true"></i>
+ Cancelar</button>
+  </div>
 
   {% if historiales %}
     {% for i in historiales %}
@@ -149,11 +136,7 @@
       	</div>
     	</div>
   	</div>
-
-
-
 {% endblock %}
-
 {% block transferenciaJs %}
 <style>
   /*TODO: SACARLO DE ACA Y PONERLO EN LOS ESTILOS DE LA PAGINA */
@@ -162,25 +145,15 @@
   }
 </style>
 <script>
-//cargar articulos
+
   window.onload = function(){
-
-//     $(document).ready(function() {
-//     $('#table').DataTable( {
-//         "paging":   false,
-//         "ordering": false,
-//         "info": 	false
-//     } );
-// } );
-
-
     if ("{{continuada}}") {
       $( document ).ready(function() {
+        
         var idsArticulosArray = [];
         var idsIds = $('.idsArticulosActuales').each(function() {
           idsArticulosArray.push($(this).val());
         });
-      //  console.log(idsArticulosArray);
         var c = idsArticulosArray.join(",");
         $.ajax({
           method: "POST",
@@ -194,18 +167,11 @@
              var b = "";
              var idsIds = $('.hiddenIds').each(function() {
                idsArticulosArray.push($(this).val());
-            //   console.log(idsArticulosArray);
              });
-            // console.log(idsArticulosArray);
              $articsIds.val(b);
              b = idsArticulosArray.join(",");
              $articsIds.val(b);
-
-
              $.each( data, function( key, value ) {
-                console.log(value);
-              //console.log( key + ": " + value.denominacion );
-              console.log(value.denominacion);
               let id = `condicion_${value.numInventario}`;
                 $('#condiciones').append(`
                   <div class="form-group ${id}_container">
@@ -219,13 +185,11 @@
                   </div>
                   `
                 );
-
             });
             $("#hacer").detach();
           },
 
           });
-          //ajax para tabla
           $.ajax({
             method: "POST",
             url: "{{oficina}}/traerArticulosTabla",
@@ -236,13 +200,11 @@
               $array = [];
                $tableTest.bootstrapTable('load',data);
                const $dataT = $tableTest.bootstrapTable('getAllSelections');
-
                  $.each( data, function( key, value ) {
                    $.each( value, function( k, v) {
                      $array.push(v.numInventario);
                    });
                 });
-
               $tabla = $('#table');
               console.log($array);
               $tabla.bootstrapTable('remove', {
@@ -254,8 +216,6 @@
         });
     }
 };
-
-
     $('#condiciones-title').hide();
     function moveTransferencias ($tableIn, $tableOut, createInput) {
       const $dataT = $tableIn.bootstrapTable('getAllSelections');
@@ -303,11 +263,9 @@
       });
       $buttonTest.click(() => {
         moveTransferencias($tableTest, $table, false);
-        //sacar
       });
     });
     function validarArticulos(){
-
       $tabla = $('#table1');
       if ($tabla.bootstrapTable('getData') == ""){
         alert('Debe ingresar al menos un articulo a la transferencia');
@@ -317,9 +275,7 @@
       }
     }
 </script>
-
 {% endblock %}
-
 {% block serchArticulos  %}
 <script>
     $("#guardar").click(function(){
@@ -361,22 +317,18 @@
           console.log(oficinaDestino);
 
           $('#guardada').append(`<div class="alert alert-info alert-dismissible fade show" role="alert">
-  <strong>La transferencia ha sido guardada con éxito.</strong>
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div> `);
+          <strong>La transferencia ha sido guardada con éxito.</strong>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+          </button>
+          </div> `);
           $tableTest.bootstrapTable('load',data);
-
         },
         error: function(){
         }
         });
       });
-
-
 </script>
-
 <script>
   $("#cancelar").click(function(){
     $condicionesIds = $('#condicionesIds');
@@ -401,7 +353,6 @@
     var fecha  = $('#appbundle_transferencia_fecha').val();
     var oficinaDestino = $('#oficinaDestino').val();
     var observaciones = $('#appbundle_transferencia_observaciones').val();
-    //console.log('guardar');
     $.ajax({
       method: "POST",
       url: "{{oficina}}/transferencia_cancel",
@@ -414,41 +365,21 @@
             } ,
       success: function(data) {
         location.href = "./oficina_show/{{oficina}}" ;
-        //console.log('anda el modal');
-          //console.log(data);
-        //alert('La transferencia ha sido cancelada.');
-        //window.location.replace("{{oficina}}/oficina_show");
-        //$table.bootstrapTable('load',data);
       },
       error: function(){
       }
       });
     });
-
-
-
-
-
     $buttonTest = $('#button1');
     art  = $('#articsIds');
     $buttonTest.click(function(){
-     a//lert('a');
       $arreg = [];
       const $dataT = $('#table1').bootstrapTable('getAllSelections');
-
-        //console.log(names);
         $.each( $dataT, function( key, value ) {
-          //console.log(value.id);
           $("input[id='" + value.id + "']").remove();
           console.log(art.val());
-
-        //  console.log(value);
         });
-
-    //  console.log($arreg);
     });
-
-
     $articulosId = $('#articulosIds');
     var $table = $('#table'),
         $tableTest = $('#table1'),
@@ -457,7 +388,6 @@
         $form = $('form');
         $transferenciasId = $('#articulosIds');
         $form.submit(function(){
-          //alert('asd');
           $condicionesIds = $('#condicionesIds');
           $articsIds = $('#articsIds');
           var idsCondicionesArray = [];
@@ -470,14 +400,11 @@
           var idsIds = $('.hiddenIds').each(function() {
             idsArticulosArray.push($(this).val());
           });
-
           b = idsCondicionesArray.join(",");
           $condicionesIds.val(b);
           c = idsArticulosArray.join(",");
           $articsIds.val(c);
-          //alert(c);
           console.log(c);
-          //alert('miau');
           var a = "";
           var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
           var ids = $.map($tableTest.bootstrapTable('getData'), function (row) {
@@ -486,13 +413,6 @@
             a = ids.join(",");
             $transferenciasId.val(a);
             return true;
-
         });
-
-$( document ).ready(function() {
-   
-
-});
-
 </script>
 {% endblock %}

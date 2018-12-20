@@ -24,10 +24,12 @@
     <div class="">
 
       <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}"><i class="fas fa-plus"></i> Agregar nuevo artículo</a>
-      <a class="btn btn-dark" href="{{ path('articulo_change', {'id': oficina.id}) }}">Cambio de estado</a>
+      <a class="btn btn-dark" href="{{ path('articulo_change', {'id': oficina.id}) }}"><i class="fa fa-retweet" aria-hidden="true"></i>
+ Cambio de estado</a>
       {% if not operaciones %}
-        <a class="btn btn-dark" href="{{ path('transferencia_new', {'id_oficina': oficina.id}) }}">Iniciar Transferencia</a>
-          <a class="btn btn-dark" href="{{ path('baja_new', {'id_oficina': oficina.id}) }}">Iniciar Baja</a>
+        <a class="btn btn-dark" href="{{ path('transferencia_new', {'id_oficina': oficina.id}) }}"><i class="fa fa-random"></i> Iniciar Transferencia</a>
+          <a class="btn btn-dark" href="{{ path('baja_new', {'id_oficina': oficina.id}) }}"><i class="fa fa-minus" aria-hidden="true"></i>
+ Iniciar Baja</a>
       {% endif %}
 
     </div>
@@ -86,7 +88,7 @@
           </select>
         </div>
         <div class="form-group col-md-12">
-          <button id="button" class="btn btn-dark">Buscar</button>
+          <button id="button" class="btn btn-dark"><i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
           <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
         </div>
       </div>
@@ -96,8 +98,10 @@
       <h4>Artículos de la oficina: {{oficina.nombre}}</h4>
       <hr>
 
-      <a  href="{{ path('listado_articulos_oficina_pdf', {'id':oficina}) }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span> Exportar a PDF</a>
-      <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span> Exportar a Excel</button>
+      <a  href="{{ path('listado_articulos_oficina_pdf', {'id':oficina}) }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i>
+      Exportar a PDF</a>
+      <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i>
+      Exportar a Excel</button>
       <div style="padding-top: 30px;" class="table-responsive">
 
         <table id="tablaArticulos"
@@ -107,33 +111,30 @@
                 data-pagination="true"
                 data-page-list="[2, 5, 10, 20, 50, 100, 200]"
                 data-search="false"
-                data-sort-name="fechaEntrada"
-                data-sort-order="desc"
+
                 data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
                 >
           <thead>
             <tr>
+              <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
               <th scope="row" data-field="fechaEntrada" data-sortable="true">Fecha entrada</th>
               <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
-              <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
               <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-              <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
               <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-              <th scope="row" data-field="condicion" data-visible="true">Condicion</th>
-              <th scope="row" data-field="oficina" data-visible="true">Oficina</th>
-              <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
               <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+              <th scope="row" data-field="condicion" data-visible="true">Condición</th>
+              <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+              <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
               <th scope="row" data-field="material" data-visible="true">Material</th>
               <th scope="row" data-field="marca" data-visible="true">Marca</th>
-              <th scope="row" data-field="numFabrica" data-visible="true">NumFabrica</th>
+              <th scope="row" data-field="numFabrica" data-visible="true">Nro.Fabrica</th>
               <th scope="row" data-field="largo" data-visible="true">Largo</th>
               <th scope="row" data-field="alto" data-visible="true">Alto</th>
               <th scope="row" data-field="ancho" data-visible="true">Ancho</th>
               <th scope="row" data-field="estantes" data-visible="true">Estantes</th>
               <th scope="row" data-field="cajones" data-visible="true">Cajones</th>
-              <th scope="row" data-field="detalleOrigen" data-visible="true">DetalleOrigen</th>
+              <th scope="row" data-field="detalleOrigen" data-visible="true">Detalle de Origen</th>
               <th scope="row" data-field="importe" data-visible="true">Importe</th>
-              <th scope="row" data-field="fechaEntrada" data-visible="true">Entrada</th>
               <th scope="row" data-field="codigoCuentaSubcuenta" data-visible="true">CodigoCuentaSubcuenta</th>
 
             </tr>
@@ -164,29 +165,6 @@
 {{ parent() }}
 <script>
 
-  // $("#guardar").click(function(){
-  //
-  //   //console.log('guardar');
-  //   $.ajax({
-  //     method: "POST",
-  //     url: "",
-  //     data: {
-  //             "oficina": "{{oficina}}"
-  //           } ,
-  //     success: function(data) {
-  //
-  //       console.log(data);
-  //       alert('La transferencia ha sido guardada con exito');
-  //       $tableTest.bootstrapTable('load',data);
-  //     },
-  //     error: function(){
-  //
-  //     }
-  //     });
-  //   });
-
-
-  //pdf export
   jQuery(function ($) {
     $("#exportButtonPdf").click(function () {
         var dataSource = shield.DataSource.create({
@@ -233,9 +211,6 @@
         });
     });
 
-//fin pdf
-
-//excel export
 $("#exportButtonExcel").click(function () {
     var dataSourceExcel = shield.DataSource.create({
         data: "#tablaArticulos",
@@ -261,9 +236,6 @@ $("#exportButtonExcel").click(function () {
               Importe: { type: String },
               Entrada: { type: String },
               CodigoCuentaSubcuenta: { type: String }
-
-
-
             }
         }
     });
@@ -410,8 +382,6 @@ $("#exportButtonExcel").click(function () {
                                     type: String,
                                     value: "CodigoCuentaSubcuenta"
                                 }
-
-
                             ]
                         }
                     ].concat($.map(data, function(item) {
@@ -437,9 +407,6 @@ $("#exportButtonExcel").click(function () {
                                 { type: String, value: item.Importe },
                                 { type: String, value: item.Entrada },
                                 { type: String, value: item.CodigoCuentaSubcuenta }
-
-
-
                             ]
                         };
                     }))
@@ -560,7 +527,6 @@ $("button").click(function(){
             "idOficina":{{oficina.id}}
           } ,
     success: function(data) {
-      //alert(data);
       $table.bootstrapTable('load',data);
       }
     });
@@ -592,11 +558,9 @@ $("button").click(function(){
               "estadoAdicional": estadoAdicional
             } ,
       success: function(data) {
-        //alert(data);
         $table.bootstrapTable('load',data);
         }
       });
     });
-
 </script>
 {% endblock %}

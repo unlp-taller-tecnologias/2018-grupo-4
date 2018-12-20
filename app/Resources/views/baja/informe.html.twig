@@ -2,27 +2,30 @@
 
 {% block content %}
 
-
-
-<a href="/informes"><i class="fas fa-angle-left">Volver a Informes </i></a>
 <div id="printJS-div">
-<h1>Informe de Baja de articulo</h1>
-<h3>En: {{oficinaOrigen}} </h3>
+<div class="container">
+  <br>
+  <a href="/informes"><i class="fas fa-angle-left"></i> Volver a Informes</a>
+  <hr>
+  <h2>Informe de Baja de artículo/s</h2>
+  <hr>
+  <h5>Baja realizada en: {{oficinaOrigen}} </h5>
+  <hr>
+  <h5>Artículos dados de baja:</h5>
+  {% for i in articulos %}
 
-<h4>Articulos dados de baja:</h4><br>
-{% for i in articulos %}
+    <label>Denominación: {{i.denominacion}}</label> -
+    <label>Número de Inventario:  {{i.numInventario}}</label><br>
 
-  Denominacion: {{i.denominacion}}
-  Numero de Inventario:  {{i.numInventario}}<br>
+  {% endfor %}
 
-{% endfor %}
+  {% if tieneObservaciones %}
+    <h5>Observaciones de la baja:</h5>
+    <p>{{baja.observaciones}}</p><br>
+  {% endif %}
 
-{% if tieneObservaciones %}
-  <h6>Observaciones:</h6>
-  {{baja.observaciones}}
-{% endif %}
-
+  <a class="btn btn-dark" href="{{ path('baja_informePDF', {'id': baja.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i>
+ Generar PDF</a>
+  </div>
 </div>
-
-<a class="btn btn-dark" href="{{ path('baja_informePDF', {'id': baja.id}) }}">Generar PDF</a>
 {% endblock %}
