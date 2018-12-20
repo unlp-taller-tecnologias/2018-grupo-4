@@ -10,16 +10,22 @@
     <hr>
     <table class="table table">
         <tbody>
-            {%  for a in articulos %}
-              <tr>
-                  <th scope="row">El artículo:</th>
-                  <td scope="row">{{ a.denominacion }}</td>
-                  <th scope="row">con número de inventario: </th>
-                  <td scope="row">{{ a.numInventario }}</td>
-                  <th scope="row">fue transferido a: </th>
-                  <td scope="row">{{ a.oficina }}</td>
-              </tr>
-            {% endfor %}
+          {% if articulos is empty %}
+          <th scope="row"><div class="alert alert-info" role="alert">
+            El historial de {{oficina.nombre}} está vacío, no hay artículos que hayan sido transferidos hasta el momento.
+          </div></th>
+          {% else %}
+              {%  for a in articulos %}
+                <tr>
+                    <th scope="row">El artículo:</th>
+                    <td scope="row">{{ a.denominacion }}</td>
+                    <th scope="row">con número de inventario: </th>
+                    <td scope="row">{{ a.numInventario }}</td>
+                    <th scope="row">fue transferido a: </th>
+                    <td scope="row">{{ a.oficina }}</td>
+                </tr>
+              {% endfor %}
+          {% endif %}
         </tbody>
     </table>
 </div>
