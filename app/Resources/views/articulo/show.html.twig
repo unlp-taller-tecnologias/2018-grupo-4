@@ -3,13 +3,11 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('articulo_index') }}"><i class="fas fa-angle-left"></i> Listado de Artículos</a>
-  <br>
-  <a href="{{ path('oficina_show', { 'id': articulo.oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a la oficina {{articulo.oficina}}</a>
+  <a href="{{ path('oficina_show', { 'id': articulo.oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a {{articulo.oficina}}</a>
   <hr>
-    <h2>Artículo: {{articulo.denominacion}}</h2>
+    <h2>Artículo: {{articulo.denominacion}} - {{articulo.numInventario}}</h2>
 <hr>
-    <a href="{{ path('articulo_historial', {'id': articulo.id}) }}">Ver historial de oficinas de {{articulo.denominacion}}</a><br>
+    <a href="{{ path('articulo_historial', {'id': articulo.id}) }}">Ver historial de oficinas</a><br>
 
     <table style="margin: 15px;" class="table table">
 

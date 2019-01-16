@@ -18,6 +18,10 @@
              <option value=""> Seleccione </option>
            </select>
          </div>
+         <!-- <div class="form-group col-md-4">
+           <label>Nombre de Oficina</label>
+           <input type="text" id="nombre" class="form-control" placeholder="Nombre" name="nombre">
+         </div> -->
        </div>
      </div>
     {% endblock %}
@@ -29,6 +33,8 @@
       <table  id="table"
               data-toggle="table"
               data-toolbar="#toolbar"
+              data-sort-name="fecha"
+              data-sort-order="desc"
               data-url="{{path('informes_list')}}"
               >
         <thead>

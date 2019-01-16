@@ -630,7 +630,7 @@ class BajaController extends Controller
              'estado' => $articulo->getEstado()->getNombre()
            );
          }
-       return new JsonResponse($rawResponse);
+       return new JsonResponse($rawResponse['rows']);
 
       }
 

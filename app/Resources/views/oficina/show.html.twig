@@ -1,168 +1,183 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-<div class="container">
-  <br>
-  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
-  <br>
-    <hr>
-    <h2>Oficina: {{oficina.nombre}}</h2>
-    <hr>
-  {% if is_granted("ROLE_ADMIN") %}
-
-    {% if operaciones %}
-      {% if tipo == 'transferencia' %}
-        <div style="margin-bottom: 15px;">
-          <a id="continuar" href="{{ path('transferencia_continue', {'id_oficina': oficina.id}) }}">Actualmente, existe una transferencia en curso. Continuar</a><br>
-        </div>
-      {% else %}
-        <div style="margin-bottom: 15px;">
-          <a id="continuar" href="{{ path('baja_continue', {'id_oficina': oficina.id}) }}">Actualmente, existe una baja en curso. Continuar</a><br>
-        </div>
-    {% endif %}
-  {% endif %}
-    <div class="">
-
-      <a class="btn btn-dark" href="{{ path('articulo_new', { 'id': oficina.id }) }}"><i class="fas fa-plus"></i> Agregar nuevo artículo</a>
-      <a class="btn btn-dark" href="{{ path('articulo_change', {'id': oficina.id}) }}"><i class="fa fa-retweet" aria-hidden="true"></i>
- Cambio de estado</a>
-      {% if not operaciones %}
-        <a class="btn btn-dark" href="{{ path('transferencia_new', {'id_oficina': oficina.id}) }}"><i class="fa fa-random"></i> Iniciar Transferencia</a>
-          <a class="btn btn-dark" href="{{ path('baja_new', {'id_oficina': oficina.id}) }}"><i class="fa fa-minus" aria-hidden="true"></i>
- Iniciar Baja</a>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2">
+      <br>
+      {% if is_granted("ROLE_ADMIN") %}
+        {% if operaciones %}
+          {% if tipo == 'transferencia' %}
+              <div>
+              <a class="btn btn-dark btn-block" style="padding: 10px;" id="continuar" href="{{ path('transferencia_continue', {'id_oficina': oficina.id}) }}">Continuar Transferencia</a><br>
+              </div>
+              {% else %}
+                <div>
+                  <a class="btn btn-dark btn-block" style="padding: 10px;" id="continuar" href="{{ path('baja_continue', {'id_oficina': oficina.id}) }}">Continuar Baja</a><br>
+                </div>
+          {% endif %}
       {% endif %}
-
+      <div class="">
+        <a class="btn btn-dark btn-block" style="padding: 10px;" href="{{ path('articulo_new', { 'id': oficina.id }) }}"><i class="fas fa-plus"></i> Nuevo artículo</a>
+        {% if not operaciones %}
+          <a class="btn btn-dark btn-block" style="padding: 10px;" href="{{ path('transferencia_new', {'id_oficina': oficina.id}) }}"><i class="fa fa-random"></i> Iniciar Transferencia</a>
+          <a class="btn btn-dark btn-block" style="padding: 10px;" href="{{ path('baja_new', {'id_oficina': oficina.id}) }}"><i class="fa fa-minus" aria-hidden="true"></i>
+          Iniciar Baja</a>
+        {% endif %}
+        <a class="btn btn-dark btn-block" style="padding: 10px;" href="{{ path('articulo_change', {'id': oficina.id}) }}"><i class="fa fa-retweet" aria-hidden="true"></i>
+        Cambio de estado</a>
+        <a class="btn btn-dark btn-block" style="padding: 10px;" href="{{ path('informes_oficina', {'id_oficina': oficina.id}) }}"><i class="far fa-file-alt"></i> Ver informes</a>
+      </div>
+      {% endif %}
     </div>
-    {% endif %}
-  <br>
-    <table class="table table">
-      <tbody>
-        <tr>
-          <th scope="row">Nombre</th>
-          <td scope="row">{{ oficina.nombre }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Responsable de Oficina</th>
-          <td scope="row">{{ oficina.responsableOficina }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Número Carpeta</th>
-          <td scope="row">{{ oficina.numeroCarpeta }}</td>
-        </tr>
-        <tr>
-          <th scope="row">Historial de artículos</th>
-          <td scope="row"><a href="{{ path('oficina_historial', { 'id': oficina.id }) }}">Ver historial de artículos transferidos de {{oficina.nombre}}</a></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="col-9">
+      <br>
+      <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
+      <br>
+        <hr>
+        <h2>Oficina: {{oficina.nombre}}</h2>
+        <hr>
 
-    {% block filters %}
+        <br>
+          <table class="table table">
+            <tbody>
+              <tr>
+                <th scope="row">Nombre</th>
+                <td scope="row">{{ oficina.nombre }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Responsable de Oficina</th>
+                <td scope="row">{{ oficina.responsableOficina }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Número de Carpeta</th>
+                <td scope="row">{{ oficina.numeroCarpeta }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Historial de artículos transferidos</th>
+                <td scope="row"><a href="{{ path('oficina_historial', { 'id': oficina.id }) }}">Ver Historial</a></td>
+              </tr>
+            </tbody>
+          </table>
 
-    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
-      <h4>Buscar artículos por:</h4>
-       <div class="form-row" >
-         <div class="form-group col-md-6">
-           <label>Nro. de expediente</label>
-           <input type="text" id="expediente" class="form-control" placeholder="Nro. de expediente" name="expediente">
-         </div>
-        <div class="form-group col-md-6">
-          <label>Nro. de inventario</label>
-          <input type="text" id="nroInventario" class="form-control" placeholder="Nro. de inventario" name="inventario">
+          {% block filters %}
+
+          <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
+            <h4>Buscar artículos por:</h4>
+             <div class="form-row" >
+               <div class="form-group col-md-6">
+                 <label>Nro. de expediente</label>
+                 <input type="text" id="expediente" class="form-control" placeholder="Nro. de expediente" name="expediente">
+               </div>
+              <div class="form-group col-md-6">
+                <label>Nro. de inventario</label>
+                <input type="text" id="nroInventario" class="form-control" placeholder="Nro. de inventario" name="inventario">
+              </div>
+              <div class="form-group col-md-6">
+                <label>Denominación</label>
+                <input type="text" id="denominacion" class="form-control" placeholder="Denominación" name="denominacion">
+              </div>
+              <div class="form-group col-md-2">
+                <label>Estado</label>
+                <select id="estado" class="form-control" name="estado">
+                  <option value=""> Seleccione </option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label>Estado adicional</label>
+                <select id="estadoAdicional" class="form-control" name="tipo">
+                  <option value=""> Seleccione </option>
+                </select>
+              </div>
+              <div class="form-group col-md-2">
+                <label>Tipo</label>
+                <select id="tipo" class="form-control" name="tipo">
+                  <option value=""> Seleccione </option>
+                </select>
+              </div>
+              <div class="form-group col-md-12">
+                <button id="button" class="btn btn-dark"><i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
+                <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
+              </div>
+            </div>
+          </div>
+          {% endblock %}
+            <hr>
+            <h4>Artículos de la oficina: {{oficina.nombre}}</h4>
+            <hr>
+
+            <a  href="{{ path('listado_articulos_oficina_pdf', {'id':oficina}) }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i>
+            Exportar a PDF</a>
+            <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i>
+            Exportar a Excel</button>
+            <div style="padding-top: 30px;" class="table-responsive">
+
+              <table id="tablaArticulos"
+                      class="table table-hover table-striped"
+                      data-toggle="table"
+                      data-side-pagination="server"
+                      data-pagination="true"
+                      data-page-list="[2, 5, 10, 20, 50, 100, 200]"
+                      data-search="false"
+                      
+                      data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
+                      >
+                <thead>
+                  <tr>
+                    <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
+                    <th scope="row" data-field="fechaEntrada" data-sortable="true">Fecha entrada</th>
+                    <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
+                    <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                    <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                    <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+                    <th scope="row" data-field="condicion" data-visible="true">Condición</th>
+                    <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+                    <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+                    <th scope="row" data-field="material" data-visible="true">Material</th>
+                    <th scope="row" data-field="marca" data-visible="true">Marca</th>
+                    <th scope="row" data-field="numFabrica" data-visible="true">Nro.Fabrica</th>
+                    <th scope="row" data-field="largo" data-visible="true">Largo</th>
+                    <th scope="row" data-field="alto" data-visible="true">Alto</th>
+                    <th scope="row" data-field="ancho" data-visible="true">Ancho</th>
+                    <th scope="row" data-field="estantes" data-visible="true">Estantes</th>
+                    <th scope="row" data-field="cajones" data-visible="true">Cajones</th>
+                    <th scope="row" data-field="detalleOrigen" data-visible="true">Detalle de Origen</th>
+                    <th scope="row" data-field="importe" data-visible="true">Importe</th>
+                    <th scope="row" data-field="codigoCuentaSubcuenta" data-visible="true">CodigoCuentaSubcuenta</th>
+
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Articulo</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <i class="fas fa-info-circle"></i> Se guardaron los cambios.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
         </div>
-        <div class="form-group col-md-6">
-          <label>Denominación</label>
-          <input type="text" id="denominacion" class="form-control" placeholder="Denominación" name="denominacion">
-        </div>
-        <div class="form-group col-md-2">
-          <label>Estado</label>
-          <select id="estado" class="form-control" name="estado">
-            <option value=""> Seleccione </option>
-          </select>
-        </div>
-        <div class="form-group col-md-2">
-          <label>Estado adicional</label>
-          <select id="estadoAdicional" class="form-control" name="tipo">
-            <option value=""> Seleccione </option>
-          </select>
-        </div>
-        <div class="form-group col-md-2">
-          <label>Tipo</label>
-          <select id="tipo" class="form-control" name="tipo">
-            <option value=""> Seleccione </option>
-          </select>
-        </div>
-        <div class="form-group col-md-12">
-          <button id="button" class="btn btn-dark"><i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
-          <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
-        </div>
-      </div>
-    </div>
-    {% endblock %}
-      <hr>
-      <h4>Artículos de la oficina: {{oficina.nombre}}</h4>
-      <hr>
-
-      <a  href="{{ path('listado_articulos_oficina_pdf', {'id':oficina}) }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i>
-      Exportar a PDF</a>
-      <button id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i>
-      Exportar a Excel</button>
-      <div style="padding-top: 30px;" class="table-responsive">
-
-        <table id="tablaArticulos"
-                class="table table-hover table-striped"
-                data-toggle="table"
-                data-side-pagination="server"
-                data-pagination="true"
-                data-page-list="[2, 5, 10, 20, 50, 100, 200]"
-                data-search="false"
-
-                data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
-                >
-          <thead>
-            <tr>
-              <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
-              <th scope="row" data-field="fechaEntrada" data-sortable="true">Fecha entrada</th>
-              <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
-              <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-              <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-              <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
-              <th scope="row" data-field="condicion" data-visible="true">Condición</th>
-              <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
-              <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-              <th scope="row" data-field="material" data-visible="true">Material</th>
-              <th scope="row" data-field="marca" data-visible="true">Marca</th>
-              <th scope="row" data-field="numFabrica" data-visible="true">Nro.Fabrica</th>
-              <th scope="row" data-field="largo" data-visible="true">Largo</th>
-              <th scope="row" data-field="alto" data-visible="true">Alto</th>
-              <th scope="row" data-field="ancho" data-visible="true">Ancho</th>
-              <th scope="row" data-field="estantes" data-visible="true">Estantes</th>
-              <th scope="row" data-field="cajones" data-visible="true">Cajones</th>
-              <th scope="row" data-field="detalleOrigen" data-visible="true">Detalle de Origen</th>
-              <th scope="row" data-field="importe" data-visible="true">Importe</th>
-              <th scope="row" data-field="codigoCuentaSubcuenta" data-visible="true">CodigoCuentaSubcuenta</th>
-
-            </tr>
-          </thead>
-        </table>
-      </div>
-
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Articulo</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <i class="fas fa-info-circle"></i> Se guardaron los cambios.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-dark" data-dismiss="modal">Cerrar</button>
-      </div>
     </div>
   </div>
+  <div class="col-9">
+  </div>
+</div>
+</div>
+
+
+
+
+
 {% endblock %}
 
 {% block javascripts %}

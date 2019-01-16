@@ -1,0 +1,108 @@
+{% extends 'layout.html.twig' %}
+
+{% block content %}
+  <div class="container">
+    <br>
+    <a href="{{ path('oficina_show', {'id': oficina.id}) }}"><i class="fas fa-angle-left"></i> Volver a {{oficina.nombre}}</a>
+    <br>
+    <hr>
+    <h2>Listado de operaciones</h2>
+    <hr>
+    {% block filters %}
+    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
+      <h4>Buscar informes de operaciones por:</h4>
+       <div class="form-row" >
+         <div class="form-group col-md-3">
+           <label>Tipo de operación</label>
+           <select id="estado" class="form-control" name="estado">
+             <option value=""> Seleccione </option>
+           </select>
+         </div>
+         <!-- <div class="form-group col-md-4">
+           <label>Nombre de Oficina</label>
+           <input type="text" id="nombre" class="form-control" placeholder="Nombre" name="nombre">
+         </div> -->
+       </div>
+     </div>
+    {% endblock %}
+    <div class="table-responsive" >
+      <div id="toolbar">
+          <button id="button" class="btn btn-dark"><i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
+          <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
+     </div>
+      <table  id="table"
+              data-toggle="table"
+              data-toolbar="#toolbar"
+              data-sort-name="fecha"
+              data-sort-order="desc"
+              data-url="{{ path('listado_informes_oficina', {'id_oficina': oficina.id}) }}"
+              >
+        <thead>
+          <tr>
+            <th scope="row" data-field="fecha" data-sortable="true">Fecha</th>
+            <th scope="row" data-field="tipo" data-sortable="true">Operación</th>
+            <th scope="row" data-field="oficinaOrigen" data-sortable="true">Oficina origen</th>
+            <th scope="row" data-field="oficinaDestino" data-sortable="true">Oficina destino</th>
+            <th data-field="id" data-formatter="operateFormatterShow">Ver Informe</th>
+          </tr>
+        </thead>
+      </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+
+var xhttpEstados = new XMLHttpRequest();
+xhttpEstados.onreadystatechange = function() {
+  if (this.readyState == 4 && this.status == 200) {
+    var listado = JSON.parse(this.responseText);
+    var estados = listado.rows;
+    var opciones = "";
+    for(es in estados){
+      if (estados[es].habilitado == 'Si' && estados[es].nombre != 'Activo') {
+        opciones += "<option value= \""+ estados[es].id + "\">"+ estados[es].nombre +"</option>";
+      }
+    }
+    $("#estado").append(opciones);
+  }
+};
+xhttpEstados.open("GET", "{{ path('estado_list') }}", true);
+xhttpEstados.send();
+
+  function operateFormatterShow(value, row, index) {
+    if (row.tipo == 'Transferencia') {
+        edit = "/transferencia/ver_informe/-1";
+    }else{
+      edit = "/baja/ver_informe/-1";
+    }
+    edit = edit.replace('-1', value);
+    return [
+      `<a class="edit ml10" href="${edit}" title="Ver informe"><i class="far fa-file-alt"></i></a>`,
+    ].join('');
+  }
+
+
+</script>
+{% endblock %}
+{% block serchArticulos  %}
+<script>
+var seleccion = '';
+var $table = $('#table');
+var $button = $('#button');
+  $button.click(function () {
+    seleccion = $('#estado option:selected').text();
+    $table.bootstrapTable('filterBy', {
+      tipo: seleccion
+    });
+  });
+
+  $('#buttonBorrar').click(function () {
+    $('#estado').val('');
+    $table.bootstrapTable('filterBy', {});
+  });
+
+</script>
+{% endblock %}

@@ -3,19 +3,21 @@
 {% block content %}
 
     <div class="container">
+      <br>
+      <a href="{{ path('oficina_index') }}" style="margin-top: 10px;"><i class="fas fa-angle-left"></i> Volver a {{bajas.oficina.nombre}}</a>
       <hr>
-        <h2>Baja</h2>
+        <h2>Baja finalizada</h2>
       <hr>
-        <div class="jumbotron" style="padding: 30px;">
-          <h4>La baja de artículo/s ha sido realizada con éxito </h4>
+        <div class="jumbotron" style="padding: 10px;">
+          <div class="row justify-content-center" style="margin: 1px;">
+          <h5>La baja de artículo/s ha sido realizada con éxito en {{bajas.oficina.nombre}} </h5>
+        </div>
           <div id="dataTransfer" class="row justify-content-center">
             <ul>
-              <a class="btn btn-dark" href="{{ path('oficina_show', { 'id': bajas.oficina.id }) }}" style="margin-top: 10px;">Ir a {{bajas.oficina}}</a>
-              <a class="btn btn-dark" href="{{ path('oficina_index') }}" style="margin-top: 10px;">Volver a listado de oficinas</a>
+              <a class="btn btn-dark" href="{{ path('baja_ver_informe', { 'id': bajas.id }) }}" >Ver Informe</a>
             </ul>
         </div>
         </div>
-          <a class="btn btn-dark" href="{{ path('baja_ver_informe', { 'id': bajas.id }) }}" >Ver Informe</a>
       </div>
 
 {% endblock %}

@@ -14,7 +14,7 @@
       <a class="nav-link active" data-toggle="tab" href="#home">Selección de artículos</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" data-toggle="tab" href="#menu1">Datos de la baja</a>
+      <a id="menudatos" class="nav-link" data-toggle="tab" href="#menu1">Datos de la baja</a>
     </li>
   </ul>
   <div class="tab-content">
@@ -28,24 +28,22 @@
           </div>
           <table id="table"
                  class="table table-hover table-striped"
-                 data-side-pagination="server"
                  data-toggle="table"
                  data-toolbar="#toolbar"
-                 data-height="460"
                  data-search="true"
-                 data-height = "460"
-                 data-page-size = "200"
-                 data-pagination="true"
+                 data-height = "600"
+                 data-pagination="false"
                  data-click-to-select="true"
                  data-url="{{ path('oficina_show_listadoActivos', { 'oficina': oficina }) }}">
                  <thead>
                    <tr>
                      <th data-field="state" data-checkbox="true"></th>
                      <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-                     <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+                     <!-- <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th> -->
                      <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
                      <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-                     <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                     <!-- <th scope="row" data-field="estado" data-sortable="true">Estado</th> -->
+                     <th scope="row" data-field="condicion" data-sortable="true">Condicion</th>
                    </tr>
                  </thead>
           </table>
@@ -57,32 +55,34 @@
         </div>
         <table id="table1"
                 class="table table-hover table-striped"
-                data-side-pagination="server"
                data-toggle="table"
                data-toolbar="#toolbar1"
-               data-height="460"
-               data-pagination="true"
+               data-pagination="false"
                data-search="true"
+               data-height = "600"
                data-click-to-select="true"
                data-url=>
                <thead>
                  <tr>
                    <th data-field="state" data-checkbox="true"></th>
                    <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-                   <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th>
+                   <!-- <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th> -->
                    <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
                    <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-                   <th scope="row" data-field="estado" data-sortable="true">Estado</th>
+                   <!-- <th scope="row" data-field="estado" data-sortable="true">Estado</th> -->
+                   <th scope="row" data-field="condicion" data-sortable="true">Condicion</th>
                  </tr>
                </thead>
-        </table>
+        </table><br>
+        <button id="btn" class="btn btn-success" type="button" name="button"><i class="fa fa-arrow-right" aria-hidden="true"></i> Continuar</button>
+        <!-- <a class="nav-link" data-toggle="tab" href="#menu1">Continuar de la baja</a> -->
       </div>
     </div>
   </div>
 </div>
 <div id="menu1" class="container tab-pane fade">
 <div class="container">
-<hr>
+<br>
 <h5>Datos de la baja:</h5>
 <hr>
 <div style="margin-top: 2%;">
@@ -101,7 +101,7 @@
     <input type="hidden" id="articulosIds" name="articulosIds" value="">
 
     <input type="hidden" id="articsIds" name="articsIds" value="">
-    <input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Dar de baja">
+    <input class="btn btn-dark" type="submit" onclick="return validarArticulos()" value="Finalizar">
 
 
 {{ form_end(form) }}
@@ -147,7 +147,7 @@
     <script>
     //cargar articulos
       window.onload = function(){
-        if ("{{continuada}}") {
+        if (true) {
           $( document ).ready(function() {
           //alert('se');
           //$tableTest = $('#table1');
@@ -183,7 +183,7 @@
                 $('#ninguno').detach();
                   $('#condiciones').append(`
                     <div class="form-group ${id}_container">
-                      <label class="idsArticulo" for="condiciones['${value.numInventario}']" >${value.denominacion}</label>
+                      <label class="idsArticulo" for="condiciones['${value.numInventario}']" >${value.denominacion} - Número de inventario: ${value.numInventario}</label>
                       <input type="hidden" class="hiddenIds" name="" id="${value.id}" value="${value.id}">
 
                     </div>
@@ -207,9 +207,7 @@
                  $tableTest.bootstrapTable('load',data);
                  const $dataT = $tableTest.bootstrapTable('getAllSelections');
                  $.each( data, function( key, value ) {
-                   $.each( value, function( k, v) {
-                     $array.push(v.numInventario);
-                   });
+                     $array.push(value.numInventario);
                 });
                 $tabla = $('#table');
                 console.log($array);
@@ -241,7 +239,7 @@
               $('#ninguno').detach();
               $('#condiciones').append(`
                 <div class="form-group ${id}_container">
-                  <label class="idsArticulo" for="condiciones['${data.numInventario}']" >${data.denominacion}</label>
+                  <label class="idsArticulo" for="condiciones['${data.numInventario}']" >${data.denominacion} - Número de inventario: ${data.numInventario}</label>
                   <input type="hidden" class="hiddenIds" name="" id="${data.id}" value="${data.id}">
 
                 </div>
@@ -430,6 +428,10 @@
 
             });
     </script>
-
+<script>
+  $('#btn').click(function() {
+    $('#menudatos').trigger('click');
+  });
+</script>
 
 {% endblock %}

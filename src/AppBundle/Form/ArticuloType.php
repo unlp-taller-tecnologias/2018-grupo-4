@@ -49,14 +49,14 @@ class ArticuloType extends AbstractType
 
 
           ->add('tipo', null, array(
-               'label'=> 'Tipo',
+               'label'=> 'Tipo de artículo',
                'placeholder' => 'Seleccione'
           ))
 
           ->add('condicion', null, array(
-               'label'=> 'Condición',
+               'label'=> 'Condición del artículo',
                'placeholder' => 'Seleccione'
-               
+
           ))
 
 
@@ -72,7 +72,7 @@ class ArticuloType extends AbstractType
             )
           ))
           ->add('numFabrica',null, array(
-            'label' => 'Número de Fábrica',
+            'label' => 'Número de fábrica',
             'attr' => array('placeholder' => 'Ingrese el número de fábrica'
             )
           ))
@@ -125,13 +125,13 @@ class ArticuloType extends AbstractType
             )
           ))
           ->add('numExpediente', null, array(
-            'label' => 'Número de Expediente',
+            'label' => 'Número de expediente',
             'attr' => array('placeholder' => 'Ingrese el número de expediente'
           )
           ))
           ->add('observaciones', null, array(
             'label' => 'Observaciones',
-            'attr' => array('placeholder' => 'Ingrese observaciones sobre el artículo si asi lo require'
+            'attr' => array('placeholder' => 'Ingrese observaciones sobre el artículo si lo requiere'
             )
           ));
     }

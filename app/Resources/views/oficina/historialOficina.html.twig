@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('oficina_show', { 'id': oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a la Oficina {{ oficina.nombre }}</a>
+  <a href="{{ path('oficina_show', { 'id': oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a {{ oficina.nombre }}</a>
   <br>
     <hr>
     <h2>Historial de artículos transferidos de {{oficina.nombre}}</h2>

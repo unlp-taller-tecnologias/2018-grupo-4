@@ -40,23 +40,23 @@ class TipoType extends AbstractType
           ->add('grupo', null, array(
               'label' => 'Grupo',
               'attr' => array(
-              'placeholder' => 'Ingrese un grupo solo si el nomenclador es 2017'
+              'placeholder' => 'Ingrese un grupo sólo si el nomenclador es 2017'
               )
           ))
           ->add('subgrupo', null, array(
               'label' => 'Subgrupo',
               'attr' => array(
-              'placeholder' => 'Ingrese un subgrupo solo si el nomenclador es 2017'
+              'placeholder' => 'Ingrese un subgrupo sólo si el nomenclador es 2017'
               )
           ))
           ->add('descripcion', null, array(
               'label' => 'Descripción',
               'attr' => array(
-              'placeholder' => 'Ingrese una descripción si el nomenclador es 2017'
+              'placeholder' => 'Ingrese una descripción sólo si el nomenclador es 2017'
               )
           ))
           ->add('vidaUtil', null, array(
-              'label' => 'Vida útil - Ingrese vida útil solo si el nomenclador es Diaguita'
+              'label' => 'Vida útil'
           ));
         };
         if ($options['edit']) {

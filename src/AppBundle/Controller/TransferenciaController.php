@@ -73,7 +73,8 @@ class TransferenciaController extends Controller
         $form->handleRequest($request);
         $historiales = false;
 
-        $allCondiciones = $em->getRepository('AppBundle:Condicion')->findAll();
+        // $allCondiciones = $em->getRepository('AppBundle:Condicion')->findAll();
+        $allCondiciones = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => 1));
 
         $transferencia->setOficinaOrigen($oficina);
         $transferencia->setUsuario($this->getUser());
@@ -498,7 +499,7 @@ class TransferenciaController extends Controller
       );
       $form = $this->createForm('AppBundle\Form\TransferenciaType', $transferencia);
       $form->handleRequest($request);
-      $allCondiciones = $em->getRepository('AppBundle:Condicion')->findAll();
+      $allCondiciones = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => 1));
       $transferencia->setOficinaOrigen($oficina);
       $historiales = $historialRepository->findByTransferencia($transferencia);
       $oficinaDestinoNombre = $request->request->get('oficinaDestino');
@@ -574,8 +575,8 @@ class TransferenciaController extends Controller
             'numExpendiente' => $articulo->getNumExpediente(),
             'denominacion' => $articulo->getDenominacion(),
             'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-            'estado' => $articulo->getEstado()->getNombre()
-
+            'estado' => $articulo->getEstado()->getNombre(),
+            'condicion' => (is_null($articulo->getCondicion())) ? null : $articulo->getCondicion()->getNombre(),
           );
         };
         return new JsonResponse($data);
@@ -608,7 +609,7 @@ class TransferenciaController extends Controller
              'estado' => $articulo->getEstado()->getNombre()
            );
          }
-       return new JsonResponse($rawResponse);
+       return new JsonResponse($rawResponse['rows']);
 
       }
 

@@ -254,7 +254,7 @@ class OficinaController extends Controller
         if (!($historialesCollection->isEmpty())) {
             foreach ($historialesCollection as $h) {
               if ($h->getTransferencia() != null) {
-                $condiciones[] = $h->getCondicion()->getNombre();
+                $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
               }
             }
         }else{
@@ -296,12 +296,78 @@ class OficinaController extends Controller
     /**
      * Lists all articulo entities.
      *
+     * @Route("/{oficina}/articulos/listados", name="oficina_show_listado_change")
+     * @Method("GET")
+     */
+    public function showListadoChangeAction(Request $request, Oficina $oficina) {
+      $offset = $request->query->get('offset', 0);
+      $limit = $request->query->get('limit', 10);
+      $search = $request->query->get('search', null);
+      $sort = $request->query->get('sort', 'denominacion');
+      $order = $request->query->get('order', 'asc');
+      $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
+      $condicionInicial = null;
+      $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
+      $total = $repository->countBy($search, $oficina);
+      $condicionInicial = null;
+      $rawResponse = array(
+        'total' => $total,
+        'rows' => array()
+      );
+      foreach($articulos as $articulo) {
+        $condiciones = array();
+        $historialesCollection = $articulo->getHistoriales();
+        if (!($historialesCollection->isEmpty())) {
+            foreach ($historialesCollection as $h) {
+              if ($h->getTransferencia() != null) {
+                $condiciones[] = $h->getCondicion()->getNombre();
+              }
+            }
+        }else{
+          if ($articulo->getCondicion() != null) {
+            $condicionInicial = $articulo->getCondicion()->getNombre();
+          }else{
+            $condicionInicial = null;
+          }
+
+        }
+        $condicion = end($condiciones);
+        $rawResponse['rows'][] = array(
+          'id' => $articulo->getId(),
+          'numInventario' => $articulo->getNumInventario(),
+          'numExpendiente' => $articulo->getNumExpediente(),
+          'denominacion' => $articulo->getDenominacion(),
+          'oficina' => $articulo->getOficina()->getNombre(),
+          'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+          'estado' => $articulo->getEstado()->getNombre(),
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
+          'condicion' => ($condicion) ? $condicion : $condicionInicial,
+          'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
+          'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
+          'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
+          'largo' =>  ($articulo->getLargo()) ? $articulo->getLargo() : null,
+          'ancho' =>  ($articulo->getAncho()) ? $articulo->getAncho() : null,
+          'alto' =>  ($articulo->getAlto()) ? $articulo->getAlto() : null,
+          'estantes' =>  ($articulo->getNumsEstantes()) ? $articulo->getNumsEstantes() : null,
+          'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
+          'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
+          'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
+          'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
+          'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
+        );
+      };
+      return new JsonResponse($rawResponse['rows']);
+    }
+
+    /**
+     * Lists all articulo entities.
+     *
      * @Route("/{oficina}/articulos/listadoActivos", name="oficina_show_listadoActivos")
      * @Method("GET")
      */
     public function showListadoActivosAction(Request $request, Oficina $oficina) {
       $offset = $request->query->get('offset', 0);
-      $limit = $request->query->get('limit', 10);
+      $limit = $request->query->get('limit', null);
       $search = $request->query->get('search', null);
       $sort = $request->query->get('sort', 'denominacion');
       $order = $request->query->get('order', 'asc');
@@ -338,11 +404,12 @@ class OficinaController extends Controller
           'denominacion' => $articulo->getDenominacion(),
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
-          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null
+          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
+          'condicion' => (is_null($articulo->getCondicion())) ? null : $articulo->getCondicion()->getNombre(),
         );
       };
 
-      return new JsonResponse($rawResponse);
+      return new JsonResponse($rawResponse['rows']);
     }
     /**
      * Displays a form to edit an existing oficina entity.

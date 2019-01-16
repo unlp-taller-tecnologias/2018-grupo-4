@@ -3,12 +3,13 @@
 {% block content %}
 <div class="container">
   <br>
-  <a href="{{ path('oficina_show', { 'id': oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a la oficina {{oficina.nombre}}</a>
+  <a href="{{ path('oficina_show', { 'id': oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a {{oficina.nombre}}</a>
   <br>
     <hr>
     <h2>Oficina: {{oficina.nombre}}</h2>
     <hr>
     <br>
+    <div class="jumbotron" style="padding-top: 1%; padding-bottom: 0%;">
     <label>Seleccione un estado adicional para agregar/cambiar el estado de un artículo:</label>
     <div class="form-row" >
       <div class="form-group col-md-3">
@@ -19,18 +20,18 @@
       <div class="form-group col-md-3">
         <button id="btnGuardar" data-toggle="modal" data-target="#addModal" class="btn btn-dark"><i class="fa fa-retweet" aria-hidden="true"></i> Cambiar estado</button>
       </div>
-    </div><br>
+    </div>
+    </div>
     <h5>Seleccione artículo/s del {{oficina.nombre}} para el cambio de estado adicional</h5>
     <hr>
-    <div style="padding-top: 30px;" class="table-responsive">
+    <div class="table-responsive">
       <table id="tablaArticulos"
               class="table table-hover table-striped"
               data-toggle="table"
-              data-side-pagination="server"
-              data-pagination="true"
-              data-page-list="[2, 5, 10, 20, 50, 100, 200]"
-              data-search="false"
-              data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
+              data-pagination="false"
+              data-search="true"
+              data-search-align="left"
+              data-url="{{ path('oficina_show_listado_change', { 'oficina': oficina.id }) }}"
               >
         <thead>
           <tr>
