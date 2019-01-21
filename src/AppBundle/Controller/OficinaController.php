@@ -239,56 +239,110 @@ class OficinaController extends Controller
       $search = $request->query->get('search', null);
       $sort = $request->query->get('sort', 'denominacion');
       $order = $request->query->get('order', 'asc');
-      $repository = $this->getDoctrine()->getManager()->getRepository('AppBundle:Articulo');
-      $condicionInicial = null;
-      $articulos = $repository->getBy($offset, $limit, $sort, $order, $search, $oficina);
-      $total = $repository->countBy($search, $oficina);
-      $condicionInicial = null;
+
+      $nroInventario = $request->query->get('nroInventario');
+      $numExpediente = $request->query->get('expediente');
+      $denominacion = $request->query->get('denominacion');
+      $estado = $request->query->get('estado');
+      $tipo = $request->query->get('tipo');
+      $oficinaId = $request->query->get('idOficina');
+      $estadoAdicional = $request->query->get('estadoAdicional');
+
+      $nroInventario = ($nroInventario == "")? NULL:$nroInventario;
+      $numExpediente = ($numExpediente == "")? NULL:$numExpediente;
+      $denominacion = ($denominacion == "")? NULL:$denominacion."%";
+      $estado = ($estado == "")? NULL:$estado;
+      $tipo = ($tipo == "")? NULL:$tipo;
+      $estadoAdicional = ($estadoAdicional == "")? NULL:$estadoAdicional;
+
+      $em = $this->getDoctrine()->getEntityManager();
+      $dql = "select a from AppBundle:Articulo a where (((a.numInventario = :nroInventario and :nroInventario is not null) or (:nroInventario is null))
+              and ((a.numExpediente = :numExpediente and :numExpediente is not null) or (:numExpediente is null))
+              and ((a.denominacion like :denominacion and :denominacion is not null) or (:denominacion is null))
+              and ((a.estado = :estado and :estado is not null) or (:estado is null))
+              and ((a.estadoAdicional = :estadoAdicional and :estadoAdicional is not null) or (:estadoAdicional is null))
+              and ((a.oficina = :oficina and :oficina is not null) or (:oficina is null))
+              and ((a.tipo = :tipo and :tipo is not null) or (:tipo is null)))
+              or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :estadoAdicional is null and :tipo is null and a.oficina = :oficina)";
+      $query = $em->createQuery($dql);
+      $query->setParameter('nroInventario', $nroInventario);
+      $query->setParameter('numExpediente', $numExpediente);
+      $query->setParameter('denominacion', $denominacion);
+      $query->setParameter('estado', $estado);
+      $query->setParameter('tipo', $tipo);
+      $query->setParameter('estadoAdicional', $estadoAdicional);
+      $query->setParameter('oficina', $oficina->getId());
+      $query->setMaxResults($limit)
+      ->setFirstResult($offset);
+      $articulos = $query->getResult();
+
+      $em = $this->getDoctrine()->getEntityManager();
+      $dql = "select a from AppBundle:Articulo a where (((a.numInventario = :nroInventario and :nroInventario is not null) or (:nroInventario is null))
+              and ((a.numExpediente = :numExpediente and :numExpediente is not null) or (:numExpediente is null))
+              and ((a.denominacion like :denominacion and :denominacion is not null) or (:denominacion is null))
+              and ((a.estado = :estado and :estado is not null) or (:estado is null))
+              and ((a.estadoAdicional = :estadoAdicional and :estadoAdicional is not null) or (:estadoAdicional is null))
+              and ((a.oficina = :oficina and :oficina is not null) or (:oficina is null))
+              and ((a.tipo = :tipo and :tipo is not null) or (:tipo is null)))
+              or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :estadoAdicional is null and :tipo is null and a.oficina = :oficina)";
+      $query = $em->createQuery($dql);
+      $query->setParameter('nroInventario', $nroInventario);
+      $query->setParameter('numExpediente', $numExpediente);
+      $query->setParameter('denominacion', $denominacion);
+      $query->setParameter('estado', $estado);
+      $query->setParameter('tipo', $tipo);
+      $query->setParameter('estadoAdicional', $estadoAdicional);
+      $query->setParameter('oficina', $oficina->getId());
+
+      $total = count($query->getResult());
+
       $rawResponse = array(
         'total' => $total,
         'rows' => array()
       );
+      $condicionInicial = null;
       foreach($articulos as $articulo) {
-        $condiciones = array();
-        $historialesCollection = $articulo->getHistoriales();
-        if (!($historialesCollection->isEmpty())) {
-            foreach ($historialesCollection as $h) {
-              if ($h->getTransferencia() != null) {
-                $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
-              }
-            }
-        }else{
-          if ($articulo->getCondicion() != null) {
-            $condicionInicial = $articulo->getCondicion()->getNombre();
-          }else{
-            $condicionInicial = null;
-          }
 
-        }
-        $condicion = end($condiciones);
-        $rawResponse['rows'][] = array(
-          'id' => $articulo->getId(),
-          'numInventario' => $articulo->getNumInventario(),
-          'numExpendiente' => $articulo->getNumExpediente(),
-          'denominacion' => $articulo->getDenominacion(),
-          'oficina' => $articulo->getOficina()->getNombre(),
-          'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
-          'estado' => $articulo->getEstado()->getNombre(),
-          'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
-          'condicion' => ($condicion) ? $condicion : $condicionInicial,
-          'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
-          'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
-          'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
-          'largo' =>  ($articulo->getLargo()) ? $articulo->getLargo() : null,
-          'ancho' =>  ($articulo->getAncho()) ? $articulo->getAncho() : null,
-          'alto' =>  ($articulo->getAlto()) ? $articulo->getAlto() : null,
-          'estantes' =>  ($articulo->getNumsEstantes()) ? $articulo->getNumsEstantes() : null,
-          'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
-          'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
-          'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
-          'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
-          'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
-        );
+          $condiciones = array();
+          $historialesCollection = $articulo->getHistoriales();
+          if (!($historialesCollection->isEmpty())) {
+              foreach ($historialesCollection as $h) {
+                if ($h->getTransferencia() != null) {
+                  $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
+                }
+              }
+          }else{
+            if ($articulo->getCondicion() != null) {
+              $condicionInicial = $articulo->getCondicion()->getNombre();
+            }else{
+              $condicionInicial = null;
+            }
+
+          }
+          $condicion = end($condiciones);
+          $rawResponse['rows'][] = array(
+            'id' => $articulo->getId(),
+            'numInventario' => $articulo->getNumInventario(),
+            'numExpendiente' => $articulo->getNumExpediente(),
+            'denominacion' => $articulo->getDenominacion(),
+            'oficina' => $articulo->getOficina()->getNombre(),
+            'tipo' => (!is_null($articulo->getTipo())) ? $articulo->getTipo()->getConcepto() : null,
+            'estado' => $articulo->getEstado()->getNombre(),
+            'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
+            'condicion' => ($condicion) ? $condicion : $condicionInicial,
+            'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
+            'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
+            'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
+            'largo' =>  ($articulo->getLargo()) ? $articulo->getLargo() : null,
+            'ancho' =>  ($articulo->getAncho()) ? $articulo->getAncho() : null,
+            'alto' =>  ($articulo->getAlto()) ? $articulo->getAlto() : null,
+            'estantes' =>  ($articulo->getNumsEstantes()) ? $articulo->getNumsEstantes() : null,
+            'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
+            'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
+            'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
+            'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
+            'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
+          );
       };
       return new JsonResponse($rawResponse);
     }
@@ -338,7 +392,7 @@ class OficinaController extends Controller
           'numExpendiente' => $articulo->getNumExpediente(),
           'denominacion' => $articulo->getDenominacion(),
           'oficina' => $articulo->getOficina()->getNombre(),
-          'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+          'tipo' => (!is_null($articulo->getTipo())) ? $articulo->getTipo()->getConcepto() : null,
           'estado' => $articulo->getEstado()->getNombre(),
           'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
           'condicion' => ($condicion) ? $condicion : $condicionInicial,
@@ -548,7 +602,24 @@ class OficinaController extends Controller
       foreach($articulos as $articulo) {
         $of = $articulo->getOficina();
         if ($of->getId() ==  $oficina->getId()) {
+          // $condiciones = array();
+          // $historialesCollection = $articulo->getHistoriales();
+          // if (!($historialesCollection->isEmpty())) {
+          //     foreach ($historialesCollection as $h) {
+          //       if ($h->getTransferencia() != null) {
+          //         $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
+          //       }
+          //     }
+          // }else{
+          //   if ($articulo->getCondicion() != null) {
+          //     $condicionInicial = $articulo->getCondicion()->getNombre();
+          //   }else{
+          //     $condicionInicial = null;
+          //   }
+          //
+          // }
           $condiciones = array();
+          $condicion = null;
           $historialesCollection = $articulo->getHistoriales();
           if (!($historialesCollection->isEmpty())) {
               foreach ($historialesCollection as $h) {
@@ -558,40 +629,43 @@ class OficinaController extends Controller
               }
           }else{
             if ($articulo->getCondicion() != null) {
-              $condicionInicial = $articulo->getCondicion()->getNombre();
+              $condicion = $articulo->getCondicion()->getNombre();
             }else{
-              $condicionInicial = null;
+              $condicion = null;
             }
-
           }
-          $condicion = end($condiciones);
+          if (is_null($condicion)) {
+            if (end($condiciones)) {
+              $condicion = end($condiciones);
+            }
+          }
           $rawResponse['rows'][] = array(
             'id' => $articulo->getId(),
             'numInventario' => $articulo->getNumInventario(),
-            'numExpendiente' => $articulo->getNumExpediente(),
+            'numExpendiente' => (!is_null($articulo->getNumExpediente())) ? $articulo->getNumExpediente() : "-",
             'denominacion' => $articulo->getDenominacion(),
             'oficina' => $articulo->getOficina()->getNombre(),
-            'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+            'tipo' => (!is_null($articulo->getTipo())) ? $articulo->getTipo()->getConcepto() : null,
             'estado' => $articulo->getEstado()->getNombre(),
-            'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
-            'condicion' => ($condicion) ? $condicion : $condicionInicial,
-            'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
-            'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
-            'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
-            'largo' =>  ($articulo->getLargo()) ? $articulo->getLargo() : null,
-            'ancho' =>  ($articulo->getAncho()) ? $articulo->getAncho() : null,
-            'alto' =>  ($articulo->getAlto()) ? $articulo->getAlto() : null,
-            'estantes' =>  ($articulo->getNumsEstantes()) ? $articulo->getNumsEstantes() : null,
-            'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
-            'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
-            'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
+            'estadoAdicional' =>  (!is_null(($articulo->getEstadoAdicional()))) ? $articulo->getEstadoAdicional()->getNombre() : null,
+            'condicion' => $condicion,
+            'material' =>  (!is_null(($articulo->getMaterial()))) ? $articulo->getMaterial() : null,
+            'marca' =>  (!is_null(($articulo->getMarca()))) ? $articulo->getMarca() : null,
+            'numFabrica' =>  (!is_null(($articulo->getNumFabrica()))) ? $articulo->getNumFabrica() : null,
+            'largo' =>  (!is_null(($articulo->getLargo()))) ? $articulo->getLargo() : null,
+            'ancho' =>  (!is_null(($articulo->getAncho()))) ? $articulo->getAncho() : null,
+            'alto' =>  (!is_null(($articulo->getAlto()))) ? $articulo->getAlto() : null,
+            'estantes' =>  (!is_null(($articulo->getNumsEstantes()))) ? $articulo->getNumsEstantes() : null,
+            'cajones' =>  (!is_null(($articulo->getNumsCajones()))) ? $articulo->getNumsCajones() : null,
+            'detalleOrigen' =>  (!is_null(($articulo->getDetalleOrigen()))) ? $articulo->getDetalleOrigen() : null,
+            'importe' =>  (!is_null(($articulo->getImporte()))) ? $articulo->getImporte() : null,
             'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
-            'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
+            'codigoCuentaSubcuenta' =>  (!is_null(($articulo->getCodigoCuentaSubcuenta()))) ? $articulo->getCodigoCuentaSubcuenta() : null,
           );
         }
       };
       $rawResponse['total'] = count($rawResponse['rows']);
-      return new JsonResponse($rawResponse);
+      return new JsonResponse($rawResponse['rows']);
     }
 
     /**

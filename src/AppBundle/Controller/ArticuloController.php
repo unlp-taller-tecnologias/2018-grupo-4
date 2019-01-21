@@ -651,7 +651,7 @@ class ArticuloController extends Controller
            'numExpediente' => $articulo->getNumExpediente(),
            'denominacion' => $articulo->getDenominacion(),
            'oficina' => $articulo->getOficina()->getNombre(),
-           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
+           'tipo' => (!is_null($articulo->getTipo())) ? $articulo->getTipo()->getConcepto() : null,
            'estado' => $articulo->getEstado()->getNombre(),
            'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
            'condicion' => ($condicion) ? $condicion : $condicionInicial,
@@ -682,14 +682,106 @@ class ArticuloController extends Controller
           * @Route("/listadoArticulosOficinaPDF/{id}",   name="listado_articulos_oficina_pdf")
           */
           public function exportTablaOficina(Request $request, $id){
-            $format = $request->get('_format');
+            // $format = $request->get('_format');
+            // $em = $this->getDoctrine()->getManager();
+            // $oficina = $em->getRepository('AppBundle:Oficina')->findOneByNombre($id);
+            // $articulos = $em->getRepository('AppBundle:Articulo')->findByOficina($oficina);
+            // return $this->render('articulo/reportePorOficina.html.twig', array(
+            //    'articulo' => $articulos,
+            //    'oficina' => $id
+            // ));
+
             $em = $this->getDoctrine()->getManager();
-            $oficina = $em->getRepository('AppBundle:Oficina')->findOneByNombre($id);
-            $articulos = $em->getRepository('AppBundle:Articulo')->findByOficina($oficina);
+            $nroInventario = $request->request->get('nroInventario');
+            $numExpediente = $request->request->get('expediente');
+            $denominacion = $request->request->get('denominacion');
+            $estado = $request->request->get('estado');
+            $tipo = $request->request->get('tipo');
+            $oficinaId = $request->query->get('idOficina');
+            $estadoAdicional = $request->request->get('estadoAdicional');
+            $objOficina = $em->getRepository("AppBundle:Oficina")->findOneBy(array('id' => $id ));
+
+            $nroInventario = ($nroInventario == "")? NULL:$nroInventario;
+            $numExpediente = ($numExpediente == "")? NULL:$numExpediente;
+            $denominacion = ($denominacion == "")? NULL:$denominacion."%";
+            $estado = ($estado == "")? NULL:$estado;
+            $tipo = ($tipo == "")? NULL:$tipo;
+            $estadoAdicional = ($estadoAdicional == "")? NULL:$estadoAdicional;
+
+            $em = $this->getDoctrine()->getEntityManager();
+            $dql = "select a from AppBundle:Articulo a where (((a.numInventario = :nroInventario and :nroInventario is not null) or (:nroInventario is null))
+                    and ((a.numExpediente = :numExpediente and :numExpediente is not null) or (:numExpediente is null))
+                    and ((a.denominacion like :denominacion and :denominacion is not null) or (:denominacion is null))
+                    and ((a.estado = :estado and :estado is not null) or (:estado is null))
+                    and ((a.estadoAdicional = :estadoAdicional and :estadoAdicional is not null) or (:estadoAdicional is null))
+                    and ((a.oficina = :oficina and :oficina is not null) or (:oficina is null))
+                    and ((a.tipo = :tipo and :tipo is not null) or (:tipo is null)))
+                    or (:nroInventario is null and :numExpediente is null and :denominacion is null and :estado is null and :estadoAdicional is null and :tipo is null and a.oficina = :oficina)";
+            $query = $em->createQuery($dql);
+            $query->setParameter('nroInventario', $nroInventario);
+            $query->setParameter('numExpediente', $numExpediente);
+            $query->setParameter('denominacion', $denominacion);
+            $query->setParameter('estado', $estado);
+            $query->setParameter('tipo', $tipo);
+            $query->setParameter('estadoAdicional', $estadoAdicional);
+            $query->setParameter('oficina', $id);
+            $articulos = $query->getResult();
+
+            $total = count($query->getResult());
+
+            $rawResponse = array(
+              'total' => $total,
+              'rows' => array()
+            );
+            $condicionInicial = null;
+            foreach($articulos as $articulo) {
+                $condiciones = array();
+                $historialesCollection = $articulo->getHistoriales();
+                if (!($historialesCollection->isEmpty())) {
+                    foreach ($historialesCollection as $h) {
+                      if ($h->getTransferencia() != null) {
+                        $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
+                      }
+                    }
+                }else{
+                  if ($articulo->getCondicion() != null) {
+                    $condicionInicial = $articulo->getCondicion()->getNombre();
+                  }else{
+                    $condicionInicial = null;
+                  }
+
+                }
+                $condicion = end($condiciones);
+                $rawResponse['rows'][] = array(
+                  'id' => $articulo->getId(),
+                  'numInventario' => $articulo->getNumInventario(),
+                  'numExpendiente' => $articulo->getNumExpediente(),
+                  'denominacion' => $articulo->getDenominacion(),
+                  'oficina' => $articulo->getOficina()->getNombre(),
+                  'tipo' => (!is_null($articulo->getTipo())) ? $articulo->getTipo()->getConcepto() : null,
+                  'estado' => $articulo->getEstado()->getNombre(),
+                  'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
+                  'condicion' => ($condicion) ? $condicion : $condicionInicial,
+                  'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
+                  'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
+                  'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
+                  'largo' =>  ($articulo->getLargo()) ? $articulo->getLargo() : null,
+                  'ancho' =>  ($articulo->getAncho()) ? $articulo->getAncho() : null,
+                  'alto' =>  ($articulo->getAlto()) ? $articulo->getAlto() : null,
+                  'estantes' =>  ($articulo->getNumsEstantes()) ? $articulo->getNumsEstantes() : null,
+                  'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
+                  'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
+                  'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
+                  'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
+                  'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
+                );
+            };
+
             return $this->render('articulo/reportePorOficina.html.twig', array(
-               'articulo' => $articulos,
-               'oficina' => $id
+               'articulo' => $rawResponse['rows'],
+               'oficina' => $objOficina
             ));
+
           }
 
 
