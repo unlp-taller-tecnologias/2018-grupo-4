@@ -7,22 +7,24 @@
   <br>
   <a href="/informes"><i class="fas fa-angle-left"></i> Volver a Informes</a>
   <hr>
-  <h2>Informe de Transferencia de artículo/s</h2>
+  <h2>Informe de Transferencia de artículos</h2>
   <hr>
-  <h5>Transferecia realizada desde: {{oficinaOrigen}} </h5>
-  <h5>Hacia: {{oficinaDestino}}</h5>
-  <hr>
-  <h5>Artículos transferidos:</h5>
+  <h5>Detalle de la Transferencia</h5>
+  <label>Realizada desde: {{oficinaOrigen}} </label><br>
+  <label>Hacia: {{oficinaDestino}}</label><br>
+  <label>Fecha: {{transferencia.fecha|date('d-m-Y')}}</label><br><br>
+
+  <h5>Listado de artículos transferidos:</h5>
   {% for i in articulos %}
-
-    <label>Denominación: {{i.denominacion}}</label> -
-    <label>Número de Inventario:  {{i.numInventario}}</label><br>
-
+    <label>Número de Inventario:  {{i.getArticulo.numInventario}} - Denominación: {{i.getArticulo.denominacion}} - Condición: {{i.getCondicion}} </label><br>
   {% endfor %}
+
+
+  <br><br>
 
   {% if tieneObservaciones %}
     <h5>Observaciones de la transferencia:</h5>
-    <p>{{transferencia.observaciones}}</p><br>
+    <label>{{transferencia.observaciones}}</label><br><br>
   {% endif %}
 
   <a class="btn btn-dark" href="{{ path('informePDF', {'id': transferencia.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i> Generar PDF</a>

@@ -1,17 +1,20 @@
 {% block content %}
   <pdf>
       <dynamic-page>
-        <h2>Informe de Transferencia de artículo/s</h2>
-        <h5>Transferencia realzada desde: {{oficinaOrigen}} </h5>
-        <h5>Hacia: {{oficinaDestino}}</h5>
-        <h5 style="font-style: bold;">Artículos transferidos:</h5>
+        <h2>Informe de Transferencia de artículos</h2>
+        <h5>Detalle de la Transferencia</h5>
+        <h4>Realizada desde: {{oficinaOrigen}} </h4>
+        <h4>Hacia: {{oficinaDestino}}</h4>
+        <h4>Fecha: {{transferencia.fecha|date('d-m-Y')}}</h4>
+
+        <h5>Listado de artículos transferidos:</h5>
         {% for i in articulos %}
-          <h6 style="font-style: bold;">Denominación:</h6> {{i.denominacion}}
-          <h6 style="font-style: bold;">Número de Inventario </h6>{{i.numInventario}}
+          <h4>Número de Inventario: {{i.getArticulo.numInventario}} - Denominación: {{i.getArticulo.denominacion}} - Condición: {{i.getCondicion}}</h4>
         {% endfor %}
+
         {% if tieneObservaciones %}
-          <h5 style="font-style: bold;">Observaciones de la transferencia:</h5>
-          {{transferencia.observaciones}}
+          <h5>Observaciones de la transferencia:</h5>
+          <h4>{{transferencia.observaciones}}</h4>
         {% endif %}
 
     </dynamic-page>

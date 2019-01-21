@@ -320,7 +320,7 @@ class OficinaController extends Controller
         if (!($historialesCollection->isEmpty())) {
             foreach ($historialesCollection as $h) {
               if ($h->getTransferencia() != null) {
-                $condiciones[] = $h->getCondicion()->getNombre();
+                $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
               }
             }
         }else{
@@ -397,6 +397,27 @@ class OficinaController extends Controller
       );
 
       foreach($activos as $articulo) {
+        $condiciones = array();
+        $condicion = null;
+        $historialesCollection = $articulo->getHistoriales();
+        if (!($historialesCollection->isEmpty())) {
+            foreach ($historialesCollection as $h) {
+              if ($h->getTransferencia() != null) {
+                $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
+              }
+            }
+        }else{
+          if ($articulo->getCondicion() != null) {
+            $condicion = $articulo->getCondicion()->getNombre();
+          }else{
+            $condicion = null;
+          }
+        }
+        if (is_null($condicion)) {
+          if (end($condiciones)) {
+            $condicion = end($condiciones);
+          }
+        }
         $rawResponse['rows'][] = array(
           'id' => $articulo->getId(),
           'numInventario' => $articulo->getNumInventario(),
@@ -405,7 +426,7 @@ class OficinaController extends Controller
           'tipo' => ($articulo->getTipo()) ? $articulo->getTipo()->getDescripcion() : null,
           'estado' => $articulo->getEstado()->getNombre(),
           'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
-          'condicion' => (is_null($articulo->getCondicion())) ? null : $articulo->getCondicion()->getNombre(),
+          'condicion' => $condicion,
         );
       };
 
@@ -532,7 +553,7 @@ class OficinaController extends Controller
           if (!($historialesCollection->isEmpty())) {
               foreach ($historialesCollection as $h) {
                 if ($h->getTransferencia() != null) {
-                  $condiciones[] = $h->getCondicion()->getNombre();
+                  $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
                 }
               }
           }else{
@@ -589,14 +610,14 @@ class OficinaController extends Controller
           $tranfe = $historial->getTransferencia();
           if (!is_null($tranfe->getOficinaOrigen())) {
             if ($tranfe->getOficinaOrigen()->getId() == $oficina->getId()) {
-              array_push($coleccionHistorial,$historial->getArticulo());
+              array_push($coleccionHistorial,$historial);
             }
           }
         }
       }
       return $this->render('oficina/historialOficina.html.twig', array(
           'oficina' => $oficina,
-          'articulos' => $coleccionHistorial
+          'historiales' => $coleccionHistorial
       ));
     }
 }

@@ -10,21 +10,23 @@
     <hr>
     <table class="table table">
         <tbody>
-          {% if articulos is empty %}
+          {% if historiales is empty %}
           <th scope="row"><div class="alert alert-info" role="alert">
             El historial de {{oficina.nombre}} está vacío, no hay artículos que hayan sido transferidos hasta el momento.
           </div></th>
           {% else %}
-              {%  for a in articulos %}
+              {%  for h in historiales %}
                 <tr>
+                    <th scope="row">En la fecha:</th>
+                    <td scope="row">{{ h.fecha|date('d-m-Y') }}</td>
                     <th scope="row">El artículo:</th>
-                    <td scope="row">{{ a.denominacion }}</td>
-                    <th scope="row">con número de inventario: </th>
-                    <td scope="row">{{ a.numInventario }}</td>
-                    <th scope="row">fue transferido a: </th>
-                    <td scope="row">{{ a.oficina }}</td>
+                    <td scope="row">{{ h.articulo.denominacion }}</td>
+                    <th scope="row">Núm. inventario:</th>
+                    <td>{{h.articulo.numInventario}}</td>
+                    <th scope="row">Ha sido transferido a:</th>
+                    <td>{{h.articulo.oficina}}</td>
                 </tr>
-              {% endfor %}
+                {% endfor %}
           {% endif %}
         </tbody>
     </table>

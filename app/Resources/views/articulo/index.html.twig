@@ -54,9 +54,16 @@
     <hr>
     <h3>Listado de todos los artículos</h3>
     <hr>
-
-    <a style="margin-bottom: 2%; margin-top: 1%;" href="{{ path('listado_articulos_pdf') }}" id="" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a PDF</a>
-    <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a Excel</button>
+    <form action="{{ path('listado_articulos_pdf') }}" method="post">
+      <input type="text" name="nroInventario" id="nroInventario1" value="" hidden>
+      <input type="text" name="denominacion" id="denominacion1" value="" hidden>
+      <input type="text" name="nroExpediente" id="nroExpediente1" value="" hidden>
+      <input type="text" name="tipo" value="" id="tipo1" hidden>
+      <input type="text" name="estado" value="" id="estado1" hidden>
+      <input type="text" name="estadoAdicional" id="estadoAdicional1" value="" hidden>
+      <button style="margin-bottom: 2%; margin-top: 1%;" id="exportarButtonPDF" type="submit" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a PDF</button>
+      <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a Excel</button>
+    </form>
     <div class="table-responsive" >
       <div id="toolbar">
         <button id="button1" hidden class="btn btn-default">filterBy</button>
@@ -67,14 +74,13 @@
               data-show-header="true"
               data-side-pagination="server"
               data-pagination="true"
+              data-page-list="[2, 5, 10, 20, 50, 100, 200]"
               data-sort-name="fechaEntrada"
               data-sort-order="desc"
-              data-page-list="[2, 5, 10, 20, 50, 100, 200]"
               data-url="{{ path('articulo_list') }}"
               >
         <thead>
           <tr>
-            <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
             <th scope="row" data-field="fechaEntrada" data-sortable="true">Fecha entrada</th>
             <th scope="row" data-field="oficina" data-visible="true">Oficina</th>
             <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
@@ -82,9 +88,11 @@
             <th scope="row" data-field="estado" data-sortable="true">Estado</th>
             <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
             <th scope="row" data-field="condicion" data-visible="true">Condicion</th>
-            <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th>
+            <!-- <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th> -->
             <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-            <th scope="row" data-field="material" data-visible="true">Material</th>
+            <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
+
+            <!-- <th scope="row" data-field="material" data-visible="true">Material</th>
             <th scope="row" data-field="marca" data-visible="true">Marca</th>
             <th scope="row" data-field="numFabrica" data-visible="true">NumFabrica</th>
             <th scope="row" data-field="largo" data-visible="true">Largo</th>
@@ -94,7 +102,7 @@
             <th scope="row" data-field="cajones" data-visible="true">Cajones</th>
             <th scope="row" data-field="detalleOrigen" data-visible="true">DetalleOrigen</th>
             <th scope="row" data-field="importe" data-visible="true">Importe</th>
-            <th scope="row" data-field="codigoCuentaSubcuenta" data-visible="true">CodigoCuentaSubcuenta</th>
+            <th scope="row" data-field="codigoCuentaSubcuenta" data-visible="true">CodigoCuentaSubcuenta</th> -->
 
 
           </tr>
@@ -130,260 +138,224 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
-$table=$('#tablaArticulos');
+
 jQuery(function ($) {
-  $("#exportButtonPdf").click(function () {
-      var dataSource = shield.DataSource.create({
-          data: $('#tablaArticulos').slice(0,6),
-          schema: {
-              type: "table",
-              fields: {
-                  NroInventario: { type: Number },
-                  NroExpediente: { type: Number },
-                  Denominación: { type: String },
-                  Tipo: { type: String },
-                  Estado: { type: String }
-              }
-          }
-      });
-    dataSource.read().then(function (data) {
-        var pdf = new shield.exp.PDFDocument({
-            author: "PrepBootstrap",
-            created: new Date()
-        });
-
-        pdf.addPage("a4", "portrait");
-        pdf.table(
-            50,
-            50,
-            data,
-            [
-                { field: "NroInventario", title: "Numero de Inventario", width: 120 },
-                { field: "Nro.Expendiente", title: "Numero de Expediente", width: 125 },
-                { field: "Denominación", title: "Denominación", width: 100 },
-                { field: "Tipo", title: "Tipo", width: 50 },
-                { field: "Estado", title: "Estado", width: 50 }
-            ],
-            {
-                margins: {
-                    top: 50,
-                    left: 50
-                }
-            }
-        );
-
-        pdf.saveAs({
-            fileName: "Listado_de_articulos"
-        });
-    });
-});
-
 $("#exportButtonExcel").click(function () {
-var dataSourceExcel = shield.DataSource.create({
-    data: "#tablaArticulos",
-    schema: {
-        type: "table",
-        fields: {
-          NroInventario: { type: Number },
-          NroExpediente: { type: Number },
-          Denominación: { type: String },
-          Tipo: { type: String },
-          Estado: { type: String },
-          Condicion: { type: String },
-          Oficina: { type: String },
-          Material: { type: String },
-          Marca: { type: String },
-          NumFabrica: { type: String },
-          Largo: { type: String },
-          Alto: { type: String },
-          Ancho: { type: String },
-          Estantes: { type: String },
-          Cajones: { type: String },
-          DetalleOrigen: { type: String },
-          Importe: { type: String },
-          Entrada: { type: String },
-          CodigoCuentaSubcuenta: { type: String }
-        }
-    }
-});
-dataSourceExcel.read().then(function (data) {
-    new shield.exp.OOXMLWorkbook({
-        author: "PrepBootstrap",
-        worksheets: [
-{
-name: "PrepBootstrap Table",
-rows: [
-{
-cells: [
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        width: 120,
-        value: "Numero de Inventario"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Numero de Expediente"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Denominacion"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Tipo"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Estado"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Condicion"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Oficina"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Material"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Marca"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "NumFabrica"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Largo"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Alto"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Ancho"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Estantes"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Cajones"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "DetalleOrigen"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Importe"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "Entrada"
-    },
-    {
-        style: {
-            bold: true
-        },
-        type: String,
-        value: "CodigoCuentaSubcuenta"
-    }
-  ]
-}
-].concat($.map(data, function(item) {
-console.log(item);
-return {
-  cells: [
-          { type: Number, value: item.NroInventario },
-          { type: Number, value: item.NroExpediente },
-          { type: String, value: item.Denominación },
-          { type: String, value: item.Tipo },
-          { type: String, value: item.Estado },
-          { type: String, value: item.Condicion },
-          { type: String, value: item.Oficina },
-          { type: String, value: item.Material },
-          { type: String, value: item.Marca },
-          { type: String, value: item.NumFabrica },
-          { type: String, value: item.Largo },
-          { type: String, value: item.Alto },
-          { type: String, value: item.Ancho },
-          { type: String, value: item.Estantes },
-          { type: String, value: item.Cajones },
-          { type: String, value: item.DestalleOrigen },
-          { type: String, value: item.Importe },
-          { type: String, value: item.Entrada },
-          { type: String, value: item.CodigoCuentaSubcuenta }
-          ]
-        };
-      }))
+  var datos;
+  var nroInventario = $('#nroInventario').val();
+  var expediente = $('#expediente').val();
+  var denominacion = $('#denominacion').val();
+  var estadoAdicional = $('#estadoAdicional').val();
+  var estado = $('#estado').val();
+  var tipo = $('#tipo').val();
+  $.ajax({
+    method: "POST",
+    url: "articulo_listFilter",
+    data: {
+            "nroInventario":nroInventario,
+            "expediente":expediente,
+            "denominacion":denominacion,
+            "estado":estado,
+            "estadoAdicional": estadoAdicional,
+            "tipo":tipo
+          } ,
+    success: function(data){
+      var dataSourceExcel = new shield.DataSource(data);
+      dataSourceExcel.read().then(function (data) {
+          new shield.exp.OOXMLWorkbook({
+              author: "PrepBootstrap",
+              worksheets: [
+      {
+      name: "PrepBootstrap Table",
+      rows: [
+      {
+      cells: [
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              width: 120,
+              value: "Numero de Inventario"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Numero de Expediente"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Denominacion"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Tipo"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Estado"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Condicion"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Oficina"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Material"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Marca"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "NumFabrica"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Largo"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Alto"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Ancho"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Estantes"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Cajones"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "DetalleOrigen"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Importe"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "Entrada"
+          },
+          {
+              style: {
+                  bold: true
+              },
+              type: String,
+              value: "CodigoCuentaSubcuenta"
+          }
+        ]
       }
-    ]
-    }).saveAs({
-    fileName: "Listado_de_articulos"
-    });
+      ].concat($.map(data, function(item) {
+      console.log(item);
+      return {
+        cells: [
+                { type: Number, value: item.numInventario },
+                { type: Number, value: item.numExpediente },
+                { type: String, value: item.denominacion },
+                { type: String, value: item.tipo },
+                { type: String, value: item.estado },
+                { type: String, value: item.condicion },
+                { type: String, value: item.oficina },
+                { type: String, value: item.material },
+                { type: String, value: item.marca },
+                { type: String, value: item.numFabrica },
+                { type: String, value: item.largo },
+                { type: String, value: item.alto },
+                { type: String, value: item.ancho },
+                { type: String, value: item.estantes },
+                { type: String, value: item.cajones },
+                { type: String, value: item.detalleOrigen },
+                { type: String, value: item.importe },
+                { type: String, value: item.fechaEntrada },
+                { type: String, value: item.codigoCuentaSubcuenta }
+                ]
+              };
+            }))
+            }
+          ]
+          }).saveAs({
+          fileName: "Listado_de_articulos"
+          });
+        });
+    }});
+    return false;
   });
-  });
+});
+
+
+
+
+$("#exportarButtonPDF").click(function () {
+  $("#nroInventario1").val($("#nroInventario").val());
+  $("#nroExpediente1").val($("#expediente").val());
+  $("#denominacion1").val($("#denominacion").val());
+  $("#tipo1").val($("#tipo").val());
+  $("#estado1").val($("#estado").val());
+  $("#estadoAdicional1").val($("#estadoAdicional").val());
+
+
+  //return true;
 });
 
 {% if editado == 'editado' %}
@@ -481,30 +453,21 @@ $.extend($.fn.bootstrapTable.defaults.icons, {
 {% block serchArticulos  %}
 <script>
 $("button").click(function(){
+  show = "{{ path('articulo_list',{nroInventario: -1}) }}";
   var nroInventario = $('#nroInventario').val();
   var expediente = $('#expediente').val();
   var denominacion = $('#denominacion').val();
   var estadoAdicional = $('#estadoAdicional').val();
   var estado = $('#estado').val();
   var tipo = $('#tipo').val();
-  $.ajax({
-    method: "POST",
-    url: "articulo_listFilter",
-    data: {
-            "nroInventario":nroInventario,
-            "expediente":expediente,
-            "denominacion":denominacion,
-            "estado":estado,
-            "estadoAdicional": estadoAdicional,
-            "tipo":tipo
-          } ,
-    success: function(data) {
-      $table.bootstrapTable('load',data);
-      }
-    });
+  var query = `${nroInventario}&expediente=${expediente}&denominacion=${denominacion}&
+                estado=${estado}&estadoAdicional=${estadoAdicional}&tipo=${tipo}`;
+  show = show.replace('-1', query);
+  $('#tablaArticulos').bootstrapTable('refresh', {url: show});
   });
 
 $("#buttonBorrar").click(function(){
+  show = "{{ path('articulo_list',{nroInventario: -1}) }}";
   $('#nroInventario').val('');
   $('#expediente').val('');
   $('#denominacion').val('');
@@ -517,21 +480,10 @@ $("#buttonBorrar").click(function(){
   var estado = $('#estado').val();
   var tipo = $('#tipo').val();
   var estadoAdicional = $('#estadoAdicional').val();
-  $.ajax({
-    method: "POST",
-    url: "articulo_listFilter",
-    data: {
-            "nroInventario":nroInventario,
-            "expediente":expediente,
-            "denominacion":denominacion,
-            "estado":estado,
-            "estadoAdicional": estadoAdicional,
-            "tipo":tipo
-          } ,
-    success: function(data) {
-      $table.bootstrapTable('load',data);
-      }
-    });
+  var query = `${nroInventario}&expediente=${expediente}&denominacion=${denominacion}&
+                estado=${estado}&estadoAdicional=${estadoAdicional}&tipo=${tipo}`;
+  show = show.replace('-1', query);
+  $('#tablaArticulos').bootstrapTable('refresh', {url: show});
   });
 
 </script>

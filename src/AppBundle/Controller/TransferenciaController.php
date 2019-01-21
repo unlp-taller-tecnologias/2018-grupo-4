@@ -503,9 +503,13 @@ class TransferenciaController extends Controller
       $transferencia->setOficinaOrigen($oficina);
       $historiales = $historialRepository->findByTransferencia($transferencia);
       $oficinaDestinoNombre = $request->request->get('oficinaDestino');
-
-      $oficinaDestino = $transferencia->getOficinaDestino()->getNombre();
-
+      if (!is_null($transferencia->getOficinaDestino())) {
+        $oficinaDestino = $transferencia->getOficinaDestino()->getNombre();
+      }else {
+        $oficinaDestino = new Oficina();
+        $oficinaDestino->setNombre("");
+        $transferencia->setOficinaDestino($oficinaDestino);
+      }
       if ($form->isSubmitted() && $form->isValid()) {
           $articulosIds = $request->request->get('articsIds');
           $oficinaDestinoName = $request->request->get('oficinaDestino');//aca es importante
@@ -626,7 +630,9 @@ class TransferenciaController extends Controller
               $articuloRepository = $em->getRepository('AppBundle:Articulo');
               $articulos = array();
               foreach ($historiales as $item) {
-                $articulos[] = $item->getArticulo();
+                $condiciones = $em->getRepository('AppBundle:Condicion')->findOneBy(array('id' => $item->getCondicion()->getId()));
+                $item->setCondicion($condiciones);
+                $articulos[] = $item;
               }
               if ($transferencia->getObservaciones()== null) {
                 $tieneObservaciones = false;
@@ -683,9 +689,15 @@ class TransferenciaController extends Controller
            $em = $this->getDoctrine()->getManager();
            $historiales = $em->getRepository('AppBundle:Historial')->findByTransferencia($transferencia);
            $articuloRepository = $em->getRepository('AppBundle:Articulo');
+
            $articulos = array();
            foreach ($historiales as $item) {
-             $articulos[] = $item->getArticulo();
+             $condiciones = $em->getRepository('AppBundle:Condicion')->findOneBy(array('id' => $item->getCondicion()->getId()));
+             $item->setCondicion($condiciones);
+             $articulos[] = $item;
+             //dump($item->getCondicion());
+             //die();
+
            }
            if ($transferencia->getObservaciones()== null) {
              $tieneObservaciones = false;
@@ -698,7 +710,8 @@ class TransferenciaController extends Controller
              'transferencia' => $transferencia,
              'tieneObservaciones' => $tieneObservaciones,
              'oficinaOrigen' => $transferencia->getOficinaOrigen(),
-             'oficinaDestino' => $transferencia->getOficinaDestino()
+             'oficinaDestino' => $transferencia->getOficinaDestino(),
+             //'condicionesArray' => $condicionesArray
            ));
        }
 

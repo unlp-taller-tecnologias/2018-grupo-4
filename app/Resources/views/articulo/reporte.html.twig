@@ -13,30 +13,32 @@
       <hr>
       <button id="btPrint" class="btn btn-dark" type="button" onclick="imprimirPagina()" name="button"><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a PDF</button><br>
       <div class="table-responsive">
-      <table class="table" name="TABLA"><br>
-          <thead class="thead">
-              <tr>
+      <table class="table table-striped" name="TABLA"><br>
+          <thead >
+              <tr class="table-active">
                 <th>Entrada</th>
                 <th>Oficina</th>
                 <th>Nro. Inventario</th>
                 <th>Denominación</th>
                 <th>Estado</th>
+                <th>Estado adicional</th>
                 <th>Condicion</th>
-                <th>Oficina</th>
-
-
-
-                <th>Marca</th>
-                <th>NumFabrica</th>
-
-
-
+                <th>Tipo</th>
                 <th>Importe</th>
-                <th>Entrada</th>
-
+                <th>Detalle origen</th>
+                <th>Codigo cuenta/subcuenta</th>
+                <th>Nro. expediente</th>
+                <th>Marca</th>
+                <th>Material</th>
+                <th>Nro. Fabrica</th>
+                <th>Largo</th>
+                <th>Ancho</th>
+                <th>Alto</th>
+                <th>Nro. estantes</th>
+                <th>Nro. cajones</th>
               </tr>
           </thead>
-          <tbody><td>
+          <tbody>
           {% for a in articulo %}
               <tr>
                   <td>{{a.fechaEntrada|date('d-m-Y ')}}</td>
@@ -44,16 +46,21 @@
                   <td>{{a.numInventario}}</td>
                   <td>{{a.denominacion}}</td>
                   <td>{{a.estado}}</td>
+                  <td>{{a.estadoAdicional}}</td>
                   <td>{{a.condicion}}</td>
                   <td>{{a.tipo}}</td>
-                  <td>{{ a.estado }}</td>
-                  <td>{{ a.condicion }}</td>
-                  <td>{{a.oficina}}</td>
+                  <td>{{a.importe}}</td>
+                  <td>{{a.detalleOrigen}}</td>
+                  <td>{{a.codigoCuentaSubcuenta}}</td>
+                  <th>{{a.numExpediente}}</th>
                   <td>{{a.marca}}</td>
-                  <td>{{ a.numFabrica }}</td>
-                  <td>{{ a.importe }}</td>
-                  <td>{{ a.fechaEntrada|date('d-m-Y ') }}</td>
-
+                  <td>{{a.material}}</td>
+                  <td>{{a.numFabrica}}</td>
+                  <td>{{a.largo}}</td>
+                  <td>{{a.ancho}}</td>
+                  <td>{{a.alto}}</td>
+                  <td>{{a.estantes}}</td>
+                  <td>{{a.cajones}}</td>
               </tr>
               {% endfor %}
           </tbody>
@@ -76,15 +83,26 @@
 <link rel="stylesheet" href="{{ asset('lib/bootstrap-table/bootstrap-table.min.css') }}">
 <script>
 var docDefinition = {
+  pageOrientation: 'landscape',
+  pageMargins: [ 20, 30, 20, 30 ],
+  footer: function(currentPage, pageCount) { return '' + currentPage.toString() + ' de ' + pageCount + ' páginas'; },
+  header: function(currentPage, pageCount, pageSize) {
+
+    return [
+      { text: 'Sistema de Inventario - Reporte de artículos - Facultas de Cs. Médicas ', alignment: (currentPage % 2) ? 'right' : 'right' },
+      { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
+    ]
+  },
   content: [
     {
       table: {
         headerRows: 1,
-        widths: [ 40, 40, 50, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40],
+        widths: [ 'auto','auto','auto','auto','auto','auto','auto','auto','auto','auto','auto', 'auto','auto','auto','auto','auto','auto','auto','auto','auto'],
         body: [
-          [ 'Inventario', 'Expediente', 'Denominacion', 'Tipo', 'Condicion', 'Oficina', 'Estado', 'Marca', 'Fabrica',  'Importe', 'Entrada' ],
+          [ 'Entrada', 'Oficina', 'Nro. Inventario', 'Denominación', 'Estado', 'Estado adicional', 'Condición', 'Tipo', 'Importe', 'Detalle origen', 'Codigo cuenta/subcuenta', 'Nro. expediente', 'Marca', 'Material', 'Nro. Fabrica', 'Largo', 'Ancho', 'Alto', 'Nro. estantes',  'Nro. cajones' ],
           {% for a in articulo %}
-          [ '{{a.numInventario}}', '{{a.numExpediente}}', '{{a.denominacion}}', '{{a.tipo}}', '{{a.condicion}}', '{{a.oficina}}', '{{a.estado}}', '{{a.marca}}', '{{a.numFabrica}}',  '{{a.importe}}', '{{ a.fechaEntrada|date("d-m-Y ") }}'],
+          [ '{{a.fechaEntrada|date('d-m-Y ')}}', '{{a.oficina}}', '{{a.numInventario}}', '{{a.denominacion}}', '{{a.estado}}', '{{a.estadoAdicional}}', '{{a.condicion}}', '{{a.tipo}}', '{{a.importe}}',  '{{a.detalleOrigen}}',
+           '{{a.codigoCuentaSubcuenta}}', '{{a.numExpediente}}', '{{a.marca}}', '{{a.material}}', '{{a.numFabrica}}', '{{a.largo}}', '{{a.ancho}}', '{{a.alto}}', '{{a.estantes}}', '{{a.cajones}}' ],
           {% endfor %}
         ]
     , margin: 0  }
@@ -92,8 +110,8 @@ var docDefinition = {
     }
   ],
   defaultStyle: {
-    fontSize: 6,
-    bold: true
+    fontSize: 8,
+    bold: false
   }
 };
 

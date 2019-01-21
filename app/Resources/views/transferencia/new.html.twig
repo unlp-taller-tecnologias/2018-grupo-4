@@ -4,7 +4,7 @@
 <div class="container-fluid">
   <div style="margin-left: 2%; margin-right: 2%;">
     <br>
-    <a href="{{ path('oficina_show', { 'id': oficina }) }}"><i class="fas fa-angle-left"></i> Volver a {{nombreOficina}}</a>
+    <a id="topTrans" href="{{ path('oficina_show', { 'id': oficina }) }}"><i class="fas fa-angle-left"></i> Volver a {{nombreOficina}}</a>
     <hr>
     <h2>Transferencia en {{nombreOficina}} </h2>
     <hr>
@@ -358,6 +358,8 @@
         error: function(){
         }
         });
+        $("html, body").animate({scrollTop: $('#topTrans').offset().top }, 800);
+
       });
 </script>
 <script>

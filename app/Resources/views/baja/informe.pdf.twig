@@ -1,23 +1,19 @@
-
-{% block content %}
 <pdf>
     <dynamic-page>
-      <h2>Informe de Baja de artículo/s</h2>
-      <h5>En: {{oficinaOrigen}} </h5>
-
-      <h5 style="font-style: bold;">Artículos dados de baja:</h5>
+      <h2>Informe de Baja de artículos</h2>
+      <h5>Detalle de la Baja</h5>
+      <h4>Realizada en: {{oficinaOrigen}} </h4>
+      <h4>Responsable actual de oficina: {{oficinaOrigen.responsableOficina}}</h4>
+      <h4>Fecha: {{baja.fecha|date('d-m-Y')}}</h4>
+      <h4>Número de expediente: {{baja.expediente}}</h4>
+      <h5>Listado de artículos dados de baja:</h5>
       {% for i in articulos %}
-
-      <h6 style="font-style: bold;">Denominacion:</h6>   {{i.denominacion}}
-      <h6 style="font-style: bold;">Numero de Inventario:</h6>  {{i.numInventario}}
-
+        <h4>Número de Inventario: {{i.numInventario}} - Denominación: {{i.denominacion}}</h4>
       {% endfor %}
-
       {% if tieneObservaciones %}
-        <h6 style="font-style: bold;">Observaciones:</h6>
-        {{baja.observaciones}}
+        <h5>Observaciones de la baja:</h5>
+        <h4>{{baja.observaciones}}</h4>
       {% endif %}
+
   </dynamic-page>
 </pdf>
-
-{% endblock %}
