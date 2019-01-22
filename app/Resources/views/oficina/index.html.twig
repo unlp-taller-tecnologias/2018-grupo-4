@@ -84,6 +84,29 @@
 {% block javascripts %}
 {{ parent() }}
 <script>
+$("button").click(function(){
+  show = "{{ path('oficina_list', { nombre: -1})}}";
+  var nombre = $('#nombre').val();
+  var nroCarpeta = $('#nroCarpeta').val();
+  var responsable = $('#responsable').val();
+  var query = `${nombre}&nroCarpeta=${nroCarpeta}&responsable=${responsable}`;
+  show = show.replace('-1', query);
+  $('#tablaOficinas').bootstrapTable('refresh', {url: show});
+  });
+
+  $("#buttonBorrar").click(function(){
+    show = "{{ path('oficina_list', { nombre: -1})}}";
+    $('#nombre').val('');
+    $('#nroCarpeta').val('');
+    $('#responsable').val('');
+    var nombre = $('#nombre').val();
+    var nroCarpeta = $('#nroCarpeta').val();
+    var responsable = $('#responsable').val();
+    var query = `${nombre}&nroCarpeta=${nroCarpeta}&responsable=${responsable}`;
+    show = show.replace('-1', query);
+    $('#tablaOficinas').bootstrapTable('refresh', {url: show});
+    });
+
   {% if editado == 'editado' %}
     $('#editModal').modal('show');
   {%endif%}
@@ -111,46 +134,46 @@
 <script>
 var $table = $('#tablaOficinas');
 
-$("button").click(function(){
-  var nombre = $('#nombre').val();
-  var nroCarpeta = $('#nroCarpeta').val();
-  var responsable = $('#responsable').val();
-  $.ajax({
-    method: "POST",
-    url: "oficina_listFilter",
-    data: {
-            "nombre":nombre,
-            "nroCarpeta":nroCarpeta,
-            "responsable":responsable
-          } ,
-    success: function(data) {
-      //alert(data);
-      $table.bootstrapTable('load',data);
-      }
-    });
-  });
-
-  $("#buttonBorrar").click(function(){
-    $('#nombre').val('');
-    $('#nroCarpeta').val('');
-    $('#responsable').val('');
-    var nombre = $('#nombre').val();
-    var nroCarpeta = $('#nroCarpeta').val();
-    var responsable = $('#responsable').val();
-    $.ajax({
-      method: "POST",
-      url: "oficina_listFilter",
-      data: {
-              "nombre":nombre,
-              "nroCarpeta":nroCarpeta,
-              "responsable":responsable
-            } ,
-      success: function(data) {
-        //alert(data);
-        $table.bootstrapTable('load',data);
-        }
-      });
-    });
+// $("button").click(function(){
+//   var nombre = $('#nombre').val();
+//   var nroCarpeta = $('#nroCarpeta').val();
+//   var responsable = $('#responsable').val();
+//   $.ajax({
+//     method: "POST",
+//     url: "oficina_listFilter",
+//     data: {
+//             "nombre":nombre,
+//             "nroCarpeta":nroCarpeta,
+//             "responsable":responsable
+//           } ,
+//     success: function(data) {
+//       //alert(data);
+//       $table.bootstrapTable('load',data);
+//       }
+//     });
+//   });
+//
+//   $("#buttonBorrar").click(function(){
+//     $('#nombre').val('');
+//     $('#nroCarpeta').val('');
+//     $('#responsable').val('');
+//     var nombre = $('#nombre').val();
+//     var nroCarpeta = $('#nroCarpeta').val();
+//     var responsable = $('#responsable').val();
+//     $.ajax({
+//       method: "POST",
+//       url: "oficina_listFilter",
+//       data: {
+//               "nombre":nombre,
+//               "nroCarpeta":nroCarpeta,
+//               "responsable":responsable
+//             } ,
+//       success: function(data) {
+//         //alert(data);
+//         $table.bootstrapTable('load',data);
+//         }
+//       });
+//     });
 
 </script>
 {% endblock %}
