@@ -8,25 +8,22 @@
   <hr>
     <h2>Historial del artículo: {{articulo.denominacion}} - {{articulo.numInventario}}</h2>
     <hr>
-    <table class="table table">
-        <tbody>
-            {%  for h in historial %}
-              <tr>
-                  <th scope="row">El artículo desde la fecha:</th>
-                  <td scope="row">{{ h.fechaDesde }}</td>
-
-                  {% if h.estado == false %}
-                    <th scope="row">se encuentra en la oficina: </th>
-                    <td scope="row">{{ h.oficina }}</td>
-                  {% else %}
-                    <th scope="row">se encuentra:</th>
-                    <td scope="row"><p style="color:red">Dado de baja</p></td>
-                  {% endif %}
-              </tr>
-            {% endfor %}
-        </tbody>
+    <table class="table table-striped">
+        <tr class="table-active">
+          <th scope="row">Desde la fecha</th>
+          <th scope="row">Se encuentra</th>
+        </tr>
+        {%  for h in historial %}
+        <tr>
+          <td scope="row">{{ h.fechaDesde }}</td>
+          {% if h.estado == false %}
+            <td scope="row">{{ h.oficina }}</td>
+          {% else %}
+            <td scope="row"><p style="color:red">Dado de baja</p></td>
+          {% endif %}
+        </tr>
+        {% endfor %}
     </table>
-    <br>
 </div>
 
 

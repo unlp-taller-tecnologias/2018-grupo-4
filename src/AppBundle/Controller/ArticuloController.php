@@ -298,7 +298,7 @@ class ArticuloController extends Controller
     {
       $em = $this->getDoctrine()->getManager();
       $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
-      $numInv = ((is_null($artNumInv))? 1 : $artNumInv->getNumInventario()+1);
+      $numInv =  '0000-0000-'.((is_null($artNumInv))? 1 : $artNumInv->getNumInventarioINT()+1);
       $condiciones = $em->getRepository('AppBundle:Condicion')->findByHabilitado(1);
       $articulo = new Articulo($numInv, $oficina);
       $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
@@ -332,8 +332,8 @@ class ArticuloController extends Controller
 
         $cantidad = $request->request->get('cantidad');
         $ultimoNum = $request->request->get('numInvent');
-        //$matrial = $request->request->get('material');
-
+        $porciones = explode("-", $articulo->getNumInventario());
+        $ultimoNum = $porciones[2];
         if ($cantidad == '1')
         {
           $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
@@ -375,7 +375,7 @@ class ArticuloController extends Controller
             $obs = $articulo->getObservaciones();
             $cond = $articulo->getCondicion();
             $tipo = $articulo->getTipo();
-            $articulo = new Articulo($ultimoNum, $oficina);
+            $articulo = new Articulo($porciones[0].'-'.$porciones[1].'-'.$ultimoNum, $oficina);
             $articulo->setDenominacion($denomin);
             $articulo->setMaterial($material);
             $articulo->setMarca($marca);
