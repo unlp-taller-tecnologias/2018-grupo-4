@@ -81,12 +81,13 @@
 <script>
 var docDefinition = {
   pageOrientation: 'landscape',
+  pageSize: 'A4',
   pageMargins: [ 20, 30, 20, 30 ],
   footer: function(currentPage, pageCount) { return '' + currentPage.toString() + ' de ' + pageCount + ' páginas'; },
   header: function(currentPage, pageCount, pageSize) {
 
     return [
-      { text: 'Sistema de Inventario - Reporte de artículos por oficina- Facultas de Cs. Médicas ', alignment: (currentPage % 2) ? 'right' : 'right' },
+      { text: 'Reporte de artículos por oficina - Sistema de Inventario - Facultas de Cs. Médicas ', alignment: (currentPage % 2) ? 'right' : 'right' },
       { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
     ]
   },

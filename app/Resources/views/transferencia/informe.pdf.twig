@@ -1,22 +1,66 @@
 {% block content %}
   <pdf>
       <dynamic-page>
+        <placeholders>
+          <footer>
+            <div height="20px">
+                <page-info format="Página %s de %s" />
+            </div>
+          </footer>
+        </placeholders>
+        <div>
+          <p text-align="right">Facultad de Cs. Médicas - UNLP</p>
+        </div>
+
         <h2>Informe de Transferencia de artículos</h2>
-        <h5>Detalle de la Transferencia</h5>
-        <h4>Realizada desde: {{oficinaOrigen}} </h4>
-        <h4>Hacia: {{oficinaDestino}}</h4>
-        <h4>Fecha: {{transferencia.fecha|date('d-m-Y')}}</h4>
 
-        <h5>Listado de artículos transferidos:</h5>
-        {% for i in articulos %}
-          <h4>Número de Inventario: {{i.getArticulo.numInventario}} - Denominación: {{i.getArticulo.denominacion}} - Condición: {{i.getCondicion}}</h4>
-        {% endfor %}
+        <h5 font-size="14px">Detalle de la Transferencia</h5>
+        <h4 font-size="14px">Realizada desde: {{oficinaOrigen}} </h4>
+        <h4 font-size="14px">Responsable actual de {{oficinaOrigen}}: {{oficinaOrigen.responsableOficina}}</h4>
+        <h4 font-size="14px">Hacia: {{oficinaDestino}}</h4>
+        <h4 font-size="14px">Responsable actual de {{oficinaDestino}}: {{oficinaDestino.responsableOficina}}</h4>
+        <h4 font-size="14px">Fecha: {{transferencia.fecha|date('d-m-Y')}}</h4>
 
-        {% if tieneObservaciones %}
-          <h5>Observaciones de la transferencia:</h5>
-          <h4>{{transferencia.observaciones}}</h4>
-        {% endif %}
+        <div>
+          <p font-style="bold" font-size="14px">Listado de artículos transferidos</p>
+        </div>
 
+        <table>
+          <tr>
+              <td padding-left="3px" padding-bottom="2px" font-size="14px" font-style="bold">Número de inventario</td>
+              <td padding-left="3px" padding-bottom="2px" font-size="14px" font-style="bold">Denominación</td>
+              <td padding-left="3px" padding-bottom="2px" font-size="14px" font-style="bold">Condición</td>
+
+          </tr>
+          {% for i in articulos %}
+          <tr>
+              <td padding-left="3px" padding-bottom="2px" font-size="14px">{{i.getArticulo.numInventario}}</td>
+              <td padding-left="3px" padding-bottom="2px" font-size="14px">{{i.getArticulo.denominacion}}</td>
+              <td padding-left="3px" padding-bottom="2px" font-size="14px">{{i.getCondicion}}</td>
+
+          </tr>
+          {% endfor %}
+        </table>
+          {% if tieneObservaciones %}
+          <div margin-top="20px" border-color="black">
+            <h5 padding-left="3px" font-size="14px" margin-top="2px">Observaciones de la transferencia</h5>
+            <p padding-left="3px" font-size="14px">
+              {{transferencia.observaciones}}
+            </p>
+          </div>
+          {% endif %}
+          <table margin-top="50px">
+            <tr>
+              <td><div margin-top="50px" text-align="center">
+                  <p padding-top="60px" font-size="14px">_______________________________</p>
+                  <p font-size="14px">Firma y aclaración de responsable actual de {{oficinaOrigen}}</p>
+              </div></td>
+              <td><div margin-top="50px" text-align="center">
+                  <p padding-top="60px" font-size="14px">_______________________________</p>
+                  <p font-size="14px">Firma y aclaración de responsable actual de {{oficinaDestino}}</p>
+                </div></td>
+            </tr>
+          </table>
     </dynamic-page>
   </pdf>
 {% endblock %}

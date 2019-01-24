@@ -563,12 +563,24 @@ class TransferenciaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $oficina = $em->getRepository('AppBundle:Oficina')->findOneById($id);
         $articuloRepository = $em->getRepository('AppBundle:Articulo');
+        $transferenciaRepository = $em->getRepository('AppBundle:Transferencia');
         $idsArticulos = $request->request->get('articulos');
         $idsArticulos = explode(",", $idsArticulos);
         $articulos = array();
+        $transferencia = $transferenciaRepository->findOneBy(
+                array('finalizada' => 2,
+                'oficinaOrigen' => $oficina)
+            );
+        $historialesViejos = $em->getRepository('AppBundle:Historial')->findByTransferencia($transferencia);
         foreach($idsArticulos as $idArticulo){
           if (!(in_array($articuloRepository->findOneById($idArticulo), $articulos))) {
-            $articulos[] = $articuloRepository->findOneById($idArticulo);
+            $artActual = $articuloRepository->findOneById($idArticulo);
+            foreach ($historialesViejos as $h) {
+              if ($h->getArticulo()->getId() == $idArticulo) {
+                $artActual->setCondicion($h->getCondicion());
+              }
+            }
+            $articulos[] = $artActual;
           }
         }
         $data=array();

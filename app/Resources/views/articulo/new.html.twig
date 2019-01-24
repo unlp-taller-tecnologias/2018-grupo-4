@@ -56,8 +56,8 @@
           <p id="textoMensaje"></p>
         </div>
         <div class="modal-footer">
-             <button type="submit" value="Delete" class="btn btn-dark">Aceptar</button>
-            <button type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
+             <button id="btSubmit" type="submit" value="Delete" class="btn btn-dark">Aceptar</button>
+            <button  id="btCencelar" type="button" class="btn btn-dark" data-dismiss="modal">Cancelar</button>
           {{ form_end(form) }}
         </div>
       </div>
@@ -75,13 +75,25 @@ $('#btnGuardar').click(function(){
   var leyenda = "";
   var denominacion = $('#appbundle_articulo_denominacion').val();
   var nroAct = $('#appbundle_articulo_numInventario').val();
-  for (var i = 0; i < $('#cantidad').val(); i++) {
-    leyenda += "<p class=\"texto\"> (*) Número de inventario: "+ nroAct +" - Denominación: "+ denominacion +"<p>";
-    nroAct++;
+  if (validateNroInventario(nroAct)) {
+    $('#btSubmit').toggle(true);
+    $('#btCencelar').text("Cancelar");
+    var array = nroAct.split("-");
+    var numInt = array[2];
+    for (var i = 0; i < $('#cantidad').val(); i++) {
+      leyenda += "<p class=\"texto\"> (*) Número de inventario: "+array[0]+"-"+array[1]+"-"+ numInt +" - Denominación: "+ denominacion +"<p>";
+      numInt++;
+    }
+    $('#textoMensaje').text("Se agregarán  "+ $('#cantidad').val() + " artículo/s "+ $('#appbundle_articulo_denominacion').val() + " con los siguientes números de inventario:");
+    $('.texto').remove();
+    $('#modal-body').append(leyenda);
+  }else {
+    $('#btSubmit').toggle(false);
+    $('#btCencelar').text("Aceptar");
+    $('#textoMensaje').text("Error: el número de inventario ingresado no es válido. El fomato válido es: 0000-0000-nro artículo");
+    $('.texto').remove();
+    $('#modal-body').append(leyenda);
   }
-  $('#textoMensaje').text("Se agregarán  "+ $('#cantidad').val() + " artículo/s "+ $('#appbundle_articulo_denominacion').val() + " con los siguientes números de inventario:");
-  $('.texto').remove();
-  $('#modal-body').append(leyenda);
 });
   $form.submit(function(){
   $num.val($numActual.val());
@@ -95,6 +107,19 @@ $('#btnGuardar').click(function(){
   $("#appbundle_articulo_tipo").find('[value="{{id}}"]').remove();
 {% endfor %}
 
+function validateNroInventario(value){
+  var array = value.split("-");
+  if (array.length != 3) {
+    return false;
+  }
+  if ((isNaN(array[0])) | (isNaN(array[1])) | (isNaN(array[2])) ) {
+    return false;
+  }
+  if ((array[0].length > 4 | array[0].length < 1) | (array[1].length > 4 | array[1].length < 1)) {
+    return false;
+  }
+  return  true;
+}
 
 </script>
 {% endblock %}

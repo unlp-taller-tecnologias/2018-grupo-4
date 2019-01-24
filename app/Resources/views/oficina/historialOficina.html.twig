@@ -9,26 +9,28 @@
     <h2>Historial de artículos transferidos de {{oficina.nombre}}</h2>
     <hr>
     <table class="table table">
-        <tbody>
           {% if historiales is empty %}
           <th scope="row"><div class="alert alert-info" role="alert">
             El historial de {{oficina.nombre}} está vacío, no hay artículos que hayan sido transferidos hasta el momento.
           </div></th>
           {% else %}
-              {%  for h in historiales %}
+
+              <table class="table table-striped">
+                <tr class="table-active">
+                    <th scope="row">Fecha</th>
+                    <th scope="row">Artículo</th>
+                    <th scope="row">Número inventario</th>
+                    <th scope="row">Ha sido transferido a</th>
+                </tr>
+                {%  for h in historiales %}
                 <tr>
-                    <th scope="row">En la fecha:</th>
-                    <td scope="row">{{ h.fecha|date('d-m-Y') }}</td>
-                    <th scope="row">El artículo:</th>
-                    <td scope="row">{{ h.articulo.denominacion }}</td>
-                    <th scope="row">Núm. inventario:</th>
-                    <td>{{h.articulo.numInventario}}</td>
-                    <th scope="row">Ha sido transferido a:</th>
-                    <td>{{h.articulo.oficina}}</td>
+                  <td scope="row">{{ h.fecha|date('d-m-Y') }}</td>
+                  <td scope="row">{{ h.articulo.denominacion }}</td>
+                  <td>{{h.articulo.numInventario}}</td>
+                  <td>{{h.articulo.oficina}}</td>
                 </tr>
                 {% endfor %}
           {% endif %}
-        </tbody>
     </table>
 </div>
 {% endblock %}

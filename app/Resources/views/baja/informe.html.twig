@@ -7,26 +7,42 @@
   <br>
   <a href="/informes"><i class="fas fa-angle-left"></i> Volver a Informes</a>
   <hr>
-  <h2>Informe de Baja de artículos</h2>
+  <h2>Informe de Baja</h2>
   <hr>
-  <h5>Detalle de la Baja</h5>
+  <a class="btn btn-dark" href="{{ path('baja_informePDF', {'id': baja.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i>
+ Generar PDF</a><br>
+  <h5 style="padding-top:25px;">Informe de Baja de artículos</h5>
+  <label>Detalle de la Baja</label><br>
   <label>Realizada en: {{oficinaOrigen}} </label><br>
   <label>Responsable actual de oficina: {{oficinaOrigen.responsableOficina}}</label><br>
   <label>Fecha: {{baja.fecha|date('d-m-Y')}}</label><br>
   <label>Número de expediente: {{baja.expediente}}</label><br><br>
-  <h5>Listado de artículos dados de baja:</h5>
-  {% for i in articulos %}
-    <label>Número de Inventario: {{i.numInventario}} - Denominación: {{i.denominacion}}</label>
-  {% endfor %}
+  <h5>Listado de artículos dados de baja</h5>
+  <table class="table table-striped">
+    <tr>
+      <th scope="col">Número de inventario</th>
+      <th scope="col">Denominación</th>
+    </tr>
+    {% for i in articulos %}
+    <tr>
+      <td>{{i.numInventario}}</td>
+      <td>{{i.denominacion}}</td>
+    </tr>
+    {% endfor %}
+  </table>
   <br><br>
 
   {% if tieneObservaciones %}
-    <h5>Observaciones de la baja:</h5>
-    <label>{{baja.observaciones}}</label><br><br>
+  <div class="border border-dark">
+    <div style="margin:5px;">
+      <h5>Observaciones de la baja</h5>
+      <label>{{baja.observaciones}}</label><br><br>
+    </div>
+  </div>
+
   {% endif %}
 
-  <a class="btn btn-dark" href="{{ path('baja_informePDF', {'id': baja.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i>
- Generar PDF</a>
+
   </div>
 </div>
 {% endblock %}

@@ -29,23 +29,23 @@
               </div>
               <table id="table"
                class="table table-hover table-striped"
-
                data-toggle="table"
                data-toolbar="#toolbar"
                data-search="true"
                data-height = "600"
                data-pagination="false"
                data-click-to-select="true"
+               data-maintain-selected = "true"
                data-url="{{ path('oficina_show_listadoActivos', { 'oficina': oficina }) }}">
                <thead>
                  <tr>
                    <th data-field="state" data-checkbox="true"></th>
-                   <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-                   <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                   <th scope="row" data-field="numInventario">Nro. Inventario</th>
+                   <th scope="row" data-field="denominacion">Denominación</th>
                    <!-- <th scope="row" data-field="estado" data-sortable="true">Estado</th> -->
                    <!-- <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th> -->
-                   <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-                   <th scope="row" data-field="condicion" data-sortable="true">Condicion</th>
+                   <th scope="row" data-field="tipo">Tipo</th>
+                   <th scope="row" data-field="condicion">Condicion</th>
                  </tr>
                </thead>
             </table>
@@ -62,17 +62,18 @@
                data-pagination="false"
                data-height = "600"
                data-search="true"
+               data-maintain-selected = "true"
                data-click-to-select="true"
                data-url=>
                <thead>
                  <tr>
                    <th data-field="state" data-checkbox="true"></th>
-                   <th scope="row" data-field="numInventario" data-sortable="true">Nro. Inventario</th>
-                   <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
+                   <th scope="row" data-field="numInventario">Nro. Inventario</th>
+                   <th scope="row" data-field="denominacion">Denominación</th>
                    <!-- <th scope="row" data-field="estado" data-sortable="true">Estado</th> -->
                    <!-- <th scope="row" data-field="numExpediente" data-sortable="true">Nro. Expediente</th> -->
-                   <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-                   <th scope="row" data-field="condicion" data-sortable="true">Condicion</th>
+                   <th scope="row" data-field="tipo">Tipo</th>
+                   <th scope="row" data-field="condicion">Condicion</th>
                  </tr>
                </thead>
             </table><br>
@@ -197,7 +198,7 @@
               let id = `condicion_${value.numInventario}`;
                 $('#condiciones').append(`
                   <div class="form-group ${id}_container">
-                    <label class="idsArticulo" for="condiciones['${value.numInventario}']" >${value.denominacion}</label>
+                    <label class="idsArticulo" for="condiciones['${value.numInventario}']" >${value.denominacion} - Número de inventario: ${value.numInventario}</label>
                     <input type="hidden" class="hiddenIds" name="" id="${value.id}" value="${value.id}">
                     <select class="form-control" class="condicionesSelect" name="${value.id}'" id="el${value.id}" required>
                         <option class="asd" value="" >Seleccione</option>
@@ -231,7 +232,6 @@
                    $array.push(value.numInventario);
                 });
               $tabla = $('#table');
-              console.log($array);
               $tabla.bootstrapTable('remove', {
                 field: 'numInventario',
                 values: $array
@@ -256,7 +256,7 @@
         if (createInput) {
           $('#condiciones').append(`
             <div class="form-group ${id}_container">
-              <label class="idsArticulo" for="condiciones['${data.numInventario}']" >${data.denominacion}</label>
+              <label class="idsArticulo" for="condiciones['${data.numInventario}']" >${data.denominacion} - Número de inventario: ${data.numInventario}</label>
               <input type="hidden" class="hiddenIds" name="" id="${data.id}" value="${data.id}">
               <select class="form-control" class="condicionesSelect" name="${data.id}'" id="el${data.id}" required>
                   <option class="asd" value="" >Seleccione</option>
@@ -337,7 +337,6 @@
       if (c == ""){
         c = null;
       }
-      console.log(oficinaDestino);
       $.ajax({
         url:" " ,
         method: "POST",
@@ -350,7 +349,6 @@
                 "idsArticulos": c
               } ,
         success: function(data) {
-          console.log(oficinaDestino);
 
           $('#flash').append(`<div class="alert alert-info alert-dismissible fade show" role="alert">
           <strong>La transferencia ha sido guardada con éxito.</strong>
@@ -381,13 +379,10 @@
     var idsIds = $('.hiddenIds').each(function() {
       idsArticulosArray.push($(this).val());
     });
-    console.log(idsArticulosArray);
     b = idsCondicionesArray.join(",");
     $condicionesIds.val(b);
     c = idsArticulosArray.join(",");
     $articsIds.val(c);
-    console.log(c);
-    console.log(b);
     var fecha  = $('#appbundle_transferencia_fecha').val();
     var oficinaDestino = $('#oficinaDestino').val();
     var observaciones = $('#appbundle_transferencia_observaciones').val();
@@ -415,7 +410,6 @@
       const $dataT = $('#table1').bootstrapTable('getAllSelections');
         $.each( $dataT, function( key, value ) {
           $("input[id='" + value.id + "']").remove();
-          console.log(art.val());
         });
     });
     $articulosId = $('#articulosIds');
@@ -442,7 +436,6 @@
           $condicionesIds.val(b);
           c = idsArticulosArray.join(",");
           $articsIds.val(c);
-          console.log(c);
           var a = "";
           var $dataTranfe = $tableTest.bootstrapTable('getData');//devuelve un json
           var ids = $.map($tableTest.bootstrapTable('getData'), function (row) {

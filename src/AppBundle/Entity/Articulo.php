@@ -32,7 +32,7 @@ class Articulo
     /**
      * @var string
      *
-     * @ORM\Column(name="num_inventario", type="integer", length=100, unique=true)
+     * @ORM\Column(name="num_inventario", type="string", length=100, unique=true)
      */
     private $numInventario;
 
@@ -834,4 +834,9 @@ class Articulo
         $this->historiales = new ArrayCollection();
     }
 
+    public function getNumInventarioINT()
+    {
+      $porciones = explode("-", $this->numInventario);
+      return $porciones[2];
+    }
 }

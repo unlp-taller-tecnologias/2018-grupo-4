@@ -11,9 +11,42 @@
       {{ form_start(edit_form) }}
       {{ form_widget(edit_form.oficina, { 'attr': {'class': 'form-control', 'hidden': 'true' }}) }}
       {{ form_widget(edit_form) }}
+      {{ form_errors(edit_form) }}
       {% if is_granted("ROLE_ADMIN") %}
-        <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+        <button  id="btnGuardar"  class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
       {% endif %}
       {{ form_end(edit_form) }}
-    </div>
+{% endblock %}
+{% block serchArticulos  %}
+<script>
+$form = $('edit_form');
+$('#btnGuardar').click(function(){
+  var nroAct = $('#appbundle_articulo_numInventario').val();
+  $( "#btnGuardar" ).removeAttr( "type");
+  $( "#btnGuardar" ).removeAttr( "value");
+  if (validateNroInventario(nroAct)) {
+    $( "#btnGuardar" ).attr( "type","submit");
+    $( "#btnGuardar" ).attr( "value","submit");
+    return true;
+  }else {
+    $('.texto').remove();
+    $('#appbundle_articulo_numInventario').after("<p class=\"texto text-danger\">Error: el número de inventario ingresado no es válido.<small>El fomato válido es: 0000-0000-nro artículo</small></p>");
+    $("html, body").animate({scrollTop: $('#appbundle_articulo_numInventario').offset().top }, 800);
+    return false;
+  }
+});
+function validateNroInventario(value){
+  var array = value.split("-");
+  if (array.length != 3) {
+    return false;
+  }
+  if ((isNaN(array[0])) | (isNaN(array[1])) | (isNaN(array[2])) ) {
+    return false;
+  }
+  if ((array[0].length > 4 | array[0].length < 1) | (array[1].length > 4 | array[1].length < 1)) {
+    return false;
+  }
+  return  true;
+}
+</script>
 {% endblock %}

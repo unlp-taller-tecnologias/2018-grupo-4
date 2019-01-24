@@ -84,7 +84,8 @@
 <script>
 var docDefinition = {
   pageOrientation: 'landscape',
-  pageMargins: [ 20, 30, 20, 30 ],
+  pageSize: 'A4',
+  pageMargins: [ 5, 30, 5, 30 ],
   footer: function(currentPage, pageCount) { return '' + currentPage.toString() + ' de ' + pageCount + ' páginas'; },
   header: function(currentPage, pageCount, pageSize) {
 
@@ -110,7 +111,7 @@ var docDefinition = {
     }
   ],
   defaultStyle: {
-    fontSize: 8,
+    fontSize: 7,
     bold: false
   }
 };
