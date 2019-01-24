@@ -29,9 +29,11 @@ class TipoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $tipos = $em->getRepository('AppBundle:Tipo')->findAll();
         $editado = $request->query->get('editado');
+        $mensaje = $request->query->get('mensaje');
         return $this->render('tipo/index.html.twig', array(
             'tipos' => $tipos,
             'editado' => $editado,
+            'mensaje' => $mensaje
         ));
     }
 
@@ -55,7 +57,9 @@ class TipoController extends Controller
             $em->persist($tipo);
             $em->flush();
 
-            return $this->redirectToRoute('tipo_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('tipo_index', array('editado' => 'editado',
+              'mensaje' => 'El tipo se ha creado con éxito.'
+            ));
         }
 
         return $this->render('tipo/new.html.twig', array(
@@ -160,7 +164,9 @@ class TipoController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('tipo_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('tipo_index', array('editado' => 'editado',
+                'mensaje' => 'El tipo se ha editado con éxito.'
+          ));
         }
 
         return $this->render('tipo/edit.html.twig', array(
@@ -185,7 +191,9 @@ class TipoController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('tipo_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('tipo_index', array('editado' => 'editado',
+                'mensaje' => 'La visibilidad del tipo se ha cambiado con éxito.'
+          ));
         }
 
         return $this->render('tipo/edit.html.twig', array(

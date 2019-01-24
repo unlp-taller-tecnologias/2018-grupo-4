@@ -33,9 +33,11 @@ class UserController extends Controller
 
         $users = $em->getRepository('AppBundle:User')->findAll();
         $editado = $request->query->get('editado');
+        $mensaje = $request->query->get('mensaje');
         return $this->render('user/index.html.twig', array(
             'users' => $users,
             'editado' => $editado,
+            'mensaje' => $mensaje
         ));
     }
 
@@ -59,7 +61,9 @@ class UserController extends Controller
             $em->persist($user);
             $em->flush();
 
-            return $this->redirectToRoute('user_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('user_index', array('editado' => 'editado',
+            'mensaje' => 'El usuario se ha creado con éxito'
+          ));
         }
 
         return $this->render('user/new.html.twig', array(
@@ -105,7 +109,10 @@ class UserController extends Controller
             $userManager->updatePassword($user);
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('user_index', array(
+              'editado' => 'editado',
+              'mensaje' => 'El usuario se ha editado con éxito'
+            ));
         }
 
         return $this->render('user/edit.html.twig', array(
@@ -164,7 +171,8 @@ class UserController extends Controller
           $em = $this->getDoctrine()->getManager();
           $em->remove($user);
           $em->flush();
-          return $this->redirectToRoute('user_index', array('editado' => 'editado'));
+          return $this->redirectToRoute('user_index', array('editado' => 'editado',
+          'mensaje' => 'El usuario se ha eliminado con éxito'));
         }
         catch (\Exception $e) {
           return $this->redirectToRoute('user_edit', array('id'=> $user->getId(), 'eliminado' => 'eliminado'));

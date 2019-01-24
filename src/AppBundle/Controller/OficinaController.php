@@ -362,17 +362,21 @@ class OficinaController extends Controller
         'rows' => array()
       );
       $condicionInicial = null;
+      $fechaEntrada = null;
       foreach($articulos as $articulo) {
-
+          $fechas = array();
+          $fechaEntrada = $articulo->getFechaEntrada()->format('d-m-Y');
           $condiciones = array();
           $historialesCollection = $articulo->getHistoriales();
           if (!($historialesCollection->isEmpty())) {
               foreach ($historialesCollection as $h) {
                 if ($h->getTransferencia() != null) {
                   $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
+                  $fechas[] = ($h->getFecha() != null)? $h->getFecha()->format('d-m-Y'):null;
                 }
               }
           }else{
+
             if ($articulo->getCondicion() != null) {
               $condicionInicial = $articulo->getCondicion()->getNombre();
             }else{
@@ -380,6 +384,7 @@ class OficinaController extends Controller
             }
 
           }
+          $fecha = end($fechas);
           $condicion = end($condiciones);
           $rawResponse['rows'][] = array(
             'id' => $articulo->getId(),
@@ -390,7 +395,7 @@ class OficinaController extends Controller
             'tipo' => (!is_null($articulo->getTipo())) ? $articulo->getTipo()->getConcepto() : null,
             'estado' => $articulo->getEstado()->getNombre(),
             'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
-            'condicion' => ($condicion) ? $condicion : $condicionInicial,
+            'condicion' => ($condicion != 0) ? $condicion : $condicionInicial,
             'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
             'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
             'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
@@ -401,7 +406,7 @@ class OficinaController extends Controller
             'cajones' =>  ($articulo->getNumsCajones()) ? $articulo->getNumsCajones() : null,
             'detalleOrigen' =>  ($articulo->getDetalleOrigen()) ? $articulo->getDetalleOrigen() : null,
             'importe' =>  ($articulo->getImporte()) ? $articulo->getImporte() : null,
-            'fechaEntrada' => $articulo->getFechaEntrada()->format('d-m-Y'),
+            'fechaEntrada' => ($fecha !=0 ) ? $fecha : $fechaEntrada,
             'codigoCuentaSubcuenta' =>  ($articulo->getCodigoCuentaSubcuenta()) ? $articulo->getCodigoCuentaSubcuenta() : null,
           );
       };

@@ -31,9 +31,11 @@ class estadoAdicionalController extends Controller
 
         $estados = $em->getRepository('AppBundle:estadoAdicional')->findAll();
         $editado = $request->query->get('editado');
+        $mensaje = $request->query->get('mensaje');
         return $this->render('estadoAdicional/index.html.twig', array(
             'estados' => $estados,
-            'editado' => $editado
+            'editado' => $editado,
+            'mensaje' => $mensaje
         ));
     }
     /**
@@ -118,7 +120,9 @@ class estadoAdicionalController extends Controller
            //  $estado->setHabilitado($habilitado);
              $em->persist($estado);
              $em->flush();
-             return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado'));
+             return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado',
+             'mensaje' => 'El estado adicional se ha creado con éxito'
+           ));
          }
 
          return $this->render('estadoAdicional/new.html.twig', array(
@@ -160,7 +164,9 @@ class estadoAdicionalController extends Controller
       if ($editForm->isSubmitted() && $editForm->isValid()) {
           $this->getDoctrine()->getManager()->flush();
 
-          return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado'));
+          return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado',
+          'mensaje' => 'El estado adicional se ha editado con éxito'
+        ));
       }
 
       return $this->render('estadoAdicional/edit.html.twig', array(
@@ -207,7 +213,9 @@ class estadoAdicionalController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('estadoAdicional_index', array('editado' => 'editado',
+            'mensaje' => 'La visbilidad del estado adicional se ha editado con éxito'
+          ));
         }
 
         return $this->render('estadoAdicional/edit.html.twig', array(

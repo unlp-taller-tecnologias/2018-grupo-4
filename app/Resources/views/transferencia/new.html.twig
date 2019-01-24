@@ -8,7 +8,7 @@
     <hr>
     <h2>Transferencia en {{nombreOficina}} </h2>
     <hr>
-    <div id="guardada">
+    <div id="flash">
     </div>
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
@@ -90,7 +90,7 @@
           <hr><br>
             <label>Oficina destino(*)</label>
             <select  id="oficinaDestino" name="oficinaDestino" class="form-control" name="" required>
-              <option value="">Seleecione</option>
+              <option value="">Seleccione</option>
                   {% for o in oficinas %}
                     {{o.nombre}}
                     {% if continuada %}
@@ -299,7 +299,12 @@
     function validarArticulos(){
       $tabla = $('#table1');
       if ($tabla.bootstrapTable('getData') == ""){
-        alert('Debe ingresar al menos un articulo a la transferencia');
+        $('#flash').append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Debe ingresar al menos un articulo a la transferencia.</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        </div> `);
         return false;
       }else{
         return true;
@@ -347,7 +352,7 @@
         success: function(data) {
           console.log(oficinaDestino);
 
-          $('#guardada').append(`<div class="alert alert-info alert-dismissible fade show" role="alert">
+          $('#flash').append(`<div class="alert alert-info alert-dismissible fade show" role="alert">
           <strong>La transferencia ha sido guardada con éxito.</strong>
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>

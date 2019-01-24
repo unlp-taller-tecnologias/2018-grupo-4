@@ -30,9 +30,11 @@ class CondicionController extends Controller
 
         $condicions = $em->getRepository('AppBundle:Condicion')->findAll();
         $editado = $request->query->get('editado');
+        $mensaje = $request->query->get('mensaje');
         return $this->render('condicion/index.html.twig', array(
             'condicions' => $condicions,
             'editado' => $editado,
+            'mensaje' => $mensaje,
         ));
     }
 
@@ -119,7 +121,9 @@ class CondicionController extends Controller
             $em->persist($condicion);
             $em->flush();
 
-            return $this->redirectToRoute('condicion_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('condicion_index', array('editado' => 'editado',
+            'mensaje' => 'La condicion se ha creado con éxito.'
+          ));
         }
 
         return $this->render('condicion/new.html.twig', array(
@@ -161,7 +165,9 @@ class CondicionController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('condicion_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('condicion_index', array('editado' => 'editado',
+            'mensaje' => 'La condicion se ha creado con éxito.'
+          ));
         }
 
         return $this->render('condicion/edit.html.twig', array(
@@ -187,7 +193,9 @@ class CondicionController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('condicion_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('condicion_index', array('editado' => 'editado',
+            'mensaje' => 'La visibilidad de la condicion se ha editado con éxito.'
+          ));
         }
 
         return $this->render('condicion/edit.html.twig', array(

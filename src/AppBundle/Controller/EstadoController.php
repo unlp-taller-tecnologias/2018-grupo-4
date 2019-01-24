@@ -31,8 +31,10 @@ class EstadoController extends Controller
 
         $estados = $em->getRepository('AppBundle:Estado')->findAll();
         $editado = $request->query->get('editado');
+        $mensaje =  $request->query->get('mensaje');
         return $this->render('estado/index.html.twig', array(
             'estados' => $estados,
+            'mensaje' => $mensaje,
             'editado' => $editado,
         ));
     }
@@ -119,7 +121,9 @@ class EstadoController extends Controller
             $em->persist($estado);
             $em->flush();
 
-            return $this->redirectToRoute('estado_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('estado_index', array('editado' => 'editado',
+            'mensaje' => 'El estado se ha creado con éxito.'
+          ));
         }
 
         return $this->render('estado/new.html.twig', array(
@@ -161,7 +165,9 @@ class EstadoController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('estado_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('estado_index', array('editado' => 'editado',
+              'mensaje' => 'El estado se ha editado con éxito.'
+          ));
         }
 
         return $this->render('estado/edit.html.twig', array(
@@ -186,7 +192,9 @@ class EstadoController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('estado_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('estado_index', array('editado' => 'editado',
+              'mensaje' => 'La visibilidad del estado se ha cambiado con éxito.'
+          ));
         }
 
         return $this->render('estado/edit.html.twig', array(

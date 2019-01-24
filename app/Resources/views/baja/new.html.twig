@@ -7,7 +7,7 @@
   <hr>
   <h2>Baja en {{nombreOficina}}</h2>
   <hr>
-  <div id="guardada">
+  <div id="flash">
   </div>
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item">
@@ -270,7 +270,12 @@
 
           $tabla = $('#table1');
           if ($tabla.bootstrapTable('getData') == ""){
-            alert('Debe ingresar al menos un articulo a la baja');
+            $('#flash').append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Debe ingresar al menos un articulo a la baja.</strong>
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div> `);
             return false;
           }else{
             return true;
@@ -319,7 +324,7 @@
 
 
               $tableTest.bootstrapTable('load',data);
-              $('#guardada').append(`<div class="alert alert-info alert-dismissible fade show" role="alert">
+              $('#flash').append(`<div class="alert alert-info alert-dismissible fade show" role="alert">
                 <strong>La baja ha sido guardada con éxito.</strong>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
