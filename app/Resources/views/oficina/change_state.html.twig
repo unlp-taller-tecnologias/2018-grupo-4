@@ -22,7 +22,7 @@
       </div>
     </div>
     </div>
-    <h5>Seleccione artículo/s del {{oficina.nombre}} para el cambio de estado adicional</h5>
+    <h5>Seleccione artículo/s para el cambio de estado adicional</h5>
     <hr>
     <div class="table-responsive">
       <table id="tablaArticulos"
@@ -30,18 +30,19 @@
               data-toggle="table"
               data-pagination="false"
               data-search="true"
+              data-maintain-selected = "true"
               data-search-align="left"
               data-url="{{ path('oficina_show_listado_change', { 'oficina': oficina.id }) }}"
               >
         <thead>
           <tr>
             <th data-field="state" data-checkbox="true"></th>
-            <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
-            <th scope="row" data-field="numExpediente" data-sortable="true">NroExpediente</th>
-            <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-            <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
-            <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-            <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
+            <th scope="row" data-field="numInventario">NroInventario</th>
+            <th scope="row" data-field="numExpediente">NroExpediente</th>
+            <th scope="row" data-field="denominacion">Denominación</th>
+            <th scope="row" data-field="tipo">Tipo</th>
+            <th scope="row" data-field="estado">Estado</th>
+            <th scope="row" data-field="estadoAdicional">Estado Adicional</th>
           </tr>
         </thead>
       </table>
@@ -109,7 +110,7 @@ $("button").click(function(){
     success: function(data) {
       $.ajax({
         method: "GET",
-        url: "{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}",
+        url: "{{ path('oficina_show_listado_change', { 'oficina': oficina.id }) }}",
         success: function(data) {
           articulos.bootstrapTable('load',data);
 

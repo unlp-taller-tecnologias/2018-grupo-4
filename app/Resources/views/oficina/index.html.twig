@@ -53,9 +53,9 @@
               >
         <thead>
           <tr>
-            <th scope="row" data-field="nombre" data-sortable="true">Nombre</th>
-            <th scope="row" data-field="numeroCarpeta" data-sortable="true">Nro. de carpeta</th>
-            <th scope="row" data-field="responsableOficina" data-sortable="true">Responsable</th>
+            <th scope="row" data-field="nombre"="true">Nombre</th>
+            <th scope="row" data-field="numeroCarpeta">Nro. de carpeta</th>
+            <th scope="row" data-field="responsableOficina">Responsable</th>
             <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
           </tr>
         </thead>
@@ -118,10 +118,10 @@ $("button").click(function(){
     edit = edit.replace('-1', value);
     return [
       {% if is_granted("ROLE_ADMIN") %}
-      `<a class="edit ml10" href="${show}" title="Ver oficina"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
-      <a class="edit ml10" href="${edit}" title="Editar oficina"><i class="fas fa-edit"></i></a>`,
+      `<a class="edit ml10 btn btn-sm btn-outline-primary" href="${show}" title="Ver oficina"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+      <a class="edit ml10 btn btn-sm btn-outline-primary" href="${edit}" title="Editar oficina"><i class="fas fa-edit"></i></a>`,
       {% else %}
-        `<a class="edit ml10" href="${show}" title="Ver oficina"><i class="fas fa-search-plus"></i></a>`,
+        `<a class="edit ml10 btn btn-sm btn-outline-primary" href="${show}" title="Ver oficina"><i class="fas fa-search-plus"></i></a>`,
       {% endif %}
     ].join('');
   }

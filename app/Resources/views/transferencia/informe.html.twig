@@ -1,33 +1,58 @@
 {% extends 'layout.html.twig' %}
 
 {% block content %}
-
 <div id="printJS-div">
 <div class="container">
   <br>
   <a href="/informes"><i class="fas fa-angle-left"></i> Volver a Informes</a>
   <hr>
-  <h2>Informe de Transferencia de artículos</h2>
+  <h2>Informe de Transferencia</h2>
   <hr>
-  <h5>Detalle de la Transferencia</h5>
+  <a class="btn btn-dark" href="{{ path('informePDF', {'id': transferencia.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i> Generar PDF</a><br>
+
+  <h5 style="padding-top:25px;">Informe de Transferencia de artículos</h5>
+
+  <label>Detalle de la Transferencia</label><br>
   <label>Realizada desde: {{oficinaOrigen}} </label><br>
+  <label>Responsable actual de {{oficinaOrigen}}: {{oficinaOrigen.responsableOficina}}</label><br>
   <label>Hacia: {{oficinaDestino}}</label><br>
+  <label>Responsable actual de {{oficinaDestino}}: {{oficinaDestino.responsableOficina}}</label><br>
   <label>Fecha: {{transferencia.fecha|date('d-m-Y')}}</label><br><br>
 
-  <h5>Listado de artículos transferidos:</h5>
-  {% for i in articulos %}
-    <label>Número de Inventario:  {{i.getArticulo.numInventario}} - Denominación: {{i.getArticulo.denominacion}} - Condición: {{i.getCondicion}} </label><br>
-  {% endfor %}
-
-
+  <h5>Listado de artículos transferidos</h5>
+  <table class="table table-striped">
+    <tr>
+      <th scope="col">Número de inventario</th>
+      <th scope="col">Denominación</th>
+      <th scope="col">Condición</th>
+    </tr>
+    {% for i in articulos %}
+    <tr>
+      <td>{{i.getArticulo.numInventario}}</td>
+      <td>{{i.getArticulo.denominacion}}</td>
+      <td>{{i.getCondicion}}</td>
+    </tr>
+    {% endfor %}
+  </table>
   <br><br>
-
   {% if tieneObservaciones %}
-    <h5>Observaciones de la transferencia:</h5>
-    <label>{{transferencia.observaciones}}</label><br><br>
+  <div class="border border-dark">
+    <div style="margin:5px;">
+      <h5>Observaciones de la transferencia</h5>
+      <label>{{transferencia.observaciones}}</label><br><br>
+    </div>
+  </div>
   {% endif %}
-
-  <a class="btn btn-dark" href="{{ path('informePDF', {'id': transferencia.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i> Generar PDF</a>
+  <div style="margin-top:5px;">
+      <div class="border border-dark" style="margin-top:20px; margin-bottom:50px; text-align:center; padding-left: 81px; padding-right: 81px; float:left; ">
+          <p style="padding-top:60px;">_______________________________</p>
+          <p>Firma y aclaración de responsable actual de {{oficinaOrigen}}</p>
+      </div>
+      <div class="border border-dark" style="margin-top:20px; margin-bottom:50px; text-align:center; padding-left: 81px; padding-right: 81px; float:right;">
+          <p style="padding-top:60px;">_______________________________</p>
+          <p>Firma y aclaración de responsable actual de {{oficinaDestino}}</p>
+      </div>
+  </div>
   </div>
 </div>
 {% endblock %}

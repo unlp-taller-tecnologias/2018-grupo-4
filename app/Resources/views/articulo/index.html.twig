@@ -81,15 +81,15 @@
               >
         <thead>
           <tr>
-            <th scope="row" data-field="fechaEntrada" data-sortable="true">Fecha entrada</th>
-            <th scope="row" data-field="oficina" data-visible="true">Oficina</th>
-            <th scope="row" data-field="numInventario" data-sortable="true">NroInventario</th>
-            <th scope="row" data-field="denominacion" data-sortable="true">Denominación</th>
-            <th scope="row" data-field="estado" data-sortable="true">Estado</th>
-            <th scope="row" data-field="estadoAdicional" data-sortable="true">Estado Adicional</th>
-            <th scope="row" data-field="condicion" data-visible="true">Condicion</th>
+            <th scope="row" data-field="fechaEntrada">Fecha entrada</th>
+            <th scope="row" data-field="oficina">Oficina</th>
+            <th scope="row" data-field="numInventario">NroInventario</th>
+            <th scope="row" data-field="denominacion">Denominación</th>
+            <th scope="row" data-field="estado">Estado</th>
+            <th scope="row" data-field="estadoAdicional">Estado Adicional</th>
+            <th scope="row" data-field="condicion">Condicion</th>
             <!-- <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th> -->
-            <th scope="row" data-field="tipo" data-sortable="true">Tipo</th>
+            <th scope="row" data-field="tipo">Tipo</th>
             <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
 
             <!-- <th scope="row" data-field="material" data-visible="true">Material</th>
@@ -369,10 +369,10 @@ function operateFormatterAction(value, row, index) {
   edit = edit.replace('-1', value);
   return [
     {% if is_granted("ROLE_ADMIN") %}
-    `<a class="edit ml10" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
-    <a class="edit ml10" href="${edit}" title="Editar artículo"><i class="fas fa-edit"></i></a>`,
+    `<a class="edit ml10 btn btn-sm btn-outline-primary" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>&nbsp;&nbsp;
+    <a class="edit ml10 btn btn-sm btn-outline-primary" href="${edit}" title="Editar artículo"><i class="fas fa-edit"></i></a>`,
     {% else %}
-    `<a class="edit ml10" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>`,
+    `<a class="edit ml10 btn btn-sm btn-outline-primary" href="${show}" title="Ver artículo"><i class="fas fa-search-plus"></i></a>`,
     {% endif %}
   ].join('');
 }

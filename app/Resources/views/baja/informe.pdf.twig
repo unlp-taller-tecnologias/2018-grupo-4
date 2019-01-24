@@ -1,19 +1,44 @@
 <pdf>
     <dynamic-page>
+      <placeholders>
+        <footer>
+          <div height="20px">
+              <page-info format="Página %s de %s" />
+          </div>
+        </footer>
+      </placeholders>
+      <div>
+        <p text-align="right">Facultad de Cs. Médicas - UNLP</p>
+      </div>
       <h2>Informe de Baja de artículos</h2>
-      <h5>Detalle de la Baja</h5>
-      <h4>Realizada en: {{oficinaOrigen}} </h4>
-      <h4>Responsable actual de oficina: {{oficinaOrigen.responsableOficina}}</h4>
-      <h4>Fecha: {{baja.fecha|date('d-m-Y')}}</h4>
-      <h4>Número de expediente: {{baja.expediente}}</h4>
-      <h5>Listado de artículos dados de baja:</h5>
-      {% for i in articulos %}
-        <h4>Número de Inventario: {{i.numInventario}} - Denominación: {{i.denominacion}}</h4>
-      {% endfor %}
-      {% if tieneObservaciones %}
-        <h5>Observaciones de la baja:</h5>
-        <h4>{{baja.observaciones}}</h4>
-      {% endif %}
 
+      <h5 font-size="14px">Detalle de la Baja</h5>
+      <h4 font-size="14px">Realizada en: {{oficinaOrigen}} </h4>
+      <h4 font-size="14px">Responsable actual de oficina: {{oficinaOrigen.responsableOficina}}</h4>
+      <h4 font-size="14px">Fecha: {{baja.fecha|date('d-m-Y')}}</h4>
+      <h4 font-size="14px">Número de expediente: {{baja.expediente}}</h4>
+      <div>
+        <p font-style="bold" font-size="14px">Listado de artículos dados de baja</p>
+      </div>
+      <table>
+        <tr>
+            <td padding-left="3px" padding-bottom="2px" font-size="14px" font-style="bold">Número de inventario</td>
+            <td padding-left="3px" padding-bottom="2px" font-size="14px" font-style="bold">Denominación</td>
+        </tr>
+        {% for i in articulos %}
+        <tr>
+            <td padding-left="3px" padding-bottom="2px" font-size="14px">{{i.numInventario}}</td>
+            <td padding-left="3px" padding-bottom="2px" font-size="14px">{{i.denominacion}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+        {% if tieneObservaciones %}
+        <div margin-top="20px" border-color="black">
+          <h5 padding-left="3px" font-size="14px" margin-top="2px">Observaciones de la baja</h5>
+          <p padding-left="3px" font-size="14px">
+            {{baja.observaciones}}
+          </p>
+        </div>
+        {% endif %}
   </dynamic-page>
 </pdf>

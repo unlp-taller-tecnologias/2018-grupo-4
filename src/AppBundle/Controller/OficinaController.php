@@ -103,61 +103,6 @@ class OficinaController extends Controller
       };
 
       return new JsonResponse($rawResponse);
-
-      // $offset = $request->query->get('offset', 0);
-      // $limit = $request->query->get('limit', 10);
-      // $search = $request->query->get('search', null);
-      // $sort = $request->query->get('sort', 'nombre');
-      // $order = $request->query->get('order', 'asc');
-      //
-      // $em = $this->getDoctrine()->getManager();
-      // $repository = $em->getRepository('AppBundle:Oficina');
-      // $oficinasQuery = $repository
-      //   ->createQueryBuilder('oficina');
-      //
-      // if (!is_null($search) && strlen($search) > 0) {
-      //   $oficinasQuery
-      //     ->where('oficina.nombre like :nombre')
-      //     ->setParameter('nombre', '%'.$search.'%');
-      // }
-      //
-      // if (!is_null($sort) && !is_null($order)) {
-      //   $oficinasQuery
-      //     ->orderBy('oficina.'.$sort, $order);
-      // }
-      //
-      // $oficinas = $oficinasQuery
-      //   ->setMaxResults($limit)
-      //   ->setFirstResult($offset)
-      //   ->getQuery()
-      //   ->getResult();
-      //
-      // $totalQuery = $repository->createQueryBuilder('oficina')
-      //   ->select('count(oficina.id)');
-      // if (!is_null($search) && strlen($search) > 0) {
-      //   $totalQuery
-      //     ->where('oficina.nombre like :nombre')
-      //     ->setParameter('nombre', '%'.$search.'%');
-      // }
-      // $total = $totalQuery
-      //   ->getQuery()
-      //   ->getSingleScalarResult();
-      //
-      // $rawResponse = array(
-      //   'total' => $total,
-      //   'rows' => array()
-      // );
-      //
-      // foreach($oficinas as $oficina) {
-      //   $rawResponse['rows'][] = array(
-      //     'id' => $oficina->getId(),
-      //     'nombre' => $oficina->getNombre(),
-      //     'numeroCarpeta' => $oficina->getNumeroCarpeta(),
-      //     'responsableOficina' => $oficina->getResponsableOficina()
-      //   );
-      // };
-      //
-      // return new JsonResponse($rawResponse);
     }
 
     /**
@@ -368,7 +313,7 @@ class OficinaController extends Controller
           $historialesCollection = $articulo->getHistoriales();
           if (!($historialesCollection->isEmpty())) {
               foreach ($historialesCollection as $h) {
-                if ($h->getTransferencia() != null) {
+                if ($h->getTransferencia() != null && $h->getTransferencia()->getFinalizada() != 2) {
                   $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
                 }
               }
@@ -416,7 +361,7 @@ class OficinaController extends Controller
      */
     public function showListadoChangeAction(Request $request, Oficina $oficina) {
       $offset = $request->query->get('offset', 0);
-      $limit = $request->query->get('limit', 10);
+      $limit = $request->query->get('limit', null);
       $search = $request->query->get('search', null);
       $sort = $request->query->get('sort', 'denominacion');
       $order = $request->query->get('order', 'asc');
@@ -434,7 +379,7 @@ class OficinaController extends Controller
         $historialesCollection = $articulo->getHistoriales();
         if (!($historialesCollection->isEmpty())) {
             foreach ($historialesCollection as $h) {
-              if ($h->getTransferencia() != null) {
+              if ($h->getTransferencia() != null && $h->getTransferencia()->getFinalizada() != 2) {
                 $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
               }
             }
@@ -517,7 +462,7 @@ class OficinaController extends Controller
         $historialesCollection = $articulo->getHistoriales();
         if (!($historialesCollection->isEmpty())) {
             foreach ($historialesCollection as $h) {
-              if ($h->getTransferencia() != null) {
+              if ($h->getTransferencia() != null && $h->getTransferencia()->getFinalizada() != 2) {
                 $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
               }
             }
@@ -684,7 +629,7 @@ class OficinaController extends Controller
           $historialesCollection = $articulo->getHistoriales();
           if (!($historialesCollection->isEmpty())) {
               foreach ($historialesCollection as $h) {
-                if ($h->getTransferencia() != null) {
+                if ($h->getTransferencia() != null && $h->getTransferencia()->getFinalizada() != 2) {
                   $condiciones[] = ($h->getCondicion() != null)? $h->getCondicion()->getNombre():null;
                 }
               }
