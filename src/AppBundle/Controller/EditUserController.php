@@ -113,6 +113,7 @@ class EditUserController extends Controller
 
 							return $this->redirectToRoute('editUser_ver', array('id' => $user->getId(),
 			            'editado' => 'editado',
+									'mensaje' => 'El usuario ha sido editado con exito'
 			        ));
 		    	}
 							// return $this->redirectToRoute('editUser_edit', array('editado' => 'editado',
@@ -264,9 +265,11 @@ class EditUserController extends Controller
 	public function showAction(User $user, Request $request)
 	{
 			$editado = $request->query->get('editado');
+			$mensaje = $request->query->get('mensaje');
     	return $this->render('user/ver.html.twig', array(
         	'user' => $user,
 					'editado' => $editado,
+					'mensaje' => $mensaje
     	));
 	}
 }

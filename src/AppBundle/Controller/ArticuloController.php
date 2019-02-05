@@ -52,9 +52,11 @@ class ArticuloController extends Controller
 
         $articulos = $em->getRepository('AppBundle:Articulo')->findAll();
         $editado = $request->query->get('editado');
+        $mensaje = $request->query->get('mensaje');
         return $this->render('articulo/index.html.twig', array(
             'articulos' => $articulos,
             'editado' => $editado,
+            'mensaje' => $mensaje
         ));
     }
 
@@ -68,10 +70,12 @@ class ArticuloController extends Controller
     {
         // $deleteForm = $this->createDeleteForm($articulo);
         $editado = $request->query->get('editado');
+        $mensaje = $request->query->get('mensaje');
         return $this->render('articulo/show.html.twig', array(
             'articulo' => $articulo,
             // 'delete_form' => $deleteForm->createView(),
             'editado' => $editado,
+            'mensaje' => $mensaje
         ));
     }
 
@@ -348,7 +352,9 @@ class ArticuloController extends Controller
           }
           $em->persist($articulo);
           $em->flush();
-          return $this->redirectToRoute('oficina_show', array('id' => $oficinaId, 'editado' => 'editado'));
+          return $this->redirectToRoute('oficina_show', array('id' => $oficinaId, 'editado' => 'editado',
+            'mensaje' => 'El articulo se ha agregado con exito'
+          ));
         } else {
           for ($i=1; $i <= $cantidad; $i++) {
             $estado = $em->getRepository('AppBundle:Estado')->findOneByNombre('Activo');
@@ -395,7 +401,9 @@ class ArticuloController extends Controller
             $articulo->setCondicion($cond);
             $articulo->setTipo($tipo);
           }
-          return $this->redirectToRoute('oficina_show', array('id' => $oficinaId, 'editado' => 'editado'));
+          return $this->redirectToRoute('oficina_show', array('id' => $oficinaId, 'editado' => 'editado',
+            'mensaje' => 'El articulo se ha agregado con exito'
+          ));
         }
       }
     $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
@@ -505,7 +513,9 @@ class ArticuloController extends Controller
 
           $this->getDoctrine()->getManager()->flush();
           $oficinaIdToRedirect = ($articulo->getOficina())->getId();
-          return $this->redirectToRoute('oficina_show', array('id' => $oficinaIdToRedirect, 'editado'=>'editado'));
+          return $this->redirectToRoute('oficina_show', array('id' => $oficinaIdToRedirect, 'editado'=>'editado',
+          'mensaje' => 'El articulo se ha editado con exito'
+          ));
         }
 
         return $this->render('articulo/edit.html.twig', array(

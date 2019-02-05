@@ -267,6 +267,7 @@ class UserController extends Controller
         return $this->render('user/ver.html.twig', array(
             'user' => $user,
             'editado' => '',
+            'mensaje' =>''
             //'delete_form' => $deleteForm->createView(),
         ));
     }

@@ -1,6 +1,6 @@
 {% block navbar %}
 <div style="background-color: #1f898e; padding: 0%;" class="navbar navbar-dark navbar-expand-lg" >
-  <a href="/oficina"><img src="{{asset('images/unlpWhite.png')}}" alt="Logo Universidad Nacional de La Plata" style="width:190px; height:80px; padding-left: 30px; padding-top: 10px;"></a>
+  <a href="{{path('oficina_index')}}"><img src="{{asset('images/unlpWhite.png')}}" alt="Logo Universidad Nacional de La Plata" style="width:190px; height:80px; padding-left: 30px; padding-top: 10px;"></a>
 </div>
 <nav style="background-color: #1f898e; padding: 0%;" class="navbar navbar-dark navbar-expand-lg" >
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,14 +12,14 @@
         <label class="btn mr-sm-2" style="color:white; font-size:15px;">Facultad de Ciencias Médicas</label>
       </li>
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/oficina">Oficinas</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="{{path('oficina_index')}}">Oficinas</a>
       </li>
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/articulo">Artículos</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="{{path('articulo_index')}}">Artículos</a>
       </li>
       {% if is_granted("ROLE_ADMIN") %}
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/informes">Informes</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="{{path('informes_index')}}">Informes</a>
       </li>
       {% endif %}
       {% if is_granted("ROLE_SUPER_ADMIN") %}
@@ -28,11 +28,11 @@
               type="button" id="dropdownMenu1" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false" style="background-color:#1f898e; border-color: #1f898e; font-size:19px;">Administración</button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <a class="dropdown-item" href="/user">Usuarios</a>
-            <a class="dropdown-item" href="/tipo">Tipos de artículos</a>
-            <a class="dropdown-item" href="/estado">Estados de artículos</a>
-            <a class="dropdown-item" href="/condicion">Condición de artículos</a>
-            <a class="dropdown-item" href="/estadoAdicional">Estados adicionales de artículos</a>
+            <a class="dropdown-item" href="{{path('user_index')}}">Usuarios</a>
+            <a class="dropdown-item" href="{{path('tipo_index')}}">Tipos de artículos</a>
+            <a class="dropdown-item" href="{{path('estado_index')}}">Estados de artículos</a>
+            <a class="dropdown-item" href="{{path('condicion_index')}}">Condición de artículos</a>
+            <a class="dropdown-item" href="{{path('estadoAdicional_index')}}">Estados adicionales de artículos</a>
           </div>
         </li>
       {% endif %}

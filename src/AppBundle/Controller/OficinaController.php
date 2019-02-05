@@ -30,9 +30,11 @@ class OficinaController extends Controller
 
         $oficinas = $em->getRepository('AppBundle:Oficina')->findAll();
         $editado = $request->query->get('editado');
+        $mensaje =$request->query->get('mensaje');
         return $this->render('oficina/index.html.twig', array(
             'oficinas' => $oficinas,
             'editado' => $editado,
+            'mensaje' => $mensaje
         ));
     }
 
@@ -178,7 +180,9 @@ class OficinaController extends Controller
             $em->persist($oficina);
             $em->flush();
 
-            return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('oficina_index', array('editado' => 'editado',
+              'mensaje' => 'La oficina se ha creado con exito'
+            ));
         }
 
         return $this->render('oficina/new.html.twig', array(
@@ -223,13 +227,14 @@ class OficinaController extends Controller
 
 
         $editado = $request->query->get('editado');
-
+        $mensaje = $request->query->get('mensaje');
         return $this->render('oficina/show.html.twig', array(
             'operaciones' => $operacionesPendientes,
             'oficina' => $oficina,
             'tipo' =>$tipo,
             'delete_form' => $deleteForm->createView(),
             'editado' => $editado,
+            'mensaje' => $mensaje
         ));
     }
 
@@ -513,7 +518,9 @@ class OficinaController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
+            return $this->redirectToRoute('oficina_index', array('editado' => 'editado',
+              'mensaje' => 'La oficina se ha editado con exito'
+            ));
         }
 
         return $this->render('oficina/edit.html.twig', array(
@@ -540,7 +547,9 @@ class OficinaController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('oficina_index', array('editado' => 'editado'));
+        return $this->redirectToRoute('oficina_index', array('editado' => 'editado',
+          'mensaje' => 'La oficina se ha eliminado con exito'
+        ));
     }
 
     /**
