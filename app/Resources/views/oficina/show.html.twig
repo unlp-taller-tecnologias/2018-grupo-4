@@ -107,7 +107,7 @@
               <input type="text" name="tipo" value="" id="tipo1" hidden>
               <input type="text" name="estado" value="" id="estado1" hidden>
               <input type="text" name="estadoAdicional" id="estadoAdicional1" value="" hidden>
-              <button style="margin-bottom: 2%; margin-top: 1%;" id="exportarButtonPDF" type="submit" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a PDF</button>
+              <button style="margin-bottom: 2%; margin-top: 1%;" id="exportarButtonPDF" type="submit" class="btn btn-dark"><span class="fa fa-file-pdf-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Generar PDF</button>
               <button style="margin-bottom: 2%; margin-top: 1%;" id="exportButtonExcel" class="btn btn-dark"><span class="fa fa-file-excel-o"></span><i class="fa fa-paperclip" aria-hidden="true"></i> Exportar a Excel</button>
             </form>
 
@@ -360,8 +360,8 @@ $("#exportButtonExcel").click(function () {
       console.log(item);
       return {
         cells: [
-                { type: Number, value: item.numInventario },
-                { type: Number, value: item.numExpendiente },
+                { type: String, value: item.numInventario },
+                { type: String, value: item.numExpendiente },
                 { type: String, value: item.denominacion },
                 { type: String, value: item.tipo },
                 { type: String, value: item.estado },

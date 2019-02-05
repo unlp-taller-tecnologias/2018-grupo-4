@@ -34,7 +34,7 @@
     </select>
 
     {{ form_errors(form) }}
-    <label style="margin-top: 2%;"><strong>Cantidad de Artículos a agregar a la oficina(*): </strong></label>
+    <label style="margin-top: 2%;"><strong>Cantidad de Artículos a agregar en la oficina(*): </strong></label>
     <input id="cantidad" type="number" name="cantidad" value="1" min ="1" required><br>
     <input id="num" type="number" name="numInvent" value="1" hidden><br>
     <label><strong>(*)La cantidad indica el número de artículos que se crearán con número de inventario consecutivo.</strong></label><br><br>
@@ -75,6 +75,11 @@ $('#btnGuardar').click(function(){
   var leyenda = "";
   var denominacion = $('#appbundle_articulo_denominacion').val();
   var nroAct = $('#appbundle_articulo_numInventario').val();
+  if (denominacion.trim() == '') {
+    $('#appbundle_articulo_denominacion').after("<p class=\"texto text-danger\">Error: la denominación es un campo obligatorio</p>");
+    $("html, body").animate({scrollTop: $('#appbundle_articulo_denominacion').offset().top }, 800);
+    return false;
+  }
   if (validateNroInventario(nroAct)) {
     $('#btSubmit').toggle(true);
     $('#btCencelar').text("Cancelar");
@@ -90,10 +95,11 @@ $('#btnGuardar').click(function(){
   }else {
     $('#btSubmit').toggle(false);
     $('#btCencelar').text("Aceptar");
-    $('#textoMensaje').text("Error: el número de inventario ingresado no es válido. El fomato válido es: 0000-0000-nro artículo");
+    $('#textoMensaje').text("Error: el número de inventario ingresado no es válido. El fomato válido es: xxxx-xxxx-número artículo");
     $('.texto').remove();
     $('#modal-body').append(leyenda);
   }
+
 });
   $form.submit(function(){
   $num.val($numActual.val());

@@ -9,6 +9,11 @@
   <br>
   <hr>
   {% endif %}
+  {% if is_granted("ROLE_SUPER_ADMIN") == false %}
+  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
+  <br>
+  <hr>
+  {% endif %}
   <h2>Editar Usuario: {{ user.username }}</h2>
   <hr>
 	{{ form_start(edit_form) }}

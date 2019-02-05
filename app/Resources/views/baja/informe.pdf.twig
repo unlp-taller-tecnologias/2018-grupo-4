@@ -12,9 +12,9 @@
       </div>
       <h2>Informe de Baja de artículos</h2>
 
-      <h5 font-size="14px">Detalle de la Baja</h5>
-      <h4 font-size="14px">Realizada en: {{oficinaOrigen}} </h4>
-      <h4 font-size="14px">Responsable actual de oficina: {{oficinaOrigen.responsableOficina}}</h4>
+
+      <h4 font-size="14px">Realizada en la oficina: {{oficinaOrigen}} </h4>
+      <h4 font-size="14px">Responsable actual de oficina {{oficinaOrigen}}: {{oficinaOrigen.responsableOficina}}</h4>
       <h4 font-size="14px">Fecha: {{baja.fecha|date('d-m-Y')}}</h4>
       <h4 font-size="14px">Número de expediente: {{baja.expediente}}</h4>
       <div>
@@ -32,13 +32,13 @@
         </tr>
         {% endfor %}
       </table>
-        {% if tieneObservaciones %}
         <div margin-top="20px" border-color="black">
-          <h5 padding-left="3px" font-size="14px" margin-top="2px">Observaciones de la baja</h5>
+          <h5 padding-left="3px" font-style="bold" font-size="14px" margin-top="2px">Observaciones de la baja</h5>
           <p padding-left="3px" font-size="14px">
+            {% if tieneObservaciones %}
             {{baja.observaciones}}
           </p>
+          {% endif %}
         </div>
-        {% endif %}
   </dynamic-page>
 </pdf>

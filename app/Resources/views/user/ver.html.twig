@@ -5,16 +5,15 @@
 <div class="container">
   <br>
   {% if is_granted("ROLE_SUPER_ADMIN") %}
-  <a href="{{ path('user_index') }}"><i class="fas fa-angle-left"></i> Listado de usuarios</a>
+  <a href="{{ path('user_index') }}"><i class="fas fa-angle-left"></i> Listado de Usuarios</a>
   <br>
   <hr>
   {% else %}
-  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de oficinas</a>
+  <a href="{{ path('oficina_index') }}"><i class="fas fa-angle-left"></i> Listado de Oficinas</a>
   <br>
   <hr>
   {% endif %}
     <h2>Usuario: {{ user.username }}</h2>
-    <br>
     <table class="table table">
         <tbody>
             <tr>
@@ -34,13 +33,13 @@
               <th scope="row">Rol</th>
               {% for role in user.roles %}
               {% if role == "ROLE_ADMIN" %}
-                <td scope="row">Rol Administrador</td>
+                <td scope="row">Administrador</td>
               {% endif %}
               {% if role == "ROLE_USER" %}
-                <td scope="row">Rol Visitante</td>
+                <td scope="row">Visitante</td>
               {% endif %}
               {% if role == "ROLE_SUPER_ADMIN" %}
-                <td scope="row">Rol Superusuario</td>
+                <td scope="row">SuperUsuario</td>
               {% endif %}
               {% endfor %}
             {% endif %}
