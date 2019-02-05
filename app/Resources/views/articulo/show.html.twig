@@ -6,96 +6,96 @@
   <a href="{{ path('oficina_show', { 'id': articulo.oficina.id }) }}"><i class="fas fa-angle-left"></i> Volver a {{articulo.oficina}}</a>
   <hr>
     <h2>{{articulo.denominacion}} - {{articulo.numInventario}}</h2><hr> <br>
-    <table class="table table-sm">
+    <table class="table">
 
         <tbody>
           <tr>
-              <th scope="row"><a href="{{ path('articulo_historial', {'id': articulo.id}) }}">Ver historial de oficinas</a></th>
+              <th><a href="{{ path('articulo_historial', {'id': articulo.id}) }}">Ver historial de oficinas</a></th>
               <td></td>
           </tr>
           <tr>
-              <th scope="row">Oficina</th>
-              <td scope="row">{{ articulo.oficina }}</td>
+              <th>Oficina</th>
+              <td>{{ articulo.oficina }}</td>
           </tr>
           <tr>
-              <th scope="row">Denominación</th>
-              <td scope="row">{{ articulo.denominacion }}</td>
+              <th>Denominación</th>
+              <td>{{ articulo.denominacion }}</td>
           </tr>
             <tr>
-                <th scope="row">Número de Inventario</th>
-                <td scope="row">{{ articulo.numInventario }}</td>
+                <th>Número de Inventario</th>
+                <td>{{ articulo.numInventario }}</td>
             </tr>
             <tr>
-                <th scope="row">Estado</th>
-                <td scope="row">{{ articulo.estado }}</td>
+                <th>Estado</th>
+                <td>{{ articulo.estado }}</td>
             </tr>
             <tr>
-                <th scope="row">Estado Adicional</th>
-                <td scope="row">{{ articulo.estadoAdicional }}</td>
+                <th>Estado Adicional</th>
+                <td>{{ articulo.estadoAdicional }}</td>
             </tr>
             <tr>
-                <th scope="row">Condicion</th>
-                <td scope="row">{{ articulo.condicion }}</td>
+                <th>Condicion</th>
+                <td>{{ articulo.condicion }}</td>
             </tr>
             <tr>
-                <th scope="row">Tipo</th>
-                <td scope="row">{{ articulo.tipo }}</td>
+                <th>Tipo</th>
+                <td>{{ articulo.tipo }}</td>
             </tr>
             <tr>
-                <th scope="row">Fecha Entrada</th>
-                <td scope="row">{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('d-m-y') }}{% endif %}</td>
+                <th>Fecha Entrada</th>
+                <td>{% if articulo.fechaEntrada %}{{ articulo.fechaEntrada|date('d-m-y') }}{% endif %}</td>
             </tr>
             <tr>
-                <th scope="row">Material</th>
-                <td scope="row">{{ articulo.material }}</td>
+                <th>Material</th>
+                <td>{{ articulo.material }}</td>
             </tr>
             <tr>
-                <th scope="row">Marca</th>
-                <td scope="row">{{ articulo.marca }}</td>
+                <th>Marca</th>
+                <td>{{ articulo.marca }}</td>
             </tr>
             <tr>
-                <th scope="row">Número  de Fábrica</th>
-                <td scope="row">{{ articulo.numFabrica }}</td>
+                <th>Número  de Fábrica</th>
+                <td>{{ articulo.numFabrica }}</td>
             </tr>
             <tr>
-                <th scope="row" scope="row">Largo</th>
-                <td scope="row">{{ articulo.largo }}</td>
+                <th>Largo</th>
+                <td>{{ articulo.largo }}</td>
             </tr>
             <tr>
-                <th scope="row">Ancho</th>
-                <td scope="row">{{ articulo.ancho }}</td>
+                <th>Ancho</th>
+                <td>{{ articulo.ancho }}</td>
             </tr>
             <tr>
-                <th scope="row">Alto</th>
-                <td scope="row">{{ articulo.alto }}</td>
+                <th>Alto</th>
+                <td>{{ articulo.alto }}</td>
             </tr>
             <tr>
-                <th scope="row">Número de Estantes</th>
-                <td scope="row">{{ articulo.numsEstantes }}</td>
+                <th>Número de Estantes</th>
+                <td>{{ articulo.numsEstantes }}</td>
             </tr>
             <tr>
-                <th scope="row">Número de Cajones</th>
-                <td scope="row">{{ articulo.numsCajones }}</td>
+                <th>Número de Cajones</th>
+                <td>{{ articulo.numsCajones }}</td>
             </tr>
             <tr>
-                <th scope="row">Detalle Origen</th>
-                <td scope="row">{{ articulo.detalleOrigen }}</td>
+                <th>Detalle Origen</th>
+                <td>{{ articulo.detalleOrigen }}</td>
             </tr>
             <tr>
-                <th scope="row">Importe</th>
-                <td scope="row">{{ articulo.importe }}</td>
+                <th>Importe</th>
+                <td>{{ articulo.importe }}</td>
             </tr>
             <tr>
-                <th scope="row">Código Cuenta/Subcuenta</th>
-                <td scope="row">{{ articulo.codigoCuentaSubcuenta }}</td>
+                <th>Código Cuenta/Subcuenta</th>
+                <td>{{ articulo.codigoCuentaSubcuenta }}</td>
             </tr>
             <tr>
-                <th scope="row">Número Expediente</th>
-                <td scope="row">{{ articulo.numExpediente }}</td>
+                <th>Número Expediente</th>
+                <td>{{ articulo.numExpediente }}</td>
             </tr>
             <tr>
-                <th scope="row">Observaciones</th>
-                <td scope="row">{{ articulo.observaciones }}</td>
+                <th>Observaciones</th>
+                <td>{{ articulo.observaciones }}</td>
             </tr>
         </tbody>
     </table>

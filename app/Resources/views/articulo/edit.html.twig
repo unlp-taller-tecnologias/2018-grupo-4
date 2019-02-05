@@ -30,7 +30,7 @@ $('#btnGuardar').click(function(){
     return true;
   }else {
     $('.texto').remove();
-    $('#appbundle_articulo_numInventario').after("<p class=\"texto text-danger\">Error: el número de inventario ingresado no es válido.<small>El fomato válido es: 0000-0000-nro artículo</small></p>");
+    $('#appbundle_articulo_numInventario').after("<p class=\"texto text-danger\">Error: el número de inventario ingresado no es válido. El fomato válido es: xxxx-xxxx-número artículo</p>");
     $("html, body").animate({scrollTop: $('#appbundle_articulo_numInventario').offset().top }, 800);
     return false;
   }

@@ -8,15 +8,14 @@
   <hr>
   <h2>Informe de Transferencia</h2>
   <hr>
-  <a class="btn btn-dark" href="{{ path('informePDF', {'id': transferencia.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i> Generar PDF</a><br>
+  <a class="btn btn-dark" target="_blank" href="{{ path('informePDF', {'id': transferencia.id}) }}"><i class="fa fa-paperclip" aria-hidden="true"></i> Generar PDF</a><br>
 
   <h5 style="padding-top:25px;">Informe de Transferencia de artículos</h5>
 
-  <label>Detalle de la Transferencia</label><br>
-  <label>Realizada desde: {{oficinaOrigen}} </label><br>
-  <label>Responsable actual de {{oficinaOrigen}}: {{oficinaOrigen.responsableOficina}}</label><br>
-  <label>Hacia: {{oficinaDestino}}</label><br>
-  <label>Responsable actual de {{oficinaDestino}}: {{oficinaDestino.responsableOficina}}</label><br>
+  <label>Realizada desde la oficina origen: {{oficinaOrigen}} </label><br>
+  <label>Responsable actual de oficina origen {{oficinaOrigen}}: {{oficinaOrigen.responsableOficina}}</label><br>
+  <label>Hacia la oficina destino: {{oficinaDestino}}</label><br>
+  <label>Responsable actual de la oficina destino {{oficinaDestino}}: {{oficinaDestino.responsableOficina}}</label><br>
   <label>Fecha: {{transferencia.fecha|date('d-m-Y')}}</label><br><br>
 
   <h5>Listado de artículos transferidos</h5>
@@ -35,14 +34,16 @@
     {% endfor %}
   </table>
   <br><br>
-  {% if tieneObservaciones %}
   <div class="border border-dark">
     <div style="margin:5px;">
       <h5>Observaciones de la transferencia</h5>
+      {% if tieneObservaciones %}
       <label>{{transferencia.observaciones}}</label><br><br>
+      {% else %}
+        <label>Sin observaciones</label><br><br>
+      {% endif %}
     </div>
   </div>
-  {% endif %}
 
   </div>
 </div>

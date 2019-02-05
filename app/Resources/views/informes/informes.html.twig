@@ -15,20 +15,16 @@
          <div class="form-group col-md-3">
            <label>Tipo de operación</label>
            <select id="estado" class="form-control" name="estado">
-             <option value=""> Seleccione </option>
+             <option value="">Seleccione</option>
            </select>
          </div>
-         <!-- <div class="form-group col-md-4">
-           <label>Nombre de Oficina</label>
-           <input type="text" id="nombre" class="form-control" placeholder="Nombre" name="nombre">
-         </div> -->
        </div>
      </div>
     {% endblock %}
     <div class="table-responsive" >
       <div id="toolbar">
-          <button id="button" class="btn btn-dark"><i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
-          <button id="buttonBorrar" class="btn btn-dark">Limpiar filtros</button>
+          <button id="button" hidden class="btn btn-dark"><i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
+          <button id="buttonBorrar" hidden class="btn btn-dark">Limpiar filtros</button>
      </div>
       <table  id="table"
               data-toggle="table"
@@ -81,7 +77,7 @@ xhttpEstados.send();
     }
     edit = edit.replace('-1', value);
     return [
-      `<a class="edit ml10" href="${edit}" title="Ver informe"><i class="far fa-file-alt"></i></a>`,
+      `<a class="edit ml10 btn btn-sm btn-outline-primary" href="${edit}" title="Ver informe"><i class="far fa-file-alt"></i></a>`,
     ].join('');
   }
 
@@ -90,20 +86,21 @@ xhttpEstados.send();
 {% endblock %}
 {% block serchArticulos  %}
 <script>
-var seleccion = '';
-var $table = $('#table');
-var $button = $('#button');
-  $button.click(function () {
+$('#estado').change(function () {
+    var seleccion = '';
+    var $table = $('#table');
     seleccion = $('#estado option:selected').text();
-    $table.bootstrapTable('filterBy', {
-      tipo: seleccion
-    });
-  });
+    console.log(seleccion);
 
-  $('#buttonBorrar').click(function () {
-    $('#estado').val('');
-    $table.bootstrapTable('filterBy', {});
-  });
+    if (seleccion != 'Seleccione'){
+      $table.bootstrapTable('filterBy', {
+        tipo: seleccion
+      });
+    }else {
+      console.log(seleccion);
+      $table.bootstrapTable('filterBy', {});
+    }
+});
 
 </script>
 {% endblock %}

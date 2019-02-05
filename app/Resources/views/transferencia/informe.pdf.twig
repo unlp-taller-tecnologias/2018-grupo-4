@@ -14,11 +14,10 @@
 
         <h2>Informe de Transferencia de artículos</h2>
 
-        <h5 font-size="14px">Detalle de la Transferencia</h5>
-        <h4 font-size="14px">Realizada desde: {{oficinaOrigen}} </h4>
-        <h4 font-size="14px">Responsable actual de {{oficinaOrigen}}: {{oficinaOrigen.responsableOficina}}</h4>
-        <h4 font-size="14px">Hacia: {{oficinaDestino}}</h4>
-        <h4 font-size="14px">Responsable actual de {{oficinaDestino}}: {{oficinaDestino.responsableOficina}}</h4>
+        <h4 font-size="14px">Realizada desde la oficina origen: {{oficinaOrigen}} </h4>
+        <h4 font-size="14px">Responsable actual de la oficina origen {{oficinaOrigen}}: {{oficinaOrigen.responsableOficina}}</h4>
+        <h4 font-size="14px">Hacia la oficina destino: {{oficinaDestino}}</h4>
+        <h4 font-size="14px">Responsable actual de la oficina destino {{oficinaDestino}}: {{oficinaDestino.responsableOficina}}</h4>
         <h4 font-size="14px">Fecha: {{transferencia.fecha|date('d-m-Y')}}</h4>
 
         <div>
@@ -43,9 +42,16 @@
         </table>
           {% if tieneObservaciones %}
           <div margin-top="20px" border-color="black">
-            <h5 padding-left="3px" font-size="14px" margin-top="2px">Observaciones de la transferencia</h5>
+            <h5 padding-left="3px" font-style="bold" font-size="14px" margin-top="2px">Observaciones de la transferencia</h5>
             <p padding-left="3px" font-size="14px">
               {{transferencia.observaciones}}
+            </p>
+          </div>
+          {% else %}
+          <div margin-top="20px" border-color="black">
+            <h5 padding-left="3px" font-style="bold" font-size="14px" margin-top="2px">Observaciones de la transferencia</h5>
+            <p padding-left="3px" font-size="14px">
+              Sin observaciones
             </p>
           </div>
           {% endif %}

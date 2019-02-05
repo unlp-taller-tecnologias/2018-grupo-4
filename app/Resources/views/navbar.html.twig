@@ -12,14 +12,14 @@
         <label class="btn mr-sm-2" style="color:white; font-size:15px;">Facultad de Ciencias Médicas</label>
       </li>
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/oficina">Oficinas</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="{{path('oficina_index')}}">Oficinas</a>
       </li>
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/articulo">Artículos</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="{{path('articulo_index')}}">Artículos</a>
       </li>
       {% if is_granted("ROLE_ADMIN") %}
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/informes">Informes</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="{{path('informes_index')}}">Informes</a>
       </li>
       {% endif %}
       {% if is_granted("ROLE_SUPER_ADMIN") %}
@@ -28,11 +28,11 @@
               type="button" id="dropdownMenu1" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false" style="background-color:#1f898e; border-color: #1f898e; font-size:19px;">Administración</button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <a class="dropdown-item" href="/user">Usuarios</a>
-            <a class="dropdown-item" href="/tipo">Tipos de artículos</a>
-            <a class="dropdown-item" href="/estado">Estados de artículos</a>
-            <a class="dropdown-item" href="/condicion">Condición de artículos</a>
-            <a class="dropdown-item" href="/estadoAdicional">Estados adicionales de artículos</a>
+            <a class="dropdown-item" href="{{path('user_index')}}">Usuarios</a>
+            <a class="dropdown-item" href="{{path('tipo_index')}}">Tipos de artículos</a>
+            <a class="dropdown-item" href="{{path('estado_index')}}">Estados de artículos</a>
+            <a class="dropdown-item" href="{{path('condicion_index')}}">Condición de artículos</a>
+            <a class="dropdown-item" href="{{path('estadoAdicional_index')}}">Estados adicionales de artículos</a>
           </div>
         </li>
       {% endif %}

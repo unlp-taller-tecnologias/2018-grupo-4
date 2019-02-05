@@ -31,24 +31,24 @@ class UserType extends AbstractType
         ))
         ->add('plainPassword', PasswordType::class, array(
           'label' => 'Contraseña(*)',
-          'required' => false)
+          'required' => true)
         );
         if ($options['edit_role']) {
         $builder->add('roles', ChoiceType::class, array(
               'label' => 'Roles(*)',
               'multiple'=> true,
               'choices' => array(
-                  'ROLE_SUPER_ADMIN' => 'ROLE_SUPER_ADMIN',
-                  'ROLE_ADMIN'  => 'ROLE_ADMIN',
-                  'ROLE_USER'  => 'ROLE_USER'
+                  'SuperUsuario' => 'ROLE_SUPER_ADMIN',
+                  'Administrador'  => 'ROLE_ADMIN',
+                  'Visitante'  => 'ROLE_USER'
               ) ) );
         }
       };
-      if ($options['edit']) {
-        $builder->add('enabled', null, array(
-          'label' => 'Habilitado',
-        ));
-      }
+      // if ($options['edit']) {
+      //   $builder->add('enabled', null, array(
+      //     'label' => 'Habilitado',
+      //   ));
+      // }
 
     }
     /**
