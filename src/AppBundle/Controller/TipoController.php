@@ -52,8 +52,6 @@ class TipoController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $habilitado = $em->getRepository('AppBundle:Tipo')->findOneByHabilitado('1');
-            $tipo->setHabilitado($habilitado);
             $em->persist($tipo);
             $em->flush();
 

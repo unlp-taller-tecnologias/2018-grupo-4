@@ -116,8 +116,6 @@ class CondicionController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $habilitado = $em->getRepository('AppBundle:Condicion')->findOneByHabilitado('1');
-            $condicion->setHabilitado($habilitado);
             $em->persist($condicion);
             $em->flush();
 
