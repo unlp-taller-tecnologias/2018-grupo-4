@@ -113,7 +113,7 @@ class EditUserController extends Controller
 
 							return $this->redirectToRoute('editUser_ver', array('id' => $user->getId(),
 			            'editado' => 'editado',
-									'mensaje' => 'El usuario ha sido editado con exito'
+									'mensaje' => 'El usuario ha sido editado con éxito'
 			        ));
 		    	}
 							// return $this->redirectToRoute('editUser_edit', array('editado' => 'editado',

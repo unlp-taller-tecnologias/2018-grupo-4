@@ -181,7 +181,7 @@ class OficinaController extends Controller
             $em->flush();
 
             return $this->redirectToRoute('oficina_index', array('editado' => 'editado',
-              'mensaje' => 'La oficina se ha creado con exito'
+              'mensaje' => 'La oficina se ha creado con éxito'
             ));
         }
 
@@ -516,7 +516,7 @@ class OficinaController extends Controller
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('oficina_index', array('editado' => 'editado',
-              'mensaje' => 'La oficina se ha editado con exito'
+              'mensaje' => 'La oficina se ha editado con éxito'
             ));
         }
 
@@ -545,7 +545,7 @@ class OficinaController extends Controller
         }
 
         return $this->redirectToRoute('oficina_index', array('editado' => 'editado',
-          'mensaje' => 'La oficina se ha eliminado con exito'
+          'mensaje' => 'La oficina se ha eliminado con éxito'
         ));
     }
 

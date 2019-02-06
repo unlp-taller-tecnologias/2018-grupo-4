@@ -353,7 +353,7 @@ class ArticuloController extends Controller
           $em->persist($articulo);
           $em->flush();
           return $this->redirectToRoute('oficina_show', array('id' => $oficinaId, 'editado' => 'editado',
-            'mensaje' => 'El articulo se ha agregado con exito'
+            'mensaje' => 'El articulo se ha agregado con éxito'
           ));
         } else {
           for ($i=1; $i <= $cantidad; $i++) {
@@ -402,7 +402,7 @@ class ArticuloController extends Controller
             $articulo->setTipo($tipo);
           }
           return $this->redirectToRoute('oficina_show', array('id' => $oficinaId, 'editado' => 'editado',
-            'mensaje' => 'El articulo se ha agregado con exito'
+            'mensaje' => 'El articulo se ha agregado con éxito'
           ));
         }
       }
@@ -514,7 +514,7 @@ class ArticuloController extends Controller
           $this->getDoctrine()->getManager()->flush();
           $oficinaIdToRedirect = ($articulo->getOficina())->getId();
           return $this->redirectToRoute('oficina_show', array('id' => $oficinaIdToRedirect, 'editado'=>'editado',
-          'mensaje' => 'El articulo se ha editado con exito'
+          'mensaje' => 'El articulo se ha editado con éxito'
           ));
         }
         $em = $this->getDoctrine()->getManager();
