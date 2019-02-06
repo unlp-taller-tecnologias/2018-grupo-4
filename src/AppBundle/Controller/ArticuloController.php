@@ -302,7 +302,7 @@ class ArticuloController extends Controller
     {
       $em = $this->getDoctrine()->getManager();
       $artNumInv = $em->getRepository('AppBundle:Articulo')->findOneBy([], ['id' => 'desc']);
-      $numInv =  '0000-0000-'.((is_null($artNumInv))? 1 : $artNumInv->getNumInventarioINT()+1);
+      $numInv =  $this->container->getParameter('numeroFacultad').'-'.$oficina->getNumeroCarpeta().'-'.((is_null($artNumInv))? 1 : $artNumInv->getNumInventarioINT()+1);
       $condiciones = $em->getRepository('AppBundle:Condicion')->findByHabilitado(1);
       $articulo = new Articulo($numInv, $oficina);
       $form = $this->createForm('AppBundle\Form\ArticuloType', $articulo);
@@ -517,10 +517,24 @@ class ArticuloController extends Controller
           'mensaje' => 'El articulo se ha editado con exito'
           ));
         }
-
+        $em = $this->getDoctrine()->getManager();
+        $arrayValuesCond = $em->getRepository('AppBundle:Condicion')->findBy(array('habilitado' => '0'));
+        $arrayDesCond = [];
+        $count = count($arrayValuesCond);
+        for ($i=0; $i < $count; $i++) {
+          array_push($arrayDesCond,$arrayValuesCond[$i]->getId());
+        }
+        $arrayValuesTipo = $em->getRepository('AppBundle:Tipo')->findBy(array('habilitado' => '0'));
+        $arrayDesTipo = [];
+        $count = count($arrayValuesTipo);
+        for ($i=0; $i < $count; $i++) {
+          array_push($arrayDesTipo,$arrayValuesTipo[$i]->getId());
+        }
         return $this->render('articulo/edit.html.twig', array(
             'articulo' => $articulo,
             'edit_form' => $editForm->createView(),
+            'CondDeshabilitadas' => $arrayDesCond,
+            'TiposDeshabilitadas' => $arrayDesTipo
             // 'delete_form' => $deleteForm->createView(),
         ));
     }
@@ -568,7 +582,7 @@ class ArticuloController extends Controller
           foreach ($historiales as $h){
           	$historial[$i]['fechaDesde'] = $h->getFecha()->format('d-m-Y');
             if ($h->getTransferencia() !=null) {
-              $oficinaNombre = $h->getTransferencia()->getOficinaDestino()->getNombre();
+              $oficinaNombre = ($h->getTransferencia()->getOficinaDestino() != null)?$h->getTransferencia()->getOficinaDestino()->getNombre():"-";
               $historial[$i]['estado'] = false;
             }else{
               $oficinaNombre = $h->getBaja()->getOficina()->getNombre();

@@ -95,7 +95,7 @@ $('#btnGuardar').click(function(){
   }else {
     $('#btSubmit').toggle(false);
     $('#btCencelar').text("Aceptar");
-    $('#textoMensaje').text("Error: el número de inventario ingresado no es válido. El fomato válido es: xxxx-xxxx-número artículo");
+    $('#textoMensaje').text("Error: el número de inventario ingresado no es válido. El fomato válido es: xx-xxxx-número artículo");
     $('.texto').remove();
     $('#modal-body').append(leyenda);
   }
@@ -121,7 +121,7 @@ function validateNroInventario(value){
   if ((isNaN(array[0])) | (isNaN(array[1])) | (isNaN(array[2])) ) {
     return false;
   }
-  if ((array[0].length > 4 | array[0].length < 1) | (array[1].length > 4 | array[1].length < 1)) {
+  if ((array[0].length > 2 | array[0].length < 1) | (array[1].length > 4 | array[1].length < 1)) {
     return false;
   }
   return  true;

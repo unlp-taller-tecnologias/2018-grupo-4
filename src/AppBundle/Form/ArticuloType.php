@@ -19,7 +19,7 @@ class ArticuloType extends AbstractType
     {
         $builder
           ->add('numInventario', null, array(
-              'label' => 'Número de inventario(*) - Formato: xxxx-xxxx-número artículo',
+              'label' => 'Número de inventario(*) - Formato: xx-xxxx-número artículo',
               'required' => true,
               'attr' => array(
               'placeholder' => 'Ingrese el número de inventario'
@@ -131,7 +131,7 @@ class ArticuloType extends AbstractType
           ))
           ->add('observaciones', null, array(
             'label' => 'Observaciones',
-            'attr' => array('placeholder' => 'Ingrese observaciones sobre el artículo si lo requiere'
+            'attr' => array('placeholder' => 'Ingrese observaciones sobre el artículo'
             )
           ));
     }

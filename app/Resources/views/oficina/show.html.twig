@@ -124,6 +124,7 @@
                       data-pagination="true"
                       data-page-list="[2, 5, 10, 20, 50, 100, 200]"
                       data-search="false"
+                      data-row-style="rowStyle"
                       data-url="{{ path('oficina_show_listado', { 'oficina': oficina.id }) }}"
                       >
                 <thead>
@@ -134,7 +135,8 @@
                     <th scope="row" data-field="denominacion">Denominación</th>
                     <th scope="row" data-field="estado">Estado</th>
                     <th scope="row" data-field="estadoAdicional">Estado Adicional</th>
-                    <th scope="row" data-field="condicion">Condición</th>
+                    <th scope="row" data-field="condicionArticulo">Condición</th>
+                    <th scope="row" data-field="condicionTranferencia">Condición tranferencia</th>
                     <!-- <th scope="row" data-field="numExpediente" data-sortable="true">Nro.Expediente</th> -->
                     <th scope="row" data-field="tipo">Tipo</th>
                     <th data-field="id" data-formatter="operateFormatterAction">Acciones</th>
@@ -438,11 +440,13 @@ $("#exportarButtonPDF").click(function () {
   xhttpTipos.open("GET", "{{ path('estadoAdicional_list') }}", true);
   xhttpTipos.send();
 
+var arrayEstados;
 var xhttpEstados = new XMLHttpRequest();
 xhttpEstados.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
     var listado = JSON.parse(this.responseText);
     var estados = listado.rows;
+    arrayEstados = estados;
     var opciones = "";
     for(es in estados){
       if (estados[es].habilitado == 'Si' && estados[es].nombre != 'Transferido') {
@@ -523,5 +527,23 @@ $("button").click(function(){
     show = show.replace('-1', query);
     $('#tablaArticulos').bootstrapTable('refresh', {url: show});
     });
+
+function rowStyle(row, index) {
+  console.log(row);
+  for(estado in arrayEstados){
+    if (arrayEstados[estado].nombre == row.estado) {
+      return {
+        css : {
+          color: arrayEstados[estado].color
+        }
+      }
+    }
+  }
+  return {
+    css: {
+      color: 'black'
+    }
+  }
+}
 </script>
 {% endblock %}

@@ -48,7 +48,7 @@
               </div>
       </li>
       <li class="nav-item">
-        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="/logout">Cerrar Sesión</a>
+        <a class="btn mr-sm-2" style="color:white; font-size:19px;" href="{{ path('fos_user_security_logout')}}">Cerrar Sesión</a>
       </li>
       {% endif %}
 
@@ -56,4 +56,5 @@
     </ul>
 
 </nav>
+
 {% endblock %}

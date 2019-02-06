@@ -13,9 +13,22 @@
     {{ form_errors(form) }}
 
     {% if is_granted("ROLE_ADMIN") %}
-    <button type="submit" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
+    <button type="submit" id="btnGuardar" value="Submit" class="btn btn-dark"><i class="fas fa-save"></i> Guardar</button>
     {% endif %}
     {{ form_end(form) }}
 
     </div>
+{% endblock %}
+{% block serchArticulos  %}
+<script>
+$('#btnGuardar').click(function(){
+var numCarpeta = $('#appbundle_oficina_numeroCarpeta').val();
+if (numCarpeta.length > 4) {
+  $('#appbundle_oficina_numeroCarpeta').after("<p class=\"texto text-danger\">Error: el número de carpeta debe contener hasta 4 dígitos</p>");
+  $("html, body").animate({scrollTop: $('#appbundle_oficina_numeroCarpeta').offset().top }, 800);
+  return false;
+}
+});
+
+</script>
 {% endblock %}
