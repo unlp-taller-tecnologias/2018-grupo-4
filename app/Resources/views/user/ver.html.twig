@@ -19,14 +19,17 @@
             <tr>
                 <th scope="row">Nombre de usuario</th>
                 <td scope="row">{{ user.username }}</td>
+                <td></td>
             </tr>
             <tr>
                 <th scope="row">Nombre</th>
                 <td scope="row">{{  user.name }}</td>
+                <td></td>
             </tr>
             <tr>
                 <th scope="row">Apellido</th>
                 <td scope="row">{{ user.lastname }}</td>
+                <td></td>
             </tr>
             {% if is_granted("ROLE_SUPER_ADMIN") %}
             <tr>
