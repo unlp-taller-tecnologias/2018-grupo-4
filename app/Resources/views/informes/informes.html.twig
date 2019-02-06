@@ -71,9 +71,9 @@ xhttpEstados.send();
 
   function operateFormatterShow(value, row, index) {
     if (row.tipo == 'Transferencia') {
-        edit = "/transferencia/ver_informe/-1";
+      edit = "{{ path('ver_informe', {id: -1})}}";
     }else{
-      edit = "/baja/ver_informe/-1";
+      edit = "{{ path('baja_ver_informe', {id: -1})}}";
     }
     edit = edit.replace('-1', value);
     return [
