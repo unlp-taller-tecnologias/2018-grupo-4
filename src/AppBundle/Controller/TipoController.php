@@ -124,6 +124,7 @@ class TipoController extends Controller
           'id' => $tipo->getId(),
           'codigo' => $tipo->getCodigo(),
           'concepto' => $tipo->getConcepto(),
+          'nomenclador' => $tipo->getNomenclador(),
           'habilitado' => ($tipo->getHabilitado() == 1)?'Si':'No'
         );
       };

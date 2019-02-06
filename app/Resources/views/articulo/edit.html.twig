@@ -19,6 +19,13 @@
 {% endblock %}
 {% block serchArticulos  %}
 <script>
+{% for id in CondDeshabilitadas %}
+  $("#appbundle_articulo_condicion").find('[value="{{id}}"]').remove();
+{% endfor %}
+
+{% for id in TiposDeshabilitadas %}
+  $("#appbundle_articulo_tipo").find('[value="{{id}}"]').remove();
+{% endfor %}
 $form = $('edit_form');
 $('#btnGuardar').click(function(){
   var nroAct = $('#appbundle_articulo_numInventario').val();
@@ -30,7 +37,7 @@ $('#btnGuardar').click(function(){
     return true;
   }else {
     $('.texto').remove();
-    $('#appbundle_articulo_numInventario').after("<p class=\"texto text-danger\">Error: el número de inventario ingresado no es válido. El fomato válido es: xxxx-xxxx-número artículo</p>");
+    $('#appbundle_articulo_numInventario').after("<p class=\"texto text-danger\">Error: el número de inventario ingresado no es válido. El fomato válido es: xx-xxxx-número artículo</p>");
     $("html, body").animate({scrollTop: $('#appbundle_articulo_numInventario').offset().top }, 800);
     return false;
   }
@@ -43,7 +50,7 @@ function validateNroInventario(value){
   if ((isNaN(array[0])) | (isNaN(array[1])) | (isNaN(array[2])) ) {
     return false;
   }
-  if ((array[0].length > 4 | array[0].length < 1) | (array[1].length > 4 | array[1].length < 1)) {
+  if ((array[0].length > 2 | array[0].length < 1) | (array[1].length > 4 | array[1].length < 1)) {
     return false;
   }
   return  true;

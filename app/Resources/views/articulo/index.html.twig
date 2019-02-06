@@ -77,6 +77,7 @@
               data-page-list="[2, 5, 10, 20, 50, 100, 200]"
               data-sort-name="fechaEntrada"
               data-sort-order="desc"
+              data-row-style="rowStyle"
               data-url="{{ path('articulo_list') }}"
               >
         <thead>
@@ -377,11 +378,14 @@ function operateFormatterAction(value, row, index) {
   ].join('');
 }
 
+var arrayEstados;
+
 var xhttpEstados = new XMLHttpRequest();
 xhttpEstados.onreadystatechange = function() {
   if (this.readyState == 4 && this.status == 200) {
     var listado = JSON.parse(this.responseText);
     var estados = listado.rows;
+    arrayEstados = estados;
     var opciones = "";
     for(es in estados){
       if (estados[es].habilitado == 'Si' && estados[es].nombre != 'Transferido') {
@@ -486,5 +490,21 @@ $("#buttonBorrar").click(function(){
   $('#tablaArticulos').bootstrapTable('refresh', {url: show});
   });
 
+function rowStyle(row, index) {
+  for(estado in arrayEstados){
+    if (arrayEstados[estado].nombre == row.estado) {
+      return {
+        css : {
+          color: arrayEstados[estado].color
+        }
+      }
+    }
+  }
+  return {
+    css: {
+      color: 'black'
+    }
+  }
+}
 </script>
 {% endblock %}

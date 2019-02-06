@@ -306,9 +306,10 @@ class OficinaController extends Controller
         'total' => $total,
         'rows' => array()
       );
-      $condicionInicial = null;
       $fechaEntrada = null;
       foreach($articulos as $articulo) {
+          $condicionInicial = null;
+          $condicion = null;
           $fechas = array();
           $fechaEntrada = $articulo->getFechaEntrada()->format('d-m-Y');
           $condiciones = array();
@@ -320,14 +321,9 @@ class OficinaController extends Controller
                   $fechas[] = ($h->getFecha() != null)? $h->getFecha()->format('d-m-Y'):null;
                 }
               }
-          }else{
-
-            if ($articulo->getCondicion() != null) {
-              $condicionInicial = $articulo->getCondicion()->getNombre();
-            }else{
-              $condicionInicial = null;
-            }
-
+          }
+          if ($articulo->getCondicion() != null) {
+            $condicionInicial = $articulo->getCondicion()->getNombre();
           }
           $fecha = end($fechas);
           $condicion = end($condiciones);
@@ -340,7 +336,8 @@ class OficinaController extends Controller
             'tipo' => (!is_null($articulo->getTipo())) ? $articulo->getTipo()->getConcepto() : null,
             'estado' => $articulo->getEstado()->getNombre(),
             'estadoAdicional' =>  ($articulo->getEstadoAdicional()) ? $articulo->getEstadoAdicional()->getNombre() : null,
-            'condicion' => ($condicion != 0) ? $condicion : $condicionInicial,
+            'condicionTranferencia' => ($condicion != "") ? $condicion : null,
+            'condicionArticulo' => ($condicionInicial != "") ? $condicionInicial : null,
             'material' =>  ($articulo->getMaterial()) ? $articulo->getMaterial() : null,
             'marca' =>  ($articulo->getMarca()) ? $articulo->getMarca() : null,
             'numFabrica' =>  ($articulo->getNumFabrica()) ? $articulo->getNumFabrica() : null,
