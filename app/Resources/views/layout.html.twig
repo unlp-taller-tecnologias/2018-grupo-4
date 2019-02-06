@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="{{ asset('css/light/all.min.css') }}">
         <link rel="stylesheet" href="{{ asset('css/icon/all.min.css') }}">
         <link rel="stylesheet" href="{{ asset('fontawesome-free-5.7.1/css/all.min.css') }}">
-      
+
 
     </head>
     <body>
@@ -54,6 +54,8 @@
         <script src="{{ asset('lib/tableExport/tableExport.js') }}"></script>
         <script src="{{ asset('lib/jsPDF/jspdf.min.js') }}"></script>
         <script src="{{ asset('lib/jsPDF-AutoTable/jspdf.plugin.autotable.js') }}"></script>
+        <script src="{{ asset('pdfmake/pdfmake.min.js') }}"> </script>
+        <script src="{{ asset('pdfmake/vfs_fonts.js') }}" > </script>
         {% endblock %}
         {% block transferenciaJs  %}
         {% endblock %}
